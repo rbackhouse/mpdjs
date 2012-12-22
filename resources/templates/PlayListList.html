@@ -1,0 +1,5 @@
+<ol id="playingList" data-role="listview" data-theme="g">
+<% _.each(playlist, function(song) { %>
+	<li data-icon="delete"><a href="#playlist/remove/<%= song.id %>"><%= song.artist %> : <%= song.title %></a></li> 
+<% }); %>
+</ol>

@@ -1,0 +1,21 @@
+<div data-role="header" data-position="fixed">
+	<h1>Songs</h1> 
+</div>
+<a href="#playlist/album/<%= encodeURIComponent(album) %>" id="addAllButton" data-role="button" data-inline="true" data-mini="true">Add All</a> 
+<div data-role="content">
+	<ul id="songList" data-role="listview" data-theme="g">
+	<% _.each(songs, function(song) { %>
+		<li><a href='#playlist/song/<%= song.b64file %>'><%= song.track %>: <%= song.title %> [<%= Math.floor(song.time / 60) %>:<%= song.time - Math.floor(song.time / 60) * 60 %>]</a></li> 
+	<% }); %>
+	</ul>
+</div>
+<div data-id="thefooter "data-role="footer" data-position="fixed">
+	<div data-role="navbar">
+		<ul>
+			<li><a href="#artists">Artists</a></li>
+			<li><a href="#albums">Albums</a></li>
+			<li><a href="#songs">Songs</a></li>
+			<li><a href="#playlist">Playing</a></li>
+		</ul>
+	</div>		
+</div>		

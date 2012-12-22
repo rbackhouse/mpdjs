@@ -1,0 +1,24 @@
+.ui-icon-fastForwardIcon {
+	background-image: url('../images/fastForward16.png');
+	background-size: 16px 16px;
+}
+
+.ui-icon-pauseIcon {
+	background-image: url('../images/pause16.png');
+	background-size: 16px 16px;
+}
+
+.ui-icon-playIcon {
+	background-image: url('../images/play16.png');
+	background-size: 16px 16px;
+}
+
+.ui-icon-stopIcon {
+	background-image: url('../images/stop16.png');
+	background-size: 16px 16px;
+}
+
+.ui-icon-rewindIcon {
+	background-image: url('../images/rewind16.png');
+	background-size: 16px 16px;
+}

@@ -1,0 +1,21 @@
+<div data-role="header" data-position="fixed">
+	<h1>Albums</h1> 
+</div>
+<a href="#" id="randomForArtistButton" data-role="button" data-inline="true" data-mini="true">Mix</a> 
+<div data-role="content">
+	<ul id="albumList" data-role="listview" data-theme="g">
+	<% _.each(albums, function(album) { %>
+		<li><a href="#songs/<%= encodeURIComponent(album.name) %>"><%= album.name %></a></li> 
+	<% }); %>
+	</ul>
+</div>
+<div data-id="thefooter "data-role="footer" data-position="fixed">
+	<div data-role="navbar">
+		<ul>
+			<li><a href="#artists">Artists</a></li>
+			<li><a href="#albums">Albums</a></li>
+			<li><a href="#songs">Songs</a></li>
+			<li><a href="#playlist">Playing</a></li>
+		</ul>
+	</div>		
+</div>		

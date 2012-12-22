@@ -1,0 +1,22 @@
+{ 
+	"name" : "mpdjs",
+	"version" : "0.0.1",
+	"description" : "Music Player Daemon client written in javascript",
+	"repository" : "git@github.com:rbackhouse/mpdjs.git",
+	"author" : "Richard Backhouse <richardabackhouse@gmail.com>",
+	"main" : "index",
+	"dependencies" : {
+		"connect" : ">= 2.0.0",
+		"zazloptimizer" : "0.5.1"
+	},
+	"config" : {
+		"port" : 8080,
+		"mpdport" : 6600
+	},
+	"engine": {
+    	"node": ">=0.8"
+	},
+    "readme": "",
+    "readmeFilename": "README.md",
+    "license": "BSD"
+}

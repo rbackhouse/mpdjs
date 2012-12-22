@@ -1,0 +1,38 @@
+<div data-role="header" data-position="fixed" class="ui-bar">
+	<h1>Play List</h1>
+</div>
+<div data-role="content">
+		<div data-role="collapsible">
+			<h3>Play/Pause/Stop/Volume</h3> 
+			<div data-role="controlgroup" data-type="horizontal" data-mini="true">
+				<a href="#control/previous" id="previous" data-role="button" data-icon="rewindIcon" data-iconpos="top" data-inline="true" data-mini="true">Prev</a> 
+				<a href="#control/play" id="playPause" data-role="button" data-icon="playIcon" data-iconpos="top" data-inline="true" data-mini="true">Play</a> 
+				<a href="#control/stop" id="stop" data-role="button" data-icon="stopIcon" data-iconpos="top" data-inline="true" data-mini="true">Stop</a> 
+				<a href="#control/next" id="next" data-role="button" data-icon="fastForwardIcon" data-iconpos="top" data-inline="true" data-mini="true">Next</a>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="volume">Volume:</label>	
+				<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
+			</div>
+			<div id="currentlyPlaying">Currently Playing []</div>					 
+		</div>			
+		<a href="#playlist/random" id="randomButton" data-role="button" data-inline="true" data-mini="true">Random</a>
+		<a href="#playlist/delete" id="clearButton" data-role="button" data-inline="true" data-mini="true">Clear</a>
+		<div> 
+			<ol id="playingList" data-role="listview" data-theme="g">
+			<% _.each(playlist, function(song) { %>
+				<li data-icon="delete"><a href="#playlist/remove/<%= song.id %>"><%= song.artist %> : <%= song.title %></a></li> 
+			<% }); %>
+			</ol>
+		</div>	
+</div>
+<div data-id="thefooter "data-role="footer" data-position="fixed">
+	<div data-role="navbar">
+		<ul>
+			<li><a href="#artists">Artists</a></li>
+			<li><a href="#albums">Albums</a></li>
+			<li><a href="#songs">Songs</a></li>
+			<li><a href="#playlist">Playing</a></li>
+		</ul>
+	</div>		
+</div>		
