@@ -4,9 +4,8 @@ define([
 		'underscore',
 		'models/PlayList',
 		'jquerymobile',
-		'text!templates/PlayList.html',
-		'text!templates/PlayListList.html'], 
-function($, Backbone, _, PlayList, mobile, template, listtemplate){
+		'text!templates/PlayList.html'], 
+function($, Backbone, _, PlayList, mobile, template){
 	var View = Backbone.View.extend({
 		events: {
 			"click #previous" : function() {
@@ -26,7 +25,7 @@ function($, Backbone, _, PlayList, mobile, template, listtemplate){
 			"change #volume" : "changeVolume"
 		},
 		initialize: function(options) {
-			this.model = options.playlist;
+			this.playlist = options.playlist;
 			this.template = _.template( template, { playlist: options.playlist.toJSON() } );
 		},
 		render: function(){
@@ -69,11 +68,14 @@ function($, Backbone, _, PlayList, mobile, template, listtemplate){
 					$("#currentlyPlaying").text("Currently Playing ["+currentsong+"]");
 				}
 			}
-			this.model.fetch({
+			this.playlist.fetch({
 				success: function(collection, response, options) {
-					this.model.reset(collection.toJSON());
-					this.listtemplate = _.template( listtemplate, { playlist: this.model.toJSON() } );
-					this.$el.find("ol").html(this.listtemplate);
+					this.playlist.reset(collection.toJSON());
+					$("#playingList li").remove();
+					this.playlist.each(function(song) {
+						$("#playingList").append('<li data-icon="delete"><a href="#playlist/remove/'+song.get("id")+'">'+song.get("artist")+' : '+song.get("title")+'</a></li>');	
+					});
+					$("#playingList").listview('refresh');
 				}.bind(this),
 				error: function(collection, xhr, options) {
 					console.log("failed!!!");
