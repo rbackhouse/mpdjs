@@ -4,24 +4,28 @@
 <div data-role="content">
 		<div data-role="collapsible">
 			<h3>Play/Pause/Stop/Volume</h3> 
-			<div data-role="controlgroup" data-type="horizontal" data-mini="true">
-				<a href="#control/previous" id="previous" data-role="button" data-icon="rewindIcon" data-iconpos="top" data-inline="true" data-mini="true">Prev</a> 
-				<a href="#control/play" id="playPause" data-role="button" data-icon="playIcon" data-iconpos="top" data-inline="true" data-mini="true">Play</a> 
-				<a href="#control/stop" id="stop" data-role="button" data-icon="stopIcon" data-iconpos="top" data-inline="true" data-mini="true">Stop</a> 
-				<a href="#control/next" id="next" data-role="button" data-icon="fastForwardIcon" data-iconpos="top" data-inline="true" data-mini="true">Next</a>
+			<div data-type="horizontal">
+				<a href="#playlist" id="previous" data-role="button" data-inline="true" data-icon="rewindIcon" data-iconpos="notext" data-mini="true"></a> 
+				<a href="#playlist" id="playPause" data-role="button" data-inline="true" data-icon="playIcon" data-iconpos="notext" data-mini="true"></a> 
+				<a href="#playlist" id="stop" data-role="button" data-inline="true" data-icon="stopIcon" data-iconpos="notext" data-mini="true"></a> 
+				<a href="#playlist" id="next" data-role="button" data-inline="true" data-icon="fastForwardIcon" data-iconpos="notext" data-mini="true"></a>
 			</div>
 			<div data-role="fieldcontain">
 				<label for="volume">Volume:</label>	
 				<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
 			</div>
-			<div id="currentlyPlaying">Currently Playing []</div>					 
-		</div>			
-		<a href="#playlist/random" id="randomButton" data-role="button" data-inline="true" data-mini="true">Random</a>
-		<a href="#playlist/delete" id="clearButton" data-role="button" data-inline="true" data-mini="true">Clear</a>
-		<div> 
+			<div id="currentlyPlaying">Playing []</div>					 
+		</div>
+		<div data-role="collapsible" data-collapsed="false"> 
+			<h3>PlayList</h3> 
+			<div>
+				<a href="#playlist" id="editButton" data-role="button" data-inline="true" data-mini="true">Edit</a>
+				<a href="#playlist" id="randomButton" data-role="button" data-inline="true" data-mini="true">Random</a>
+				<a href="#playlist" id="clearButton" data-role="button" data-inline="true" data-mini="true">Clear</a>
+			</div>
 			<ol id="playingList" data-role="listview" data-theme="g">
 			<% _.each(playlist, function(song) { %>
-				<li data-icon="delete"><a href="#playlist/remove/<%= song.id %>"><%= song.artist %> : <%= song.title %></a></li> 
+				<li><%= song.artist %> : <%= song.title %></li> 
 			<% }); %>
 			</ol>
 		</div>	

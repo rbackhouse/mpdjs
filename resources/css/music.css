@@ -22,3 +22,8 @@
 	background-image: url('../images/rewind16.png');
 	background-size: 16px 16px;
 }
+
+.ui-icon-minusIcon {
+	background-image: url('../images/minus.png');
+	background-size: 16px 16px;
+}
