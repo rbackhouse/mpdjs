@@ -119,8 +119,9 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			'songs/:album': 'songs',
 			'albums/:artist': 'albums',
 			'artists': 'artists',
-			'artists/': 'artists',
-			'': 'artists'
+			'albums': 'albums',
+			'songs': 'songs',
+			'': 'playlist'
 		}
 	});
 	

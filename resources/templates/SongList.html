@@ -1,4 +1,6 @@
 <div data-role="header" data-position="fixed">
+	<a href="#artists" data-role="button" data-inline="true" data-theme="b">Artists</a> 
+	<a href="#playlist" data-role="button" data-inline="true" data-theme="b">Playing</a> 
 	<h1>Songs</h1> 
 </div>
 <a href="#playlist/album/<%= encodeURIComponent(album) %>" id="addAllButton" data-role="button" data-inline="true" data-mini="true">Add All</a> 
@@ -9,13 +11,14 @@
 	<% }); %>
 	</ul>
 </div>
+<!--
 <div data-id="thefooter "data-role="footer" data-position="fixed">
 	<div data-role="navbar">
 		<ul>
 			<li><a href="#artists">Artists</a></li>
 			<li><a href="#albums">Albums</a></li>
-			<li><a href="#songs">Songs</a></li>
 			<li><a href="#playlist">Playing</a></li>
 		</ul>
 	</div>		
 </div>		
+-->

@@ -175,10 +175,10 @@ function($, Backbone, _, PlayList, mobile, template){
 			this.state = status.state;
 			console.log("state:"+status.state);
 			if (status.state === "play") {
-				//$("#playPause .ui-btn-text").html("Pause");
+				$("#playPause .ui-btn-text").html("Pause");
 				$("#playPause").buttonMarkup({icon : "pauseIcon" });
 			} else {
-				//$("#playPause .ui-btn-text").html("Play");
+				$("#playPause .ui-btn-text").html("Play");
 				$("#playPause").buttonMarkup({icon : "playIcon" });
 			}
 			if (refreshVolume) {

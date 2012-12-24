@@ -1,20 +1,12 @@
-<div data-role="header" data-position="fixed" class="ui-bar">
+<div data-role="header">
+	<a href="#artists" data-role="button" data-inline="true" data-theme="b">Artists</a> 
+	<a href="#albums" data-role="button" data-inline="true" data-theme="b">Albums</a> 
 	<h1>Play List</h1>
 </div>
 <div data-role="content">
-		<div data-role="collapsible">
-			<h3>Play/Pause/Stop/Volume</h3> 
-			<div data-type="horizontal">
-				<a href="#playlist" id="previous" data-role="button" data-inline="true" data-icon="rewindIcon" data-iconpos="notext" data-mini="true"></a> 
-				<a href="#playlist" id="playPause" data-role="button" data-inline="true" data-icon="playIcon" data-iconpos="notext" data-mini="true"></a> 
-				<a href="#playlist" id="stop" data-role="button" data-inline="true" data-icon="stopIcon" data-iconpos="notext" data-mini="true"></a> 
-				<a href="#playlist" id="next" data-role="button" data-inline="true" data-icon="fastForwardIcon" data-iconpos="notext" data-mini="true"></a>
-			</div>
-			<div data-role="fieldcontain">
-				<label for="volume">Volume:</label>	
-				<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
-			</div>
-			<div id="currentlyPlaying">Playing []</div>					 
+		<div id="currentlyPlaying"><b>Playing []<b></div>					 
+		<div data-role="fieldcontain">
+			<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
 		</div>
 		<div data-role="collapsible" data-collapsed="false"> 
 			<h3>PlayList</h3> 
@@ -30,13 +22,11 @@
 			</ol>
 		</div>	
 </div>
-<div data-id="thefooter "data-role="footer" data-position="fixed">
-	<div data-role="navbar">
-		<ul>
-			<li><a href="#artists">Artists</a></li>
-			<li><a href="#albums">Albums</a></li>
-			<li><a href="#songs">Songs</a></li>
-			<li><a href="#playlist">Playing</a></li>
-		</ul>
+<div data-id="thefooter "data-role="footer" data-position="fixed" class="ui-bar">
+	<div data-role="controlgroup" data-type="horizontal">
+		<a href="#playlist" id="previous" data-role="button" data-icon="rewindIcon">Prev</a> 
+		<a href="#playlist" id="playPause" data-role="button" data-icon="playIcon">Play</a> 
+		<a href="#playlist" id="stop" data-role="button" data-icon="stopIcon">Stop</a> 
+		<a href="#playlist" id="next" data-role="button" data-icon="fastForwardIcon">Next</a>
 	</div>		
 </div>		

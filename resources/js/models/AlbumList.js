@@ -5,7 +5,7 @@ define(['backbone', './Album'], function(Backbone, Album){
 		},
 		model: Album,
 		url: function() {
-			return "./music/albums/"+(this.artist === undefined ? "" : this.artist);
+			return "./music/albums"+(this.artist === undefined ? "" : "/"+this.artist);
 		}
 	});
 	return AlbumList;
