@@ -31,6 +31,9 @@ function($, Backbone, _, PlayList, mobile, template){
 			"change #volume" : "changeVolume"
 		},
 		initialize: function(options) {
+		    options.ws.onmessage = function(event) {
+		    	this.showStatus(event.data);
+      		}.bind(this);
 			this.playlist = options.playlist;
 			this.template = _.template( template, { playlist: options.playlist.toJSON() } );
         	$.ajax({
@@ -39,7 +42,6 @@ function($, Backbone, _, PlayList, mobile, template){
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 	        	dataType: "text",
 	        	success: function(data, textStatus, jqXHR) {
-		        	this.showStatus(data, true);
 	        	}.bind(this),
 	        	error: function(jqXHR, textStatus, errorThrown) {
 					console.log("status error : "+textStatus);
@@ -76,7 +78,6 @@ function($, Backbone, _, PlayList, mobile, template){
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 	        	dataType: "text",
 	        	success: function(data, textStatus, jqXHR) {
-		        	this.showStatus(data, true);
 		        	this.fetchPlayList();
 	        	}.bind(this),
 	        	error: function(jqXHR, textStatus, errorThrown) {
@@ -92,7 +93,6 @@ function($, Backbone, _, PlayList, mobile, template){
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 	        	dataType: "text",
 	        	success: function(data, textStatus, jqXHR) {
-		        	this.showStatus(data, true);
 		        	this.fetchPlayList();
 	        	}.bind(this),
 	        	error: function(jqXHR, textStatus, errorThrown) {
@@ -109,7 +109,6 @@ function($, Backbone, _, PlayList, mobile, template){
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 					dataType: "text",
 					success: function(data, textStatus, jqXHR) {
-		        		this.showStatus(data, true);
 						this.fetchPlayList();
 					}.bind(this),
 					error: function(jqXHR, textStatus, errorThrown) {
@@ -140,22 +139,23 @@ function($, Backbone, _, PlayList, mobile, template){
 			});
 		},
 		changeVolume: function() {
-        	$.ajax({
-        		url: "./music/volume/"+$("#volume").val(),
-        		type: "POST",
-				headers: { "cache-control": "no-cache" },
-	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-	        	dataType: "text",
-	        	success: function(data, textStatus, jqXHR) {
-	        		this.showStatus(data);
-	        	}.bind(this),
-	        	error: function(jqXHR, textStatus, errorThrown) {
-	        		console.log("change volume error: "+textStatus);
-	        	}
-        	});
+			var vol = $("#volume").val();
+			if (vol !== this.volume) {
+				$.ajax({
+					url: "./music/volume/"+vol,
+					type: "POST",
+					headers: { "cache-control": "no-cache" },
+					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+					dataType: "text",
+					success: function(data, textStatus, jqXHR) {
+					}.bind(this),
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log("change volume error: "+textStatus);
+					}
+				});
+        	}
 		},
 		sendControlCmd: function(type) {
-        	console.log("type = "+type);
         	$.ajax({
         		url: "./music/"+type,
         		type: "POST",
@@ -163,17 +163,16 @@ function($, Backbone, _, PlayList, mobile, template){
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 	        	dataType: "text",
 	        	success: function(data, textStatus, jqXHR) {
-	        		this.showStatus(data, true);
 	        	}.bind(this),
 	        	error: function(jqXHR, textStatus, errorThrown) {
 	        		console.log("control cmd error: "+textStatus);
 	        	}
         	});
 		},
-		showStatus: function(data, refreshVolume) {
+		showStatus: function(data) {
 			var status = JSON.parse(data);
 			this.state = status.state;
-			console.log("state:"+status.state);
+			this.volume = status.volume;
 			if (status.state === "play") {
 				$("#playPause .ui-btn-text").html("Pause");
 				$("#playPause").buttonMarkup({icon : "pauseIcon" });
@@ -181,17 +180,19 @@ function($, Backbone, _, PlayList, mobile, template){
 				$("#playPause .ui-btn-text").html("Play");
 				$("#playPause").buttonMarkup({icon : "playIcon" });
 			}
-			if (refreshVolume) {
-			var volume = parseInt(status.volume);
+			if (status.currentsong && (status.state === "play" || status.state === "pause")) {
+				var volume = parseInt(status.volume);
 				if (volume > -1) {
 					$("#volume").val(status.volume);
 				} else {
 					$("#volume").val("0");
 				}
 				$("#volume").slider('refresh');
-			}
-			if (status.currentsong && status.state === "play") {
-				$("#currentlyPlaying").text("Playing ["+status.currentsong+"]");
+				var time = Math.floor(parseInt(status.time));
+				var minutes = Math.floor(time / 60);
+				var seconds = time - minutes * 60;
+				seconds = (seconds < 10 ? '0' : '') + seconds;
+				$("#currentlyPlaying").text("Playing ["+status.currentsong+"] "+minutes+":"+seconds);
 			} else {
 				$("#currentlyPlaying").text("Playing []");
 			}

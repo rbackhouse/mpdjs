@@ -3,7 +3,7 @@ define(['backbone'], function(Backbone){
 		defaults: {
 			title: null,
 			track: 0,
-			time: 0,
+			time: null,
 			file: null,
 			b64file: null
 		}

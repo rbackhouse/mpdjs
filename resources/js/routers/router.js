@@ -21,7 +21,6 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        });
 	        this.firstPage = true;			
 	        this.on("route:addsong", function(song) {
-	        	console.log("song = "+song);
 	        	$.ajax({
 	        		url: "./music/playlist/song/"+song,
 	        		type: "PUT",
@@ -35,7 +34,6 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        	});
 	        });
 	        this.on("route:addalbum", function(album) {
-	        	console.log("album = "+album);
 	        	$.ajax({
 	        		url: "./music/playlist/album/"+album,
 	        		type: "PUT",
@@ -84,16 +82,20 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					}
 				});
 			});
-			this.on("route:removesong", function(song) {
-				console.log("remove "+song);
-			});
 			Backbone.history.start();
+			this.ws = new WebSocket('ws://' + window.location.host);
 		},
 		fetchPlayList: function(statusJSON) {
+			this.navigate("playlist", {replace: true});
+			if (this.currentView) {
+				this.currentView.remove();
+				this.currentView.unbind();
+			}
 			var playlist = new PlayList();
 			playlist.fetch({
 				success: function(collection, response, options) {
-					this.changePage(new PlayListView({playlist: collection}));
+					this.currentView = new PlayListView({playlist: collection, ws: this.ws})
+					this.changePage(this.currentView);
 				}.bind(this),
 				error: function(collection, xhr, options) {
 					console.log("failed!!!");
@@ -104,18 +106,12 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        $(page.el).attr('data-role', 'page');
 	        page.render();
 	        $('body').append($(page.el));
-	        var transition = mobile.defaultPageTransition;
-	        if (this.firstPage) {
-	            transition = 'none';
-	            this.firstPage = false;
-	        }
-	        mobile.changePage($(page.el), {changeHash:false, transition: transition});
+	        mobile.changePage($(page.el), {changeHash:false, reverse: false});
 	    },
 		routes: {
 			'playlist': 'playlist',
 			'playlist/song/:song': 'addsong',
 			'playlist/album/:album': 'addalbum',
-			'playlist/remove/:song': 'removesong',
 			'songs/:album': 'songs',
 			'albums/:artist': 'albums',
 			'artists': 'artists',
