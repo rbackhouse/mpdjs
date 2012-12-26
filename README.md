@@ -3,11 +3,8 @@ mpdjs
 
 Music Player Daemon client written in javascript. 
 
-MPD proxy runs using nodejs
-
-Frontend written using JQuery/JQuery Mobile/Backbone/Underscore
-
-JavaScript optimization provided by Zazl (https://github.com/zazl/optimizer)
+A proxy running on a nodejs server provides the connection to the Music Play Daemon process. The Frontend is written using JQuery/JQuery Mobile/Backbone/Underscore.
+JavaScript optimization provided by Zazl (https://github.com/zazl/optimizer). A WebSocket is used to push status updates to the browser.
 
 Prereqs: nodejs V0.8 or greater
 
