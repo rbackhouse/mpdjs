@@ -83,7 +83,13 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});
 			});
 			Backbone.history.start();
-			this.ws = new WebSocket('ws://' + window.location.host);
+			if (window.WebSocket) {
+				this.ws = new WebSocket('ws://' + window.location.host);
+			} else if (window.MozWebSocket) {
+				this.ws = new MozWebSocket('ws://' + window.location.host);
+			} else {
+				alert("No WebSocket Support !!!");
+			}
 		},
 		fetchPlayList: function(statusJSON) {
 			this.navigate("playlist", {replace: true});
