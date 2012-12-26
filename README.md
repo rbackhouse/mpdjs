@@ -12,6 +12,8 @@ To use:
 
 git clone git@github.com:rbackhouse/mpdjs.git
 
+or download the zipped source from https://github.com/rbackhouse/mpdjs/archive/master.zip
+
 npm install
 
 node index.js [http port] [MPD hostname] [MPD port]
