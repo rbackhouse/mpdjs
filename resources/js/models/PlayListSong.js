@@ -21,7 +21,7 @@ define(['backbone'], function(Backbone){
 			album: null,
 			title: null,
 			track: 0,
-			time: 0,
+			time: null,
 			file: null,
 			id: 0,
 			pos: 0

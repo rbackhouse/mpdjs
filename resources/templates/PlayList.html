@@ -17,7 +17,7 @@
 			</div>
 			<ol id="playingList" data-role="listview" data-theme="g">
 			<% _.each(playlist, function(song) { %>
-				<li><%= song.artist %> : <%= song.title %></li> 
+				<li><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></li> 
 			<% }); %>
 			</ol>
 		</div>	

@@ -47,22 +47,9 @@ function($, Backbone, _, PlayList, mobile, template){
 			"change #volume" : "changeVolume"
 		},
 		initialize: function(options) {
-		    options.ws.onmessage = function(event) {
-		    	this.showStatus(event.data);
-      		}.bind(this);
 			this.playlist = options.playlist;
 			this.template = _.template( template, { playlist: options.playlist.toJSON() } );
-        	$.ajax({
-        		url: "./music/status",
-        		type: "GET",
-	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-	        	dataType: "text",
-	        	success: function(data, textStatus, jqXHR) {
-	        	}.bind(this),
-	        	error: function(jqXHR, textStatus, errorThrown) {
-					console.log("status error : "+textStatus);
-	        	}
-        	});
+			this._openWebSocket();
 		},
 		render: function(){
 			$(this.el).html( this.template );
@@ -73,15 +60,13 @@ function($, Backbone, _, PlayList, mobile, template){
 				this.editing = undefined;
 				$("#editButton .ui-btn-text").html("Edit");
 				this.playlist.each(function(song) {
-					$("#playingList").append('<li>'+song.get("artist")+' : '+song.get("title")+'</li>');	
+					$("#playingList").append('<li>'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></li>');	
 				});
 			} else {
 				this.editing = true;
 				$("#editButton .ui-btn-text").html("Done");
 				this.playlist.each(function(song) {
-					//$("#playingList").append('<li id="'+song.get("id")+'"><img src="images/minus.png" alt="Delete" class="ui-li-icon">'+song.get("artist")+' : '+song.get("title")+'</li>');	
-					$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'">'+song.get("artist")+' : '+song.get("title")+'</a></li>');	
-					//$("#playingList").append('<li><a href="#playlist" id="'+song.get("id")+'"><img src="images/minus.png" alt="Delete" class="ui-li-icon">'+song.get("artist")+' : '+song.get("title")+'</a></li>');	
+					$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></a></li>');	
 				});
 			}
 			$("#playingList").listview('refresh');
@@ -140,11 +125,9 @@ function($, Backbone, _, PlayList, mobile, template){
 					$("#playingList li").remove();
 					this.playlist.each(function(song) {
 						if (this.editing) {
-							//$("#playingList").append('<li id="'+song.get("id")+'"><img src="images/minus.png" alt="Delete" class="ui-li-icon">'+song.get("artist")+' : '+song.get("title")+'</li>');	
-							$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'">'+song.get("artist")+' : '+song.get("title")+'</a></li>');	
-							//$("#playingList").append('<li><a href="#playlist" id="'+song.get("id")+'"><img src="images/minus.png" alt="Delete" class="ui-li-icon">'+song.get("artist")+' : '+song.get("title")+'</a></li>');	
+							$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></a></li>');	
 						} else {
-							$("#playingList").append('<li>'+song.get("artist")+' : '+song.get("title")+'</li>');	
+							$("#playingList").append('<li>'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></li>');	
 						}
 					}.bind(this));
 					$("#playingList").listview('refresh');
@@ -212,6 +195,26 @@ function($, Backbone, _, PlayList, mobile, template){
 			} else {
 				$("#currentlyPlaying").text("Playing []");
 			}
+		},
+		_openWebSocket: function() {
+			if (window.WebSocket) {
+				this.ws = new WebSocket('ws://' + window.location.host);
+			} else if (window.MozWebSocket) {
+				this.ws = new MozWebSocket('ws://' + window.location.host);
+			} else {
+				alert("No WebSocket Support !!!");
+			}
+		    this.ws.onmessage = function(event) {
+		    	this.showStatus(event.data);
+      		}.bind(this);
+      		this.ws.onerror = function (error) {
+  				console.log('WebSocket Error ' + error);
+  				this.ws.close();
+  				this._openWebSocket();
+			}.bind(this);
+		},
+		close: function() {
+			this.ws.close();
 		}
 	});
 	

@@ -99,24 +99,18 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});
 			});
 			Backbone.history.start();
-			if (window.WebSocket) {
-				this.ws = new WebSocket('ws://' + window.location.host);
-			} else if (window.MozWebSocket) {
-				this.ws = new MozWebSocket('ws://' + window.location.host);
-			} else {
-				alert("No WebSocket Support !!!");
-			}
 		},
 		fetchPlayList: function(statusJSON) {
 			this.navigate("playlist", {replace: true});
 			if (this.currentView) {
+				this.currentView.close();
 				this.currentView.remove();
 				this.currentView.unbind();
 			}
 			var playlist = new PlayList();
 			playlist.fetch({
 				success: function(collection, response, options) {
-					this.currentView = new PlayListView({playlist: collection, ws: this.ws})
+					this.currentView = new PlayListView({playlist: collection})
 					this.changePage(this.currentView);
 				}.bind(this),
 				error: function(collection, xhr, options) {
