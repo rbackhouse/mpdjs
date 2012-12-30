@@ -23,10 +23,10 @@ From git
 Usage
 -----
 
-	node index.js [http port] [MPD hostname] [MPD port]
+	node node_modules/mpdjs [http port] [MPD hostname] [MPD port]
 
 e.g
 
-	node index.js 8080 localhost 6600
+	node node_modules/mpdjs 8080 localhost 6600
 
 Point browser to http://[host]:[http port]/mpd.html
