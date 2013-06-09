@@ -31,7 +31,7 @@ define([
 function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView){
 	var Router = Backbone.Router.extend({
 		initialize: function() {
-			$('.back').live('click', function(event) {
+			$('.back').on('click', function(event) {
 	            window.history.back();
 	            return false;
 	        });
