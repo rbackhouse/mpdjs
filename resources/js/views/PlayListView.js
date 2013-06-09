@@ -40,6 +40,9 @@ function($, Backbone, _, PlayList, mobile, template){
 			"click #stop" : function() {
 				this.sendControlCmd("stop");
 			},
+			"click #update" : function() {
+				this.sendControlCmd("update");
+			},
 			"click #editButton" : "editPlayList",
 			"click #randomButton" : "randomPlayList",
 			"click #clearButton" : "clearPlayList",
