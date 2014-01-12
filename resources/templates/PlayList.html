@@ -1,6 +1,6 @@
 <div data-role="header" data-position="fixed">
-	<a href="#artists" data-role="button" data-inline="true" data-theme="b">Artists</a> 
-	<a href="#albums" data-role="button" data-inline="true" data-theme="b">Albums</a> 
+	<a href="#artists" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Artists</a> 
+	<a href="#albums" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Albums</a> 
 	<h1>Play List</h1>
 </div>
 <div data-role="content">
@@ -9,13 +9,13 @@
 			<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
 		</div>
 		<div data-role="collapsible" data-collapsed="false"> 
-			<h3>PlayList</h3> 
-			<div>
-				<a href="#playlist" id="editButton" data-role="button" data-inline="true" data-mini="true">Edit</a>
-				<a href="#playlist" id="randomButton" data-role="button" data-inline="true" data-mini="true">Random</a>
-				<a href="#playlist" id="clearButton" data-role="button" data-inline="true" data-mini="true">Clear</a>
+			<h3>PlayList</h3>
+			<div data-role="controlgroup" data-type="horizontal" data-mini="true">
+				<input id="editButton" data-icon="edit" value="Edit" type="button" data-mini="true">
+				<input id="randomButton" value="Random" type="button" data-mini="true">
+				<input id="clearButton" value="Clear" type="button" data-mini="true">
 			</div>
-			<ol id="playingList" data-role="listview" data-theme="g">
+			<ol id="playingList" data-role="listview" style="margin-top:0;">
 			<% _.each(playlist, function(song) { %>
 				<li><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></li> 
 			<% }); %>
@@ -27,10 +27,10 @@
 		</div>	
 </div>
 <div data-id="thefooter "data-role="footer" data-position="fixed" class="ui-bar">
-	<div data-role="controlgroup" data-type="horizontal">
-		<a href="#playlist" id="previous" data-role="button" data-icon="rewindIcon">Prev</a> 
-		<a href="#playlist" id="stop" data-role="button" data-icon="stopIcon">Stop</a> 
-		<a href="#playlist" id="playPause" data-role="button" data-icon="playIcon">Play</a> 
-		<a href="#playlist" id="next" data-role="button" data-icon="fastForwardIcon">Next</a>
+	<div data-role="controlgroup" data-type="horizontal" data-mini="true">
+		<input id="previous" data-icon="rewindIcon" value="Prev" type="button" data-mini="true">
+		<input id="stop" data-icon="stopIcon" value="Stop" type="button" data-mini="true">
+		<input id="playPause" data-icon="playIcon" value="Play" type="button" data-mini="true">
+		<input id="next" data-icon="fastForwardIcon" value="Next" type="button" data-mini="true">
 	</div>		
 </div>		

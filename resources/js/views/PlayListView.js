@@ -61,13 +61,15 @@ function($, Backbone, _, PlayList, mobile, template){
 			$("#playingList li").remove();
 			if (this.editing) {
 				this.editing = undefined;
-				$("#editButton .ui-btn-text").html("Edit");
+				$("#editButton").val("Edit");
+				$("#editButton").button("refresh");
 				this.playlist.each(function(song) {
 					$("#playingList").append('<li>'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></li>');	
 				});
 			} else {
 				this.editing = true;
-				$("#editButton .ui-btn-text").html("Done");
+				$("#editButton").val("Done");
+				$("#editButton").button("refresh");
 				this.playlist.each(function(song) {
 					$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></a></li>');	
 				});
@@ -176,11 +178,13 @@ function($, Backbone, _, PlayList, mobile, template){
 			this.state = status.state;
 			this.volume = status.volume;
 			if (status.state === "play") {
-				$("#playPause .ui-btn-text").html("Pause");
-				$("#playPause").buttonMarkup({icon : "pauseIcon" });
+				$("#playPause").val('Pause');
+				$("#playPause").button('option', {icon : "pauseIcon" });
+				$("#playPause").button("refresh");
 			} else {
-				$("#playPause .ui-btn-text").html("Play");
-				$("#playPause").buttonMarkup({icon : "playIcon" });
+				$("#playPause").val('Play');
+				$("#playPause").button('option', {icon : "playIcon" });
+				$("#playPause").button("refresh");
 			}
 			if (status.currentsong && (status.state === "play" || status.state === "pause")) {
 				var volume = parseInt(status.volume);

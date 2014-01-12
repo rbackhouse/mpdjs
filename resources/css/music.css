@@ -1,29 +1,29 @@
-.ui-icon-fastForwardIcon {
+.ui-icon-fastForwardIcon:after {
 	background-image: url('../images/fastForward16.png');
 	background-size: 16px 16px;
 }
 
-.ui-icon-pauseIcon {
+.ui-icon-pauseIcon:after {
 	background-image: url('../images/pause16.png');
 	background-size: 16px 16px;
 }
 
-.ui-icon-playIcon {
+.ui-icon-playIcon:after {
 	background-image: url('../images/play16.png');
 	background-size: 16px 16px;
 }
 
-.ui-icon-stopIcon {
+.ui-icon-stopIcon:after {
 	background-image: url('../images/stop16.png');
 	background-size: 16px 16px;
 }
 
-.ui-icon-rewindIcon {
+.ui-icon-rewindIcon:after {
 	background-image: url('../images/rewind16.png');
 	background-size: 16px 16px;
 }
 
-.ui-icon-minusIcon {
+.ui-icon-minusIcon:after {
 	background-image: url('../images/minus.png');
 	background-size: 16px 16px;
 }

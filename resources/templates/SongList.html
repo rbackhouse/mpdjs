@@ -5,7 +5,7 @@
 </div>
 <a href="#playlist/album/<%= encodeURIComponent(album) %>" id="addAllButton" data-role="button" data-inline="true" data-mini="true">Add All</a> 
 <div data-role="content">
-	<ul id="songList" data-role="listview" data-theme="g">
+	<ul id="songList" data-role="listview">
 	<% _.each(songs, function(song) { %>
 		<li><a href='#playlist/song/<%= song.b64file %>'><%= song.track %>: <%= song.title %> [<%= song.time %>]</a></li> 
 	<% }); %>
