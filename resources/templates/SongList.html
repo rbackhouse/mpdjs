@@ -1,9 +1,9 @@
 <div data-role="header" data-position="fixed">
-	<a href="#artists" data-role="button" data-inline="true" data-theme="b">Artists</a> 
-	<a href="#playlist" data-role="button" data-inline="true" data-theme="b">Playing</a> 
+	<a href="#artists" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Artists</a> 
+	<a href="#playlist" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Playing</a> 
 	<h1>Songs</h1> 
 </div>
-<a href="#playlist/album/<%= encodeURIComponent(album) %>" id="addAllButton" data-role="button" data-inline="true" data-mini="true">Add All</a> 
+<a href="#playlist/album/<%= encodeURIComponent(album) %>" id="addAllButton" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a> 
 <div data-role="content">
 	<ul id="songList" data-role="listview">
 	<% _.each(songs, function(song) { %>
