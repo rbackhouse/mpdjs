@@ -23,7 +23,14 @@
 		</div>	
 		<div data-role="collapsible" data-collapsed="true"> 
 			<h3>Settings</h3> 
-			<a href="#playlist" id="update" data-role="button" data-mini="true" data-inline="true">Update DB</a> 
+			<input id="update" value="Update DB" type="button" data-mini="true">
+			<% if (window.cordova) { %>
+			<label for="baseurl">Base URL:</label>
+			<div data-role="controlgroup" data-type="horizontal">
+				<input data-wrapper-class="controlgroup-textinput ui-btn" name="baseurl" id="baseurl" value="" type="text">
+				<input id="setBaseUrl" value="Set" type="button">
+		    </div>
+		    <% } %>
 		</div>	
 </div>
 <div data-id="thefooter "data-role="footer" data-position="fixed" class="ui-bar">

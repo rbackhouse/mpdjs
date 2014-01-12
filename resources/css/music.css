@@ -27,3 +27,9 @@
 	background-image: url('../images/minus.png');
 	background-size: 16px 16px;
 }
+
+.controlgroup-textinput{
+    padding-top:.22em;
+    padding-bottom:.22em;
+    width: 160px;
+}

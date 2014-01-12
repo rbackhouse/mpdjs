@@ -44,6 +44,9 @@ function($, Backbone, _, PlayList, mobile, config, template){
 			"click #update" : function() {
 				this.sendControlCmd("update");
 			},
+			"click #setBaseUrl" : function() {
+				config.setUrl($("#baseurl").val());
+			},
 			"click #editButton" : "editPlayList",
 			"click #randomButton" : "randomPlayList",
 			"click #clearButton" : "clearPlayList",

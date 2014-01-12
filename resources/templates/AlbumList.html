@@ -6,7 +6,7 @@
 <div data-role="content">
 	<ul id="albumList" data-role="listview" data-filter="true">
 	<% _.each(albums, function(album) { %>
-		<li><a href="#songs/<%= encodeURIComponent(album.name) %>"><%= album.name %></a></li> 
+		<li data-icon="arrow-r"><a href="#songs/<%= encodeURIComponent(album.name) %>"><%= album.name %></a></li> 
 	<% }); %>
 	</ul>
 </div>
