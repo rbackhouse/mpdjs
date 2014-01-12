@@ -14,23 +14,26 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(['jquery', 'mobileconfig', 'routers/router'], function($, mobileconfig, router) {
-	var uiRouter;
-	
-	function ready() {
-    	console.log("ready");
-    	uiRouter = new router();
+require.config({
+	baseUrl: 'js/',
+	directInject: true,
+	paths: {
+		jquery: '../lib/jquery/jquery-2.0.3',
+		jquerymobile: '../lib/mobile/jquery.mobile-1.4.0',
+		underscore: '../lib/underscore/underscore-1.5.2',
+		backbone: '../lib/backbone/backbone-1.1.0',
+		text: '../lib/requirejs/text',
+		templates: '../templates'
+	},
+	shim: {
+		'backbone' : {
+			deps: ['underscore', 'jquery'],
+			exports: 'Backbone'
+		},
+		'underscore' : {
+			exports: '_'
+		}
 	}
-	
-    $(document).ready(function() {
-	    if (window.cordova) {
-	    	require(['deviceReady!'], function() {
-	    		ready();
-	    	});
-	    } else {
-    		ready();
-	    }
-	});
-	
-	return {};
 });
+
+require(['app']);

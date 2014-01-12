@@ -100,6 +100,9 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});
 			});
 			Backbone.history.start();
+			if (window.cordova && navigator.userAgent.match(/iPhone OS 7/)) {
+				$('body').css('-webkit-transform', 'translate3d(0,20px,0)');
+			}
 		},
 		fetchPlayList: function(statusJSON) {
 			this.navigate("playlist", {replace: true});
