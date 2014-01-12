@@ -14,14 +14,14 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(['backbone', './Album'], function(Backbone, Album){
+define(['backbone', './Album', '../uiconfig'], function(Backbone, Album, config){
 	var AlbumList = Backbone.Collection.extend({
 		initialize: function(options) {
 			this.artist = options.artist;
 		},
 		model: Album,
 		url: function() {
-			return "./music/albums"+(this.artist === undefined ? "" : "/"+this.artist);
+			return config.baseUrl+"/music/albums"+(this.artist === undefined ? "" : "/"+this.artist);
 		}
 	});
 	return AlbumList;

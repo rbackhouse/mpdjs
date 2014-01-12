@@ -20,8 +20,9 @@ define([
 		'underscore',
 		'models/PlayList',
 		'jquerymobile',
+		'../uiconfig',
 		'text!templates/PlayList.html'], 
-function($, Backbone, _, PlayList, mobile, template){
+function($, Backbone, _, PlayList, mobile, config, template){
 	var View = Backbone.View.extend({
 		events: {
 			"click #previous" : function() {
@@ -78,7 +79,7 @@ function($, Backbone, _, PlayList, mobile, template){
 		},
 		randomPlayList: function() {
         	$.ajax({
-        		url: "./music/playlist/random",
+        		url: config.baseUrl+"/music/playlist/random",
         		type: "PUT",
 				headers: { "cache-control": "no-cache" },
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -93,7 +94,7 @@ function($, Backbone, _, PlayList, mobile, template){
 		},
 		clearPlayList: function() {
         	$.ajax({
-        		url: "./music/playlist",
+        		url: config.baseUrl+"/music/playlist",
         		type: "DELETE",
 				headers: { "cache-control": "no-cache" },
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -109,7 +110,7 @@ function($, Backbone, _, PlayList, mobile, template){
 		removeSong: function(evt) {
 			if (this.editing) {			
 				$.ajax({
-					url: "./music/playlist/"+evt.target.id,
+					url: config.baseUrl+"/music/playlist/"+evt.target.id,
 					type: "DELETE",
 					headers: { "cache-control": "no-cache" },
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -146,7 +147,7 @@ function($, Backbone, _, PlayList, mobile, template){
 			var vol = $("#volume").val();
 			if (vol !== this.volume) {
 				$.ajax({
-					url: "./music/volume/"+vol,
+					url: config.baseUrl+"/music/volume/"+vol,
 					type: "POST",
 					headers: { "cache-control": "no-cache" },
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -161,7 +162,7 @@ function($, Backbone, _, PlayList, mobile, template){
 		},
 		sendControlCmd: function(type) {
         	$.ajax({
-        		url: "./music/"+type,
+        		url: config.baseUrl+"/music/"+type,
         		type: "POST",
 				headers: { "cache-control": "no-cache" },
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -205,9 +206,9 @@ function($, Backbone, _, PlayList, mobile, template){
 		},
 		_openWebSocket: function() {
 			if (window.WebSocket) {
-				this.ws = new WebSocket('ws://' + window.location.host);
+				this.ws = new WebSocket(config.wsUrl);
 			} else if (window.MozWebSocket) {
-				this.ws = new MozWebSocket('ws://' + window.location.host);
+				this.ws = new MozWebSocket(config.wsUrl);
 			} else {
 				alert("No WebSocket Support !!!");
 			}
