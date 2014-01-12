@@ -16,7 +16,6 @@
 */
 require.config({
 	baseUrl: 'js/',
-	directInject: true,
 	paths: {
 		jquery: '../lib/jquery/jquery-2.0.3',
 		jquerymobile: '../lib/mobile/jquery.mobile-1.4.0',
@@ -35,5 +34,4 @@ require.config({
 		}
 	}
 });
-
 require(['app']);

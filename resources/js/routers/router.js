@@ -39,7 +39,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        this.firstPage = true;			
 	        this.on("route:addsong", function(song) {
 	        	$.ajax({
-	        		url: "./music/playlist/song/"+song,
+	        		url: config.baseURL()+"/music/playlist/song/"+song,
 	        		type: "PUT",
 		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 		        	dataType: "text",
@@ -47,12 +47,13 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			        	this.fetchPlayList();
 		        	}.bind(this),
 		        	error: function(jqXHR, textStatus, errorThrown) {
+						console.log("addsong failed :"+errorThrown);
 		        	}
 	        	});
 	        });
 	        this.on("route:addalbum", function(album) {
 	        	$.ajax({
-	        		url: "./music/playlist/album/"+album,
+	        		url: config.baseURL()+"/music/playlist/album/"+album,
 	        		type: "PUT",
 		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 		        	dataType: "text",
@@ -60,6 +61,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			        	this.fetchPlayList();
 		        	}.bind(this),
 		        	error: function(jqXHR, textStatus, errorThrown) {
+						console.log("addalbum failed :"+errorThrown);
 		        	}
 	        	});
 	        });
@@ -73,7 +75,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 						this.changePage(new SongListView({songs: collection, album: album}));
 					}.bind(this),
 					error: function(collection, xhr, options) {
-						console.log("failed!!!");
+						console.log("get songs failed :"+xhr.status);
 					}
 				});
 			});
@@ -84,7 +86,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 						this.changePage(new AlbumListView({albums: collection}));
 					}.bind(this),
 					error: function(collection, xhr, options) {
-						console.log("failed!!!");
+						console.log("get albums failed :"+xhr.status);
 					}
 				});
 			});
@@ -95,7 +97,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 						this.changePage(new ArtistListView({artists: collection}));
 					}.bind(this),
 					error: function(collection, xhr, options) {
-						console.log("failed!!!");
+						console.log("get artists failed :"+xhr.status);
 					}
 				});
 			});
@@ -118,7 +120,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					this.changePage(this.currentView);
 				}.bind(this),
 				error: function(collection, xhr, options) {
-					console.log("failed!!!");
+					console.log("get playlist failed :"+xhr.status);
 				}
 			});
 		},
