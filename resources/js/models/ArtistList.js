@@ -17,7 +17,7 @@
 define(['backbone', './Artist', '../uiconfig'], function(Backbone, Artist, config){
 	var ArtistList = Backbone.Collection.extend({
 		model: Artist,
-		url: config.baseUrl+"/music/artists"
+		url: config.getBaseUrl()+"/music/artists"
 	});
 	return ArtistList;
 });

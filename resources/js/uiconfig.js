@@ -1,15 +1,33 @@
 define(function() {
+	var url = localStorage["mpdjs.baseURL"] || window.location.host;
 	var baseUrl;
 	var wsUrl;
 	if (window.cordova) {
-		baseUrl = "";
-		wsUrl = "";
+		baseUrl = url;
+		wsUrl = url;
 	} else {
 		baseUrl = ".";
-		wsUrl = 'ws://' + window.location.host;
+		wsUrl = window.location.host;
 	}
 	return {
-		baseUrl: baseUrl,
-		wsUrl: wsUrl
+		getBaseUrl : function() {
+			if (baseUrl === ".") {
+				return baseUrl;
+			} else {
+				return 'http://'+baseUrl;
+			}
+			return
+		},
+		getWSUrl : function() {
+			return 'ws://' + wsUrl;
+		},
+		setUrl: function(newUrl) {
+			baseUrl = newUrl;
+			wsUrl = newUrl;
+			localStorage["mpdjs.baseURL"] = newUrl;
+		},
+		promptForUrl: function() {
+			return window.cordova ? true : false;
+		}
 	}
 });

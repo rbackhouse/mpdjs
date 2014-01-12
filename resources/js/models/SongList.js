@@ -21,7 +21,7 @@ define(['backbone', './Song', '../uiconfig'], function(Backbone, Song, config){
 		},
 		model: Song,
 		url: function() {
-			return config.baseUrl+"/music/songs/"+(this.album === undefined ? "" : this.album);	
+			return config.getBaseUrl()+"/music/songs/"+(this.album === undefined ? "" : this.album);	
 		}
 	});
 	return SongList;

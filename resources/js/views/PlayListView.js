@@ -79,7 +79,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 		},
 		randomPlayList: function() {
         	$.ajax({
-        		url: config.baseUrl+"/music/playlist/random",
+        		url: config.getBaseUrl()+"/music/playlist/random",
         		type: "PUT",
 				headers: { "cache-control": "no-cache" },
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -94,7 +94,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 		},
 		clearPlayList: function() {
         	$.ajax({
-        		url: config.baseUrl+"/music/playlist",
+        		url: config.getBaseUrl()+"/music/playlist",
         		type: "DELETE",
 				headers: { "cache-control": "no-cache" },
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -110,7 +110,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 		removeSong: function(evt) {
 			if (this.editing) {			
 				$.ajax({
-					url: config.baseUrl+"/music/playlist/"+evt.target.id,
+					url: config.getBaseUrl()+"/music/playlist/"+evt.target.id,
 					type: "DELETE",
 					headers: { "cache-control": "no-cache" },
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -147,7 +147,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 			var vol = $("#volume").val();
 			if (vol !== this.volume) {
 				$.ajax({
-					url: config.baseUrl+"/music/volume/"+vol,
+					url: config.getBaseUrl()+"/music/volume/"+vol,
 					type: "POST",
 					headers: { "cache-control": "no-cache" },
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -162,7 +162,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 		},
 		sendControlCmd: function(type) {
         	$.ajax({
-        		url: config.baseUrl+"/music/"+type,
+        		url: config.getBaseUrl()+"/music/"+type,
         		type: "POST",
 				headers: { "cache-control": "no-cache" },
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
@@ -206,9 +206,9 @@ function($, Backbone, _, PlayList, mobile, config, template){
 		},
 		_openWebSocket: function() {
 			if (window.WebSocket) {
-				this.ws = new WebSocket(config.wsUrl);
+				this.ws = new WebSocket(config.getWSUrl());
 			} else if (window.MozWebSocket) {
-				this.ws = new MozWebSocket(config.wsUrl);
+				this.ws = new MozWebSocket(config.getWSUrl());
 			} else {
 				alert("No WebSocket Support !!!");
 			}

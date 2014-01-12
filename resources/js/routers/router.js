@@ -27,8 +27,9 @@ define([
 	'views/AlbumListView',
 	'views/SongListView',
 	'views/PlayListView',
+	'uiconfig'
 	], 
-function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView){
+function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, config){
 	var Router = Backbone.Router.extend({
 		initialize: function() {
 			$('.back').on('click', function(event) {
@@ -119,10 +120,51 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			});
 		},
 	    changePage:function (page) {
-	        $(page.el).attr('data-role', 'page');
-	        page.render();
-	        $('body').append($(page.el));
-	        mobile.changePage($(page.el), {changeHash:false, reverse: false});
+	    	function changeIt() {
+				$(page.el).attr('data-role', 'page');
+				page.render();
+				$('body').append($(page.el));
+				mobile.changePage($(page.el), {changeHash:false, reverse: false});
+	    	}
+			if (config.promptForUrl()) {
+				var $popUp = $("<div/>").popup({
+					dismissible : false,
+					theme : "a",
+					overlyaTheme : "a",
+					transition : "pop"
+				}).bind("popupafterclose", function() {
+					$(this).remove();
+				});			
+				$("<h2/>", {
+			        text : "Provide a Server URL"
+			    }).appendTo($popUp);
+			    
+				$("<p/>", {
+					text : "URL:"
+				}).appendTo($popUp);
+
+				$("<form>").append($("<input/>", {
+					id : "baseUrl",
+					type : "text",
+					name : "url",
+					value : config.getBaseUrl()
+				})).appendTo($popUp);
+				
+				$("<a>", {
+					text : "Ok"
+				}).buttonMarkup({
+					inline : true,
+					icon : "check"
+				}).bind("click", function() {
+					$popUp.popup("close");
+					config.setUrl($("#baseUrl").val());
+					changeIt();
+				}).appendTo($popUp);
+				
+				$popUp.popup("open").trigger("create");
+			} else {
+				changeIt();
+			}
 	    },
 		routes: {
 			'playlist': 'playlist',
