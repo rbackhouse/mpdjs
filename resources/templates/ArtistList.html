@@ -4,7 +4,7 @@
 	<h1>Artists</h1>
 </div>
 <div data-role="content">
-	<ul id="artistList" data-role="listview" data-filter="true" data-autodividers="true">
+	<ul id="artistList" data-role="listview" data-filter="true">
 	<% _.each(artists, function(artist) { %>
 		<li><a href="#albums/<%= encodeURIComponent(artist.name) %>"><%= artist.name %></a></li> 
 	<% }); %>
