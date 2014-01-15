@@ -39,7 +39,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        this.firstPage = true;			
 	        this.on("route:addsong", function(song) {
 	        	$.ajax({
-	        		url: config.baseURL()+"/music/playlist/song/"+song,
+	        		url: config.getBaseUrl()+"/music/playlist/song/"+song,
 	        		type: "PUT",
 		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 		        	dataType: "text",
@@ -53,7 +53,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        });
 	        this.on("route:addalbum", function(album) {
 	        	$.ajax({
-	        		url: config.baseURL()+"/music/playlist/album/"+album,
+	        		url: config.getBaseUrl()+"/music/playlist/album/"+album,
 	        		type: "PUT",
 		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 		        	dataType: "text",
