@@ -1,11 +1,15 @@
 <div data-role="header" data-position="fixed">
-	<a href="#artists" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Artists</a> 
-	<a href="#albums" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Albums</a> 
+	<a id="back" class="ui-btn ui-icon-back ui-btn-icon-notext ui-corner-all">Back</a> 
 	<h1>Play List</h1>
+	<div data-role="controlgroup" data-type="horizontal" class="ui-mini ui-btn-right">
+		<a href="#artists" class="ui-btn ui-btn-inline ui-corner-all ui-mini ui-btn-icon-notext ui-icon-user">Artists</a> 
+		<a href="#albums" class="ui-btn ui-btn-inline ui-corner-all ui-mini ui-btn-icon-notext ui-icon-bullets">Albums</a>
+	</div>
 </div>
 <div data-role="content">
 		<div class="ui-body ui-body-e" id="currentlyPlaying">Playing []</div>					 
-		<div data-role="fieldcontain">
+		<div class="ui-field-contain">
+			<label for="volume" class="ui-hidden-accessible">Volume:</label>
 			<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
 		</div>
 		<div data-role="collapsible" data-collapsed="false"> 

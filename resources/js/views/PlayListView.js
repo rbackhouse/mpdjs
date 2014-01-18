@@ -25,6 +25,9 @@ define([
 function($, Backbone, _, PlayList, mobile, config, template){
 	var View = Backbone.View.extend({
 		events: {
+			"click #back" : function() {
+				window.history.back();
+			},
 			"click #previous" : function() {
 				this.sendControlCmd("previous");
 			},

@@ -21,6 +21,11 @@ define([
 		'text!templates/AlbumList.html'], 
 function($, Backbone, _, template){
 	var View = Backbone.View.extend({
+		events: {
+			"click #back" : function() {
+				window.history.back();
+			}
+		},
 		initialize: function(options) {
 			this.template = _.template( template, { albums: options.albums.toJSON() } );
 		},

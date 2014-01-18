@@ -1,7 +1,10 @@
 <div data-role="header" data-position="fixed">
-	<a href="#artists" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Artists</a> 
-	<a href="#playlist" class="ui-btn ui-btn-inline ui-corner-all ui-btn-b">Playing</a> 
+	<a id="back" class="ui-btn ui-icon-back ui-btn-icon-notext ui-corner-all">Back</a> 
 	<h1>Songs</h1> 
+	<div data-role="controlgroup" data-type="horizontal" class="ui-mini ui-btn-right">
+		<a href="#artists" class="ui-btn ui-btn-inline ui-corner-all ui-mini ui-btn-icon-notext ui-icon-user">Artists</a> 
+		<a href="#playlist" class="ui-btn ui-btn-inline ui-corner-all ui-mini ui-btn-icon-notext ui-icon-audio">Playing</a> 
+	</div>
 </div>
 <a href="#playlist/album/<%= encodeURIComponent(album) %>" id="addAllButton" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a> 
 <div data-role="content">
