@@ -1,33 +1,33 @@
 define(function() {
-	var url = localStorage["mpdjs.baseURL"] || window.location.host;
 	var baseUrl;
 	var wsUrl;
 	if (window.cordova) {
-		baseUrl = url;
-		wsUrl = url;
+		baseUrl = localStorage["mpdjs.baseURL"];
+		if (baseUrl === undefined) {
+			wsUrl = 'ws://';
+		} else {
+			wsUrl = 'ws://'+baseUrl.substring(7);
+		}
 	} else {
 		baseUrl = ".";
-		wsUrl = window.location.host;
+		wsUrl = 'ws://' + window.location.host;
 	}
+	console.log("baseUrl : "+baseUrl);
+	console.log("wsUrl : "+wsUrl);
 	return {
 		getBaseUrl : function() {
-			if (baseUrl === ".") {
-				return baseUrl;
-			} else {
-				return 'http://'+baseUrl;
-			}
-			return
+			return baseUrl;
 		},
 		getWSUrl : function() {
-			return 'ws://' + wsUrl;
+			return wsUrl;
 		},
 		setUrl: function(newUrl) {
 			baseUrl = newUrl;
-			wsUrl = newUrl;
+			wsUrl = 'ws://' + newUrl.substring(7);
 			localStorage["mpdjs.baseURL"] = newUrl;
 		},
 		promptForUrl: function() {
-			return window.cordova ? true : false;
+			return window.cordova && baseUrl === undefined ? true : false;
 		}
 	}
 });

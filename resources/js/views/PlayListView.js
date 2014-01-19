@@ -58,7 +58,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 		},
 		initialize: function(options) {
 			this.playlist = options.playlist;
-			this.template = _.template( template, { playlist: options.playlist.toJSON() } );
+			this.template = _.template( template, { baseUrl: config.getBaseUrl(), playlist: options.playlist.toJSON() } );
 			this._openWebSocket();
 		},
 		render: function(){

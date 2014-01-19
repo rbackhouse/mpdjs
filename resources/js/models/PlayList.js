@@ -17,7 +17,9 @@
 define(['backbone', './PlayListSong', '../uiconfig'], function(Backbone, PlayListSong, config){
 	var PlayList = Backbone.Collection.extend({
 		model: PlayListSong,
-		url: config.getBaseUrl()+"/music/playlist"
+		url: function() {
+			return config.getBaseUrl()+"/music/playlist";
+		}
 	});
 	return PlayList;
 });

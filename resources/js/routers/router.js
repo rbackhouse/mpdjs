@@ -104,30 +104,34 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			Backbone.history.start();
 		},
 		fetchPlayList: function(statusJSON) {
-			this.navigate("playlist", {replace: true});
-			if (this.currentView) {
-				this.currentView.close();
-				this.currentView.remove();
-				this.currentView.unbind();
-			}
-			var playlist = new PlayList();
-			playlist.fetch({
-				success: function(collection, response, options) {
-					this.currentView = new PlayListView({playlist: collection})
-					this.changePage(this.currentView);
-				}.bind(this),
-				error: function(collection, xhr, options) {
-					console.log("get playlist failed :"+xhr.status);
+			this.checkForBaseURL(function() {
+				this.navigate("playlist", {replace: true});
+				if (this.currentView) {
+					this.currentView.close();
+					this.currentView.remove();
+					this.currentView.unbind();
 				}
-			});
+				var playlist = new PlayList();
+				playlist.fetch({
+					success: function(collection, response, options) {
+						this.currentView = new PlayListView({playlist: collection})
+						this.changePage(this.currentView);
+					}.bind(this),
+					error: function(collection, xhr, options) {
+						console.log("get playlist failed :"+xhr.status);
+					}
+				});
+			}.bind(this));
 		},
 	    changePage:function (page) {
-	    	function changeIt() {
+	    	this.checkForBaseURL(function() {
 				$(page.el).attr('data-role', 'page');
 				page.render();
 				$('body').append($(page.el));
 				mobile.changePage($(page.el), {changeHash:false, reverse: false});
-	    	}
+	    	});
+	    },
+	    checkForBaseURL : function(cb) {
 			if (config.promptForUrl()) {
 				var $popUp = $("<div/>").popup({
 					dismissible : false,
@@ -138,7 +142,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					$(this).remove();
 				});			
 				$("<h2/>", {
-			        text : "Provide a Server URL"
+			        text : "Enter a Server URL"
 			    }).appendTo($popUp);
 			    
 				$("<p/>", {
@@ -149,7 +153,8 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					id : "baseUrl",
 					type : "text",
 					name : "url",
-					value : config.getBaseUrl()
+					value : config.getBaseUrl(),
+					autocapitalize: "off"
 				})).appendTo($popUp);
 				
 				$("<a>", {
@@ -160,12 +165,12 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				}).bind("click", function() {
 					$popUp.popup("close");
 					config.setUrl($("#baseUrl").val());
-					changeIt();
+					cb();
 				}).appendTo($popUp);
 				
 				$popUp.popup("open").trigger("create");
 			} else {
-				changeIt();
+				cb();
 			}
 	    },
 		routes: {
