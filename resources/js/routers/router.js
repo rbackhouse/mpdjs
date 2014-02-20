@@ -159,6 +159,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				}).bind("popupafterclose", function() {
 					$(this).remove();
 				});			
+				$popUp.addClass("ui-content");
 				$("<h2/>", {
 			        text : "Enter a Server URL"
 			    }).appendTo($popUp);
