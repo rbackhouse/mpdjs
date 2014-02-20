@@ -84,6 +84,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 			$("#playingList").listview('refresh');
 		},
 		randomPlayList: function() {
+			$.mobile.loading("show", { textVisible: false });
         	$.ajax({
         		url: config.getBaseUrl()+"/music/playlist/random",
         		type: "PUT",
@@ -91,14 +92,17 @@ function($, Backbone, _, PlayList, mobile, config, template){
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 	        	dataType: "text",
 	        	success: function(data, textStatus, jqXHR) {
+		        	$.mobile.loading("hide");
 		        	this.fetchPlayList();
 	        	}.bind(this),
 	        	error: function(jqXHR, textStatus, errorThrown) {
+		        	$.mobile.loading("hide");
 					console.log("random playlist error : "+textStatus);
 	        	}
         	});
 		},
 		clearPlayList: function() {
+			$.mobile.loading("show", { textVisible: false });
         	$.ajax({
         		url: config.getBaseUrl()+"/music/playlist",
         		type: "DELETE",
@@ -106,15 +110,18 @@ function($, Backbone, _, PlayList, mobile, config, template){
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 	        	dataType: "text",
 	        	success: function(data, textStatus, jqXHR) {
+		        	$.mobile.loading("hide");
 		        	this.fetchPlayList();
 	        	}.bind(this),
 	        	error: function(jqXHR, textStatus, errorThrown) {
+		        	$.mobile.loading("hide");
 					console.log("clear playlist error : "+textStatus);
 	        	}
         	});
 		},
 		removeSong: function(evt) {
 			if (this.editing) {			
+				$.mobile.loading("show", { textVisible: false });
 				$.ajax({
 					url: config.getBaseUrl()+"/music/playlist/"+evt.target.id,
 					type: "DELETE",
@@ -122,17 +129,21 @@ function($, Backbone, _, PlayList, mobile, config, template){
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 					dataType: "text",
 					success: function(data, textStatus, jqXHR) {
+			        	$.mobile.loading("hide");
 						this.fetchPlayList();
 					}.bind(this),
 					error: function(jqXHR, textStatus, errorThrown) {
+			        	$.mobile.loading("hide");
 						console.log("remove song error : "+textStatus);
 					}
 				});
 			}
 		},
 		fetchPlayList: function() {
+			$.mobile.loading("show", { textVisible: false });
 			this.playlist.fetch({
 				success: function(collection, response, options) {
+		        	$.mobile.loading("hide");
 					this.playlist.reset(collection.toJSON());
 					$("#playingList li").remove();
 					this.playlist.each(function(song) {
@@ -145,6 +156,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 					$("#playingList").listview('refresh');
 				}.bind(this),
 				error: function(jqXHR, textStatus, errorThrown) {
+		        	$.mobile.loading("hide");
 					console.log("fetch playlist error : "+textStatus);
 				}
 			});
@@ -152,6 +164,7 @@ function($, Backbone, _, PlayList, mobile, config, template){
 		changeVolume: function() {
 			var vol = $("#volume").val();
 			if (vol !== this.volume) {
+				$.mobile.loading("show", { textVisible: false });
 				$.ajax({
 					url: config.getBaseUrl()+"/music/volume/"+vol,
 					type: "POST",
@@ -159,14 +172,17 @@ function($, Backbone, _, PlayList, mobile, config, template){
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 					dataType: "text",
 					success: function(data, textStatus, jqXHR) {
+			        	$.mobile.loading("hide");
 					}.bind(this),
 					error: function(jqXHR, textStatus, errorThrown) {
+			        	$.mobile.loading("hide");
 						console.log("change volume error: "+textStatus);
 					}
 				});
         	}
 		},
 		sendControlCmd: function(type) {
+			$.mobile.loading("show", { textVisible: false });
         	$.ajax({
         		url: config.getBaseUrl()+"/music/"+type,
         		type: "POST",
@@ -174,8 +190,10 @@ function($, Backbone, _, PlayList, mobile, config, template){
 	        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 	        	dataType: "text",
 	        	success: function(data, textStatus, jqXHR) {
+		        	$.mobile.loading("hide");
 	        	}.bind(this),
 	        	error: function(jqXHR, textStatus, errorThrown) {
+		        	$.mobile.loading("hide");
 	        		console.log("control cmd error: "+textStatus);
 	        	}
         	});

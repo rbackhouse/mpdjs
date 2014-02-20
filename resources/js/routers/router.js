@@ -38,29 +38,35 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        });
 	        this.firstPage = true;			
 	        this.on("route:addsong", function(song) {
+				$.mobile.loading("show", { textVisible: false });
 	        	$.ajax({
 	        		url: config.getBaseUrl()+"/music/playlist/song/"+song,
 	        		type: "PUT",
 		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 		        	dataType: "text",
 		        	success: function(data, textStatus, jqXHR) {
+		        		$.mobile.loading("hide");
 			        	this.fetchPlayList();
 		        	}.bind(this),
 		        	error: function(jqXHR, textStatus, errorThrown) {
+		        		$.mobile.loading("hide");
 						console.log("addsong failed :"+errorThrown);
 		        	}
 	        	});
 	        });
 	        this.on("route:addalbum", function(album) {
+				$.mobile.loading("show", { textVisible: false });
 	        	$.ajax({
 	        		url: config.getBaseUrl()+"/music/playlist/album/"+album,
 	        		type: "PUT",
 		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 		        	dataType: "text",
 		        	success: function(data, textStatus, jqXHR) {
+		        		$.mobile.loading("hide");
 			        	this.fetchPlayList();
 		        	}.bind(this),
 		        	error: function(jqXHR, textStatus, errorThrown) {
+		        		$.mobile.loading("hide");
 						console.log("addalbum failed :"+errorThrown);
 		        	}
 	        	});
@@ -70,33 +76,42 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			});
 			this.on("route:songs", function(album) {
 				var songlist = new SongList({album: album});
+				$.mobile.loading("show", { textVisible: false });
 				songlist.fetch({
 					success: function(collection, response, options) {
+		        		$.mobile.loading("hide");
 						this.changePage(new SongListView({songs: collection, album: album}));
 					}.bind(this),
 					error: function(collection, xhr, options) {
+		        		$.mobile.loading("hide");
 						console.log("get songs failed :"+xhr.status);
 					}
 				});
 			});
 			this.on("route:albums", function(artist) {
 				var albumslist = new AlbumList({artist: artist});
+				$.mobile.loading("show", { textVisible: false });
 				albumslist.fetch({
 					success: function(collection, response, options) {
+		        		$.mobile.loading("hide");
 						this.changePage(new AlbumListView({albums: collection}));
 					}.bind(this),
 					error: function(collection, xhr, options) {
+		        		$.mobile.loading("hide");
 						console.log("get albums failed :"+xhr.status);
 					}
 				});
 			});
 			this.on("route:artists", function() {
 				var artistlist = new ArtistList();
+				$.mobile.loading("show", { textVisible: false });
 				artistlist.fetch({
 					success: function(collection, response, options) {
+		        		$.mobile.loading("hide");
 						this.changePage(new ArtistListView({artists: collection}));
 					}.bind(this),
 					error: function(collection, xhr, options) {
+		        		$.mobile.loading("hide");
 						console.log("get artists failed :"+xhr.status);
 					}
 				});
@@ -112,12 +127,15 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					this.currentView.unbind();
 				}
 				var playlist = new PlayList();
+				$.mobile.loading("show", { textVisible: false });
 				playlist.fetch({
 					success: function(collection, response, options) {
+		        		$.mobile.loading("hide");
 						this.currentView = new PlayListView({playlist: collection})
 						this.changePage(this.currentView);
 					}.bind(this),
 					error: function(collection, xhr, options) {
+		        		$.mobile.loading("hide");
 						console.log("get playlist failed :"+xhr.status);
 					}
 				});
