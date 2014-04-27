@@ -1,7 +1,7 @@
 /*
 * The MIT License (MIT)
 * 
-* Copyright (c) 2012 Richard Backhouse
+* Copyright (c) 2014 Richard Backhouse
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -14,18 +14,18 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(['backbone'], function(Backbone){
-	var Song = Backbone.Model.extend({
-		defaults: {
-			artist: null,
-			album: null,
-			title: null,
-			track: 0,
-			time: null,
-			file: null,
-			b64file: null
+define(['backbone', './Song', '../uiconfig'], function(Backbone, Song, config){
+	var SongSearchList = Backbone.Collection.extend({
+		initialize: function(options) {
+		},
+		model: Song,
+		url: function() {
+			var url = config.getBaseUrl()+"/music/search/";
+			if (this.searchValue && this.searchValue !== "") {
+				url += encodeURIComponent(this.searchValue);
+			}
+			return url;
 		}
 	});
-	
-	return Song;
+	return SongSearchList;
 });

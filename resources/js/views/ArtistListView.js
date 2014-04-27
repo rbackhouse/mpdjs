@@ -18,19 +18,23 @@ define([
 		'jquery', 
 		'backbone',
 		'underscore', 
+		'./BaseView',
 		'text!templates/ArtistList.html'], 
-function($, Backbone, _, template){
-	var View = Backbone.View.extend({
-		events: {
-			"click #back" : function() {
-				window.history.back();
-			}
+function($, Backbone, _, BaseView, template){
+	var View = BaseView.extend({
+		events: function() {
+		    return _.extend({}, BaseView.prototype.events, {
+		    });	
 		},
 		initialize: function(options) {
+			options.header = {
+				title: "Artists"
+			};
+			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template, { artists: options.artists.toJSON() } );
 		},
 		render: function(){
-			$(this.el).html( this.template );
+			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
 		}
 	});
 	

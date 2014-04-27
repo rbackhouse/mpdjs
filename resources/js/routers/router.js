@@ -27,9 +27,10 @@ define([
 	'views/AlbumListView',
 	'views/SongListView',
 	'views/PlayListView',
+	'views/SongSearchView',
 	'uiconfig'
 	], 
-function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, config){
+function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, SongSearchView, config){
 	var Router = Backbone.Router.extend({
 		initialize: function() {
 			$('.back').on('click', function(event) {
@@ -116,6 +117,9 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					}
 				});
 			});
+			this.on("route:search", function() {
+				this.changePage(new SongSearchView({}));
+			});
 			Backbone.history.start();
 		},
 		fetchPlayList: function(statusJSON) {
@@ -201,6 +205,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			'artists': 'artists',
 			'albums': 'albums',
 			'songs': 'songs',
+			'search': 'search',
 			'': 'playlist'
 		}
 	});

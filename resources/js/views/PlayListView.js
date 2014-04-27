@@ -21,48 +21,55 @@ define([
 		'models/PlayList',
 		'jquerymobile',
 		'../uiconfig',
+		'./BaseView',
 		'text!templates/PlayList.html'], 
-function($, Backbone, _, PlayList, mobile, config, template){
-	var View = Backbone.View.extend({
-		events: {
-			"click #back" : function() {
-				window.history.back();
-			},
-			"click #previous" : function() {
-				this.sendControlCmd("previous");
-			},
-			"click #next" : function() {
-				this.sendControlCmd("next");
-			},
-			"click #playPause" : function() {
-				if (this.state === "play") {
-					this.sendControlCmd("pause");
-				} else {
-					this.sendControlCmd("play");
-				}
-			},
-			"click #stop" : function() {
-				this.sendControlCmd("stop");
-			},
-			"click #update" : function() {
-				this.sendControlCmd("update");
-			},
-			"click #setBaseUrl" : function() {
-				config.setUrl($("#baseurl").val());
-			},
-			"click #editButton" : "editPlayList",
-			"click #randomButton" : "randomPlayList",
-			"click #clearButton" : "clearPlayList",
-			"click #playingList li" : "removeSong",
-			"change #volume" : "changeVolume"
+function($, Backbone, _, PlayList, mobile, config, BaseView, template){
+	var View = BaseView.extend({
+		events: function() {
+		    return _.extend({}, BaseView.prototype.events, {
+				"click #back" : function() {
+					window.history.back();
+				},
+				"click #previous" : function() {
+					this.sendControlCmd("previous");
+				},
+				"click #next" : function() {
+					this.sendControlCmd("next");
+				},
+				"click #playPause" : function() {
+					if (this.state === "play") {
+						this.sendControlCmd("pause");
+					} else {
+						this.sendControlCmd("play");
+					}
+				},
+				"click #stop" : function() {
+					this.sendControlCmd("stop");
+				},
+				"click #update" : function() {
+					this.sendControlCmd("update");
+				},
+				"click #setBaseUrl" : function() {
+					config.setUrl($("#baseurl").val());
+				},
+				"click #editButton" : "editPlayList",
+				"click #randomButton" : "randomPlayList",
+				"click #clearButton" : "clearPlayList",
+				"click #playingList li" : "removeSong",
+				"change #volume" : "changeVolume"
+		    });	
 		},
 		initialize: function(options) {
+			options.header = {
+				title: "Play List"
+			};
+			this.constructor.__super__.initialize.apply(this, [options]);
 			this.playlist = options.playlist;
 			this.template = _.template( template, { baseUrl: config.getBaseUrl(), playlist: options.playlist.toJSON() } );
 			this._openWebSocket();
 		},
 		render: function(){
-			$(this.el).html( this.template );
+			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
 		},
 		editPlayList: function() {
 			$("#playingList li").remove();

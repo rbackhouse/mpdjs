@@ -1,11 +1,3 @@
-<div data-role="header" data-position="fixed">
-	<a id="back" class="ui-btn ui-icon-back ui-btn-icon-notext ui-corner-all">Back</a> 
-	<h1>Albums</h1> 
-	<div data-role="controlgroup" data-type="horizontal" class="ui-mini ui-btn-right">
-		<a href="#artists" class="ui-btn ui-btn-inline ui-corner-all ui-mini ui-btn-icon-notext ui-icon-user">Artists</a> 
-		<a href="#playlist" class="ui-btn ui-btn-inline ui-corner-all ui-mini ui-btn-icon-notext ui-icon-audio">Playing</a> 
-	</div>
-</div>
 <div data-role="content">
 	<ul id="albumList" data-role="listview" data-filter="true">
 	<% _.each(albums, function(album) { %>
@@ -13,14 +5,3 @@
 	<% }); %>
 	</ul>
 </div>
-<!--
-<div data-id="thefooter "data-role="footer" data-position="fixed">
-	<div data-role="navbar">
-		<ul>
-			<li><a href="#artists">Artists</a></li>
-			<li><a href="#albums">Albums</a></li>
-			<li><a href="#playlist">Playing</a></li>
-		</ul>
-	</div>		
-</div>		
--->
