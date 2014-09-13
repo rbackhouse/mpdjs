@@ -1,23 +1,24 @@
-{ 
-	"name" : "mpdjs",
-	"version" : "0.1.0",
-	"description" : "Music Player Daemon client written in javascript",
-	"repository" : "git@github.com:rbackhouse/mpdjs.git",
-	"author" : "Richard Backhouse <richardabackhouse@gmail.com>",
-	"main" : "index",
-	"dependencies" : {
-		"connect" : ">= 2.0.0",
-		"zazloptimizer" : ">= 0.5.2",
-		"ws" : ">= 0.4"
-	},
-	"config" : {
-		"port" : 8080,
-		"mpdport" : 6600
-	},
-	"engine": {
-    	"node": ">=0.8"
-	},
-    "readme": "",
-    "readmeFilename": "README.md",
-    "license": "MIT"
+{
+  "name": "mpdjs",
+  "version": "0.1.0",
+  "description": "Music Player Daemon client written in javascript",
+  "repository": "git@github.com:rbackhouse/mpdjs.git",
+  "author": "Richard Backhouse <richardabackhouse@gmail.com>",
+  "main": "index",
+  "dependencies": {
+    "connect": ">= 2.0.0",
+    "serve-static": "^1.6.1",
+    "ws": ">= 0.4",
+    "zazloptimizer": ">= 0.5.2"
+  },
+  "config": {
+    "port": 8080,
+    "mpdport": 6600
+  },
+  "engine": {
+    "node": ">=0.8"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "license": "MIT"
 }
