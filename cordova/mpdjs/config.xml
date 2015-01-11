@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="org.potpie.mpdjs" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>MPD js</name>
+    <description>
+		Music Player Daemon client written in javascript        
+    </description>
+    <author email="richardabackhouse@gmail.com" href="http://rbackhouse.org">
+        Richard Backhouse
+    </author>
+    <content src="cordovampd.html" />
+    <access origin="*" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
+</widget>
