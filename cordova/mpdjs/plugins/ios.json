@@ -27,6 +27,24 @@
                         {
                             "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SocketConnection\"><param name=\"ios-package\" value=\"SocketConnection\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BackgroundMode\"><param name=\"ios-package\" value=\"APPBackgroundMode\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "*-Info.plist": {
+                "parents": {
+                    "UIBackgroundModes": [
+                        {
+                            "xml": "<array><string>audio</string></array>",
+                            "count": 1
                         }
                     ]
                 }
@@ -41,6 +59,12 @@
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
         "org.apache.cordova.console": {
+            "PACKAGE_NAME": "org.potpie.mpdjs"
+        },
+        "org.potpie.mpdjs.socketconnection": {
+            "PACKAGE_NAME": "org.potpie.mpdjs"
+        },
+        "de.appplant.cordova.plugin.background-mode": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         }
     },

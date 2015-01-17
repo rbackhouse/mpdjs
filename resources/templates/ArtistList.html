@@ -1,7 +1,7 @@
 <div data-role="content">
 	<ul id="artistList" data-role="listview" data-filter="true">
 	<% _.each(artists, function(artist) { %>
-		<li data-icon="arrow-r"><a href="#albums/<%= encodeURIComponent(artist.name) %>"><%= artist.name %></a></li> 
+		<li data-icon="arrow-r"><a href="#albums/<%= encodeURIComponent(artist.name) %>"><p style="white-space:normal"><%= artist.name %></p></a></li> 
 	<% }); %>
 	</ul>
 </div>

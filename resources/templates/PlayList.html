@@ -13,7 +13,7 @@
 			</div>
 			<ol id="playingList" data-role="listview" style="margin-top:0;">
 			<% _.each(playlist, function(song) { %>
-				<li><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></li> 
+				<li><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></li> 
 			<% }); %>
 			</ol>
 		</div>	
@@ -21,11 +21,16 @@
 			<h3>Settings</h3> 
 			<input id="update" value="Update DB" type="button" data-mini="true">
 			<% if (window.cordova) { %>
-			<label for="baseurl">Base URL:</label>
-			<div data-role="controlgroup" data-type="horizontal">
-				<input data-wrapper-class="controlgroup-textinput ui-btn" name="baseurl" id="baseurl" value="<%= baseUrl %>" type="text">
-				<input id="setBaseUrl" value="Set" type="button">
-		    </div>
+			<label for="isDirect">Direct Connection :</label>
+			<select id="isDirect" data-role="flipswitch">
+				<option value="false" <% if (isDirect === false) { %> selected="true" <% } %>>Off</option>
+				<option value="true" <% if (isDirect === true) { %> selected="true" <% } %>On</option>
+			</select>		
+			<label for="host">Host:</label>
+			<input data-wrapper-class="controlgroup-textinput ui-btn" name="host" id="host" value="<%= host %>" type="text">
+			<label for="port">Port:</label>
+			<input data-wrapper-class="controlgroup-textinput ui-btn" name="port" id="port" value="<%= port %>" type="text">
+			<input id="setConnection" value="Set" type="button">
 		    <% } %>
 		</div>	
 </div>

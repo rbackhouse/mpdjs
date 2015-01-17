@@ -63,7 +63,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 					$.mobile.loading("hide");
 					$("#songList li").remove();
 					collection.each(function(song) {
-						$("#songList").append("<li data-icon=\"arrow-r\"><a href='#playlist/song/"+song.get("b64file")+"'>"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</a></li>");
+						$("#songList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
 					});
 					$("#songList").listview('refresh');
 				}.bind(this),

@@ -1,7 +1,7 @@
 /*
 * The MIT License (MIT)
 * 
-* Copyright (c) 2012 Richard Backhouse
+* Copyright (c) 2014 Richard Backhouse
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -14,23 +14,58 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(['backbone', './Artist', '../uiconfig', '../mpd/MPDClient'], function(Backbone, Artist, config, MPDClient) {
-	var ArtistList = Backbone.Collection.extend({
-		model: Artist,
-		url: function() {
-			return config.getBaseUrl()+"/music/artists";
-		},
-		fetch: function(options) {
-			if (config.isDirect()) {
-				MPDClient.getAllArtists(function(artists) {
-					this.set(artists, options);
-			        options.success(this, artists, options);
-        			this.trigger('sync', this, artists, options);
-				}.bind(this));								
-			} else {
-				this.constructor.__super__.fetch.apply(this, [options]);
-			}
-		}
-	});
-	return ArtistList;
-});
+
+var readListener;
+
+var SocketConnection = {
+	connect: function(host, port, cb) {
+		cordova.exec(
+			function(state) {
+				cb(undefined, state);
+			},
+			function(err) {
+				cb(err);
+			},
+			"SocketConnection",
+			"connect",
+			[host, port]
+		);
+	},
+	disconnect: function() {
+		cordova.exec(
+			function() {
+			},
+			function(err) {
+			},
+			"SocketConnection",
+			"disconnect",
+			[]
+		);
+	},
+	writeMessage: function(msg) {
+		cordova.exec(
+			function() {
+			},
+			function(err) {
+			},
+			"SocketConnection",
+			"writeMessage",
+			[msg]
+		);
+	},
+	listen: function(listener) {
+		readListener = listener;
+		cordova.exec(
+			function(response) {
+				readListener(response);
+			},
+			function(err) {
+			},
+			"SocketConnection",
+			"listen",
+			[]
+		);
+	}
+}
+
+module.exports = SocketConnection;

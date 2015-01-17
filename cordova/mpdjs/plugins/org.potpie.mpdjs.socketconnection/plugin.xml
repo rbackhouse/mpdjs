@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    id="org.potpie.mpdjs.socketconnection"
+    version="1.0.0">
+
+    <name>SocketConnection</name>
+
+    <engines>
+        <engine name="cordova" version=">=3.2.0" />
+    </engines>
+
+    <js-module src="www/SocketConnection.js" name="SocketConnection">
+        <clobbers target="window.SocketConnection" />
+    </js-module>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="SocketConnection">
+                <param name="ios-package" value="SocketConnection" />
+            </feature>
+        </config-file>
+
+		<header-file src="src/ios/SocketConnection.h" />
+        <source-file src="src/ios/SocketConnection.m" />
+    </platform>
+    
+</plugin>

@@ -28,9 +28,13 @@ define([
 	'views/SongListView',
 	'views/PlayListView',
 	'views/SongSearchView',
-	'uiconfig'
+	'uiconfig',
+	'mpd/MPDClient'
 	], 
-function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, SongSearchView, config){
+function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, SongSearchView, config, MPDClient){
+	window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
+    	console.log('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber + ' Column: ' + column + ' StackTrace: ' +  errorObj);
+	}
 	var Router = Backbone.Router.extend({
 		initialize: function() {
 			$('.back').on('click', function(event) {
@@ -40,37 +44,51 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        this.firstPage = true;			
 	        this.on("route:addsong", function(song) {
 				$.mobile.loading("show", { textVisible: false });
-	        	$.ajax({
-	        		url: config.getBaseUrl()+"/music/playlist/song/"+song,
-	        		type: "PUT",
-		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-		        	dataType: "text",
-		        	success: function(data, textStatus, jqXHR) {
-		        		$.mobile.loading("hide");
-			        	this.fetchPlayList();
-		        	}.bind(this),
-		        	error: function(jqXHR, textStatus, errorThrown) {
-		        		$.mobile.loading("hide");
-						console.log("addsong failed :"+errorThrown);
-		        	}
-	        	});
+				if (config.isDirect()) {
+					MPDClient.addSongToPlayList(atob(song), function() {
+						$.mobile.loading("hide");
+						this.fetchPlayList();
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/playlist/song/"+song,
+						type: "PUT",
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+							this.fetchPlayList();
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("addsong failed :"+errorThrown);
+						}
+					});
+				}
 	        });
 	        this.on("route:addalbum", function(album) {
 				$.mobile.loading("show", { textVisible: false });
-	        	$.ajax({
-	        		url: config.getBaseUrl()+"/music/playlist/album/"+album,
-	        		type: "PUT",
-		        	contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-		        	dataType: "text",
-		        	success: function(data, textStatus, jqXHR) {
-		        		$.mobile.loading("hide");
-			        	this.fetchPlayList();
-		        	}.bind(this),
-		        	error: function(jqXHR, textStatus, errorThrown) {
-		        		$.mobile.loading("hide");
-						console.log("addalbum failed :"+errorThrown);
-		        	}
-	        	});
+				if (config.isDirect()) {
+					MPDClient.addAlbumToPlayList(album, function() {
+						$.mobile.loading("hide");
+						this.fetchPlayList();
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/playlist/album/"+album,
+						type: "PUT",
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+							this.fetchPlayList();
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("addalbum failed :"+errorThrown);
+						}
+					});
+	        	}
 	        });
 	        this.on("route:playlist", function() {
 	        	this.fetchPlayList();
@@ -165,20 +183,30 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});			
 				$popUp.addClass("ui-content");
 				$("<h2/>", {
-			        text : "Enter a Server URL"
+			        text : "Enter a Host and Port"
 			    }).appendTo($popUp);
 			    
 				$("<p/>", {
-					text : "URL:"
+					text : "Host:"
 				}).appendTo($popUp);
-
-				$("<form>").append($("<input/>", {
-					id : "baseUrl",
+				
+				$("<input/>", {
+					id : "host",
 					type : "text",
-					name : "url",
-					value : config.getBaseUrl(),
+					value : config.getHost(),
 					autocapitalize: "off"
-				})).appendTo($popUp);
+				}).appendTo($popUp);
+				
+				$("<p/>", {
+					text : "Port:"
+				}).appendTo($popUp);
+				
+				$("<input/>", {
+					id : "port",
+					type : "text",
+					value : config.getPort(),
+					autocapitalize: "off"
+				}).appendTo($popUp);
 				
 				$("<a>", {
 					text : "Ok"
@@ -187,7 +215,8 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					icon : "check"
 				}).bind("click", function() {
 					$popUp.popup("close");
-					config.setUrl($("#baseUrl").val());
+					config.setHost($("#host").val());
+					config.setPort($("#port").val());
 					cb();
 				}).appendTo($popUp);
 				

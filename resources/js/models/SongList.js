@@ -14,7 +14,7 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(['backbone', './Song', '../uiconfig'], function(Backbone, Song, config){
+define(['backbone', './Song', '../uiconfig', '../mpd/MPDClient'], function(Backbone, Song, config, MPDClient){
 	var SongList = Backbone.Collection.extend({
 		initialize: function(options) {
 			this.album = options.album;
@@ -22,6 +22,17 @@ define(['backbone', './Song', '../uiconfig'], function(Backbone, Song, config){
 		model: Song,
 		url: function() {
 			return config.getBaseUrl()+"/music/songs/"+(this.album === undefined ? "" : encodeURIComponent(this.album));	
+		},
+		fetch: function(options) {
+			if (config.isDirect()) {
+				MPDClient.getSongs(this.album, function(songs) {
+					this.set(songs, options);
+			        options.success(this, songs, options);
+        			this.trigger('sync', this, songs, options);
+				}.bind(this));								
+			} else {
+				this.constructor.__super__.fetch.apply(this, [options]);
+			}
 		}
 	});
 	return SongList;
