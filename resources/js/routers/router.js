@@ -28,10 +28,11 @@ define([
 	'views/SongListView',
 	'views/PlayListView',
 	'views/SongSearchView',
+	'views/ConnectionListView',
 	'uiconfig',
 	'mpd/MPDClient'
 	], 
-function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, SongSearchView, config, MPDClient){
+function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, SongSearchView, ConnectionListView, config, MPDClient){
 	window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
     	console.log('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber + ' Column: ' + column + ' StackTrace: ' +  errorObj);
 	}
@@ -138,10 +139,13 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			this.on("route:search", function() {
 				this.changePage(new SongSearchView({}));
 			});
+			this.on("route:connections", function() {
+				this.changePage(new ConnectionListView({}));
+			});
 			Backbone.history.start();
 		},
 		fetchPlayList: function(statusJSON) {
-			this.checkForBaseURL(function() {
+			this.checkForConnection(function() {
 				this.navigate("playlist", {replace: true});
 				if (this.currentView) {
 					this.currentView.close();
@@ -163,64 +167,24 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});
 			}.bind(this));
 		},
-	    changePage:function (page) {
-	    	this.checkForBaseURL(function() {
+	    changePage:function (page, dontCheck) {
+	    	function cp() {
 				$(page.el).attr('data-role', 'page');
 				page.render();
 				$('body').append($(page.el));
 				mobile.changePage($(page.el), {changeHash:false, reverse: false});
-	    	});
+	    	}
+	    	if (dontCheck) {
+				cp();
+	    	} else {
+				this.checkForConnection(function() {
+					cp();
+				});
+			}
 	    },
-	    checkForBaseURL : function(cb) {
-			if (config.promptForUrl()) {
-				var $popUp = $("<div/>").popup({
-					dismissible : false,
-					theme : "a",
-					overlyaTheme : "a",
-					transition : "pop"
-				}).bind("popupafterclose", function() {
-					$(this).remove();
-				});			
-				$popUp.addClass("ui-content");
-				$("<h2/>", {
-			        text : "Enter a Host and Port"
-			    }).appendTo($popUp);
-			    
-				$("<p/>", {
-					text : "Host:"
-				}).appendTo($popUp);
-				
-				$("<input/>", {
-					id : "host",
-					type : "text",
-					value : config.getHost(),
-					autocapitalize: "off"
-				}).appendTo($popUp);
-				
-				$("<p/>", {
-					text : "Port:"
-				}).appendTo($popUp);
-				
-				$("<input/>", {
-					id : "port",
-					type : "text",
-					value : config.getPort(),
-					autocapitalize: "off"
-				}).appendTo($popUp);
-				
-				$("<a>", {
-					text : "Ok"
-				}).buttonMarkup({
-					inline : true,
-					icon : "check"
-				}).bind("click", function() {
-					$popUp.popup("close");
-					config.setHost($("#host").val());
-					config.setPort($("#port").val());
-					cb();
-				}).appendTo($popUp);
-				
-				$popUp.popup("open").trigger("create");
+	    checkForConnection : function(cb) {
+			if (config.promptForConnection()) {
+				this.changePage(new ConnectionListView({}), true);
 			} else {
 				cb();
 			}
@@ -235,6 +199,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			'albums': 'albums',
 			'songs': 'songs',
 			'search': 'search',
+			'connections': 'connections',
 			'': 'playlist'
 		}
 	});

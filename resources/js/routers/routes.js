@@ -22,6 +22,10 @@ define(function() {
         {href: "search", label: "Song Search"}
 	];
 	
+	if (window.cordova) {
+		menuItems.push({href: "connections", label: "Connections"});
+	}	
+	
 	return {
 		getMenuItems: function() {
 			return menuItems;

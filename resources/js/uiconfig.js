@@ -1,57 +1,71 @@
 define(function() {
-	var host;
-	var port;
+	var connections = [];
+	var selectedIndex = 0;
 	var isDirect = false;
 	if (window.cordova) {
-		host = localStorage["mpdjs.host"];
-		port = localStorage["mpdjs.port"];
-		//isDirect = localStorage["mpdjs.isDirect"] === "true" ? true : false;
+		var connectionsStr = localStorage["mpdjs.connections"];
+		if (connectionsStr) {
+			var connectionsData = JSON.parse(connectionsStr);
+			connections = connectionsData.connections;
+			selectedIndex = connectionsData.selectedIndex;
+		}
 		isDirect = true;
 	} else {
-		host = ".";
-		wsUrl = 'ws://' + window.location.host;
+		connections[0] = {
+			host: ".",
+			port: "0"
+		}
 	}
-	console.log("host : "+host);
-	console.log("port : "+port);
-	console.log("isDirect : "+isDirect);
 	return {
 		getBaseUrl: function() {
-			if (host === ".") {
-				return host;
+			if (connections[0].host === ".") {
+				return ".";
 			} else {
-				return "http://"+host+":"+port;
+				return "http://"+connections[0].host +":"+connections[0].port;
 			}
 		},
 		getWSUrl: function() {
-			if (host === ".") {
+			if (connections[0].host === ".") {
 				return 'ws://' + window.location.host;
 			} else {
-				return 'ws://'+host+":"+port;
+				return 'ws://'+connections[0].host +":"+connections[0].port;
 			}
 		},
-		getHost: function() {
-			return host;
+		getConnection: function() {
+			return connections[selectedIndex];
 		},
-		getPort: function() {
-			return port;
-		},
-		setHost: function(newHost) {
-			host = newHost;
-			localStorage["mpdjs.host"] = host;
-		},
-		setPort: function(newPort) {
-			port = newPort;
-			localStorage["mpdjs.port"] = port;
-		},
-		promptForUrl: function() {
-			return window.cordova && host === undefined ? true : false;
+		promptForConnection: function() {
+			return window.cordova && connections.length === 0 ? true : false;
 		},
 		isDirect: function() {
 			return isDirect;
 		},
-		setIsDirect: function(direct) {
-			isDirect = direct;
-			localStorage["mpdjs.isDirect"] = isDirect === true ? "true" : "false";
+		getConnections: function() {
+			return connections;
+		},
+		addConnection: function(host, port) {
+			var connection = {
+				host: host,
+				port: port
+			}
+			var index = connections.push(connection) - 1;
+			var connectionsStr = JSON.stringify({ connections: connections, selectedIndex: selectedIndex });
+			localStorage["mpdjs.connections"] = connectionsStr;
+			return index;
+		},
+		removeConnection: function(index) {
+			connections.splice(index, 1);
+			if (index === selectedIndex) {
+				selectedIndex = 0;
+			}
+		},
+		getSelectedIndex: function() {
+			return selectedIndex;
+		},
+		setSelectedIndex: function(index) {
+			selectedIndex = index;
+			var connectionsStr = JSON.stringify({ connections: connections, selectedIndex: selectedIndex });
+			localStorage["mpdjs.connections"] = connectionsStr;
 		}
 	}
 });

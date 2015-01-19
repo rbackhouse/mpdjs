@@ -1,0 +1,11 @@
+<li>
+	<a id='<%= index %>'>
+		<p id='<%= index %>'>
+			<%= connection.host %> : <%= connection.port %>
+			<% if (selectedIndex === index) { %>
+				<img style="float: right;" src="css/images/icons-png/check-black.png"/>
+			<% } %>
+		</p>
+	</a>
+	<a id='delete-<%= index %>' class="ui-btn ui-btn-icon-notext ui-icon-minusIcon"></a>
+</li> 

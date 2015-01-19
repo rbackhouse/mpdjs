@@ -50,23 +50,11 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 				"click #update" : function() {
 					this.sendControlCmd("update");
 				},
-				"click #setConnection" : function() {
-					config.setHost($("#host").val());
-					config.setPort($("#port").val());
-				},
 				"click #editButton" : "editPlayList",
 				"click #randomButton" : "randomPlayList",
 				"click #clearButton" : "clearPlayList",
 				"click #playingList li" : "removeSong",
-				"change #volume" : "changeVolume",
-		    	"change #isDirect" : function(evt) {
-		    		var isDirect = $("#isDirect").val();
-		    		if (isDirect === "true") {
-		    			config.setIsDirect(true);
-		    		} else {
-		    			config.setIsDirect(false);
-		    		}
-		    	}
+				"change #volume" : "changeVolume"
 		    });	
 		},
 		initialize: function(options) {
@@ -76,7 +64,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 			this.volumeSet = false;
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.playlist = options.playlist;
-			this.template = _.template( template, { host: config.getHost(), port: config.getPort(), isDirect: config.isDirect(), playlist: options.playlist.toJSON() } );
+			this.template = _.template( template, { playlist: options.playlist.toJSON() } );
 			if (config.isDirect()) {
 				var statusListener = function(status) {
 					this.showStatus(status);

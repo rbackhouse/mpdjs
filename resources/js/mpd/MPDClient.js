@@ -32,7 +32,7 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 	
 	function initialize() {
 		if (connection) return;
-		connection = new MPDConnector(config.getHost(), config.getPort());
+		connection = new MPDConnector(config.getConnection().host, config.getConnection().port);
 		connection.connect(function() {
 			if (intervalId) {
 				clearInterval(intervalId);

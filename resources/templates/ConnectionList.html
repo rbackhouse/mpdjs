@@ -1,0 +1,18 @@
+<div data-role="content">
+	<button id="add" class="ui-btn ui-btn-inline ui-icon-plus ui-corner-all ui-btn-icon-left ui-mini">Add Connection</button>
+	<ul id="connectionList" data-role="listview" data-inset="true">
+	<% _.each(connections, function(connection, index) { %>
+		<li>
+			<a id='<%= index %>'>
+				<p id='<%= index %>'>
+					<%= connection.host %> : <%= connection.port %>
+					<% if (selectedIndex === index) { %>
+						<img style="float: right;" src="css/images/icons-png/check-black.png"/>
+					<% } %>
+				</p>
+			</a>
+			<a id='delete-<%= index %>' class="ui-btn ui-btn-icon-notext ui-icon-minusIcon"></a>
+		</li> 
+	<% }); %>
+	</ul>
+</div>
