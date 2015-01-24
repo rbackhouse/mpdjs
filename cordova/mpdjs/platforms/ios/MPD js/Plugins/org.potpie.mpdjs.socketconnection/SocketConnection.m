@@ -46,7 +46,7 @@
     [self.inputStream close];
     [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.inputStream = nil;
-
+    
     [self.outputStream close];
     [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.outputStream = nil;
@@ -69,9 +69,11 @@
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)streamEvent {
     switch (streamEvent) {
         case NSStreamEventOpenCompleted: {
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"connected"];
-            [pluginResult setKeepCallbackAsBool:true];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.connectCommand.callbackId];
+            if (stream == self.inputStream) {
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"connected"];
+                [pluginResult setKeepCallbackAsBool:true];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:self.connectCommand.callbackId];
+            }
             break;
         }
             
@@ -98,10 +100,12 @@
             
             
         case NSStreamEventErrorOccurred: {
-            NSError *theError = [stream streamError];
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[theError localizedDescription]];
-            [pluginResult setKeepCallbackAsBool:true];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.connectCommand.callbackId];
+            if (stream == self.inputStream) {
+                NSError *theError = [stream streamError];
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[theError localizedDescription]];
+                [pluginResult setKeepCallbackAsBool:true];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:self.connectCommand.callbackId];
+            }
             break;
         }
             
@@ -110,9 +114,11 @@
             [stream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
             stream = nil;
             
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"disconnected"];
-            [pluginResult setKeepCallbackAsBool:true];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.connectCommand.callbackId];
+            if (stream == self.inputStream) {
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"disconnected"];
+                [pluginResult setKeepCallbackAsBool:true];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:self.connectCommand.callbackId];
+            }
             break;
         }
             

@@ -58,6 +58,8 @@ define(function() {
 			if (index === selectedIndex) {
 				selectedIndex = 0;
 			}
+			var connectionsStr = JSON.stringify({ connections: connections, selectedIndex: selectedIndex });
+			localStorage["mpdjs.connections"] = connectionsStr;
 		},
 		getSelectedIndex: function() {
 			return selectedIndex;

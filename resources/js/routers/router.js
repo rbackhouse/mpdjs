@@ -92,9 +92,17 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        	}
 	        });
 	        this.on("route:playlist", function() {
-	        	this.fetchPlayList();
+	        	if (config.isDirect() && MPDClient.isConnected() == false) {
+					this.changePage(new ConnectionListView({}));
+	        	} else {
+		        	this.fetchPlayList();
+	        	}
 			});
 			this.on("route:songs", function(album) {
+	        	if (config.isDirect() && MPDClient.isConnected() == false) {
+					this.changePage(new ConnectionListView({}));
+					return;
+	        	}
 				var songlist = new SongList({album: album});
 				$.mobile.loading("show", { textVisible: false });
 				songlist.fetch({
@@ -109,6 +117,10 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});
 			});
 			this.on("route:albums", function(artist) {
+	        	if (config.isDirect() && MPDClient.isConnected() == false) {
+					this.changePage(new ConnectionListView({}));
+					return;
+	        	}
 				var albumslist = new AlbumList({artist: artist});
 				$.mobile.loading("show", { textVisible: false });
 				albumslist.fetch({
@@ -123,6 +135,10 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});
 			});
 			this.on("route:artists", function() {
+	        	if (config.isDirect() && MPDClient.isConnected() == false) {
+					this.changePage(new ConnectionListView({}));
+					return;
+	        	}
 				var artistlist = new ArtistList();
 				$.mobile.loading("show", { textVisible: false });
 				artistlist.fetch({
@@ -137,6 +153,10 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				});
 			});
 			this.on("route:search", function() {
+	        	if (config.isDirect() && MPDClient.isConnected() == false) {
+					this.changePage(new ConnectionListView({}));
+					return;
+	        	}
 				this.changePage(new SongSearchView({}));
 			});
 			this.on("route:connections", function() {

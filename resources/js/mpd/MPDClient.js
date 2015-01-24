@@ -21,25 +21,30 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 	var intervalId;
 	var active = true;
 	
-	cordova.plugins.backgroundMode.onactivate = function() {
-		console.log("Background mode activated");
-		active = false;
-	};
-	cordova.plugins.backgroundMode.ondeactivate = function() {
-		console.log("Background mode deactivated");
-		active = true;
-	};
+	if (window.cordova) {
+		cordova.plugins.backgroundMode.onactivate = function() {
+			console.log("Background mode activated");
+			active = false;
+		};
+		cordova.plugins.backgroundMode.ondeactivate = function() {
+			console.log("Background mode deactivated");
+			active = true;
+		};
+	}
 	
-	function initialize() {
-		if (connection) return;
+	function createConnection(cb) {
 		connection = new MPDConnector(config.getConnection().host, config.getConnection().port);
-		connection.connect(function() {
+		connection.connect(function(error) {
+			if (error) {
+				cb(error);
+				return;
+			}
 			if (intervalId) {
 				clearInterval(intervalId);
 				intervalId = undefined;
 			}
 			intervalId = setInterval(function() {
-				if (active) {
+				if (active && connection) {
 					connection.getStatus(function(status) {
 						statusListeners.forEach(function(listener) {
 							listener(status);
@@ -47,44 +52,61 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 					});
 				}
 			}, 1000);
+			cb();
 		});
 	}
 	
 	return {
-		getAllArtists: function(cb) {
-			initialize();
-			connection.getAllArtists(cb);
+		isConnected: function() {
+			return connection === undefined ? false : true;
 		},
-		getAlbums: function(artist, cb) {
-			initialize();
-			if (artist) {
-				connection.getAlbumsForArtist(artist, cb);
-			} else {
-				connection.getAllAlbums(cb);
+		connect: function(cb) {
+			if (connection) {
+				this.disconnect();
+			}
+			createConnection(function(error) {
+				if (error) {
+					connection = undefined;
+				}
+				cb(error);
+			});
+		},
+		disconnect: function() {
+			if (connection) {
+				connection.disconnect();
+				connection = undefined;
+				if (intervalId) {
+					clearInterval(intervalId);
+					intervalId = undefined;
+				}
 			}
 		},
-		getSongs: function(album, cb) {
-			initialize();
-			connection.getSongsForAlbum(album, cb);
+		getAllArtists: function(cb, errorcb) {
+			connection.getAllArtists(cb, errorcb);
 		},
-		getPlayList: function(cb) {
-			initialize();
-			connection.getPlayListInfo(cb);
+		getAlbums: function(artist, cb, errorcb) {
+			if (artist) {
+				connection.getAlbumsForArtist(artist, cb, errorcb);
+			} else {
+				connection.getAllAlbums(cb, errorcb);
+			}
 		},
-		searchSongs: function(searchValue, cb) {
-			initialize();
-			connection.getSongs(searchValue, cb);
+		getSongs: function(album, cb, errorcb) {
+			connection.getSongsForAlbum(album, cb, errorcb);
+		},
+		getPlayList: function(cb, errorcb) {
+			connection.getPlayListInfo(cb, errorcb);
+		},
+		searchSongs: function(searchValue, cb, errorcb) {
+			connection.getSongs(searchValue, cb, errorcb);
 		},
 		addSongToPlayList: function(song, cb) {
-			initialize();
 			connection.addSongToPlayList(song, cb);
 		},
 		addAlbumToPlayList: function(album, cb) {
-			initialize();
 			connection.addAlbumToPlayList(album, cb);
 		},
 		randomPlayList: function(cb) {
-			initialize();
 			connection.clearPlayList();
 			connection.getAllArtists(function(artists) {
 				var songlist = [];
@@ -109,22 +131,18 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 			});
 		},
 		clearPlayList: function(cb) {
-			initialize();
 			connection.clearPlayList();
 			cb();
 		},
 		removeSong: function(song, cb) {
-			initialize();
 			connection.removeSong(song);
 			cb();
 		},
 		changeVolume: function(volume, cb) {
-			initialize();
 			connection.setVolume(volume);
 			cb();
 		},
 		sendControlCmd: function(type, cb) {
-			initialize();
 			if (type === "play") {
 				connection.play();
 			} else if (type === "pause") {

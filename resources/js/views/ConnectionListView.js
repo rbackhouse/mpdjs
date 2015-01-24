@@ -20,30 +20,64 @@ define([
 		'underscore', 
 		'./BaseView',
 		'../uiconfig',
+		'../mpd/MPDClient',
+		'../util/MessagePopup',
 		'text!templates/ConnectionList.html',
 		'text!templates/ConnectionListItem.html'], 
-function($, Backbone, _, BaseView, config, template, itemTemplate){
+function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, itemTemplate){
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
 				"click #add" : function(evt) {
 					this.addConnection();
 				},
+				"click #connect" : function(evt) {
+					if (MPDClient.isConnected()) {
+						MPDClient.disconnect();
+						$("#connect").val("Connect");
+						$("#connect").button('option', {icon : "check" });
+						$("#connect").button("refresh");
+					} else {
+						MPDClient.connect(function(error) {
+							if (error) {
+								MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnection().host+":"+config.getConnection().port+" Error: "+error);
+							} else {
+								$("#connect").val("Disconnect");
+								$("#connect").button('option', {icon : "minus" });
+								$("#connect").button("refresh");
+								MessagePopup.create("Connected", "Connected to "+config.getConnection().host+":"+config.getConnection().port);
+							}
+						});
+					}
+				},
 				"click #connectionList li" : function(evt) {
 					var index;
 					var id = evt.target.id;
 					if (id.indexOf("delete-") != -1) {
-						index = parseInt(id.substring("delete-".length));
-						config.removeConnection(index);
+						MessagePopup.create("Delete Connection", "Are you sure you want to delete the Connection ?", undefined, function() {
+							index = parseInt(id.substring("delete-".length));
+							config.removeConnection(index);
+							$("#connectionList li").remove();
+							config.getConnections().forEach(function(connection, index) {
+								$("#connectionList").append(_.template( itemTemplate, { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
+							});
+							$("#connectionList").listview('refresh');
+						}, true);
 					} else {
 						index = parseInt(id);
 						config.setSelectedIndex(index);
+						if (MPDClient.isConnected()) {
+							MPDClient.disconnect();
+							$("#connect").val("Connect");
+							$("#connect").button('option', {icon : "check" });
+							$("#connect").button("refresh");
+						}						
+						$("#connectionList li").remove();
+						config.getConnections().forEach(function(connection, index) {
+							$("#connectionList").append(_.template( itemTemplate, { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
+						});
+						$("#connectionList").listview('refresh');
 					}
-					$("#connectionList li").remove();
-					config.getConnections().forEach(function(connection, index) {
-						$("#connectionList").append(_.template( itemTemplate, { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
-					});
-					$("#connectionList").listview('refresh');
 				}
 		    });	
 		},
@@ -53,7 +87,7 @@ function($, Backbone, _, BaseView, config, template, itemTemplate){
 				title: "Connections"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template, { connections: config.getConnections(), selectedIndex: config.getSelectedIndex() } );
+			this.template = _.template( template, { connections: config.getConnections(), selectedIndex: config.getSelectedIndex(), isConnected: MPDClient.isConnected() } );
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );

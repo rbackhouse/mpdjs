@@ -40,6 +40,7 @@ MPDConnection = function(host, port) {
 
 MPDConnection.prototype = {
 	connect: function(callback) {
+		console.log("Connect to "+this.host+":"+this.port);
 		SocketConnection.connect(this.host, this.port, function(error, state) {
 			if (error) {
 				console.log("Connection error : "+error);
@@ -48,9 +49,11 @@ MPDConnection.prototype = {
 					task.error = error;
 					task.state = COMPLETE;
 				}
-				//if (error === "Error: read ETIMEDOUT") {
+				if (error === "Error: read ETIMEDOUT") {
 					this.connect();
-				//}
+				} else if (callback) {
+					callback(error);
+				}
 			} else if (state == "connected") {
 				console.log("Connected");
 				if (callback) {
@@ -115,7 +118,7 @@ MPDConnection.prototype = {
 		poller();
 	},
 	disconnect: function() {
-		SocketConnect.disconnect();
+		SocketConnection.disconnect();
 	},
 	getAllArtists: function(cb, errorcb) {
 		if (this.artists) {

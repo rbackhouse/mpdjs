@@ -1,5 +1,8 @@
 <div data-role="content">
-	<button id="add" class="ui-btn ui-btn-inline ui-icon-plus ui-corner-all ui-btn-icon-left ui-mini">Add Connection</button>
+	<div data-role="controlgroup" data-type="horizontal" data-mini="true">
+		<button id="add" class="ui-btn ui-btn-inline ui-icon-plus ui-corner-all ui-btn-icon-left ui-mini">Add</button>
+		<input id="connect" <% if (isConnected) { %>data-icon="minus" value="Disconnect"<% } else { %>data-icon="check" value="Connect"<% } %> type="button" data-mini="true">
+	</div>	
 	<ul id="connectionList" data-role="listview" data-inset="true">
 	<% _.each(connections, function(connection, index) { %>
 		<li>
