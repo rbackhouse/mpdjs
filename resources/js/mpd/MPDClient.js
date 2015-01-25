@@ -22,14 +22,17 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 	var active = true;
 	
 	if (window.cordova) {
-		cordova.plugins.backgroundMode.onactivate = function() {
-			console.log("Background mode activated");
-			active = false;
-		};
-		cordova.plugins.backgroundMode.ondeactivate = function() {
-			console.log("Background mode deactivated");
-			active = true;
-		};
+		require(['deviceReady!'], function() {
+		    cordova.plugins.backgroundMode.enable();
+			cordova.plugins.backgroundMode.onactivate = function() {
+				console.log("Background mode activated");
+				active = false;
+			};
+			cordova.plugins.backgroundMode.ondeactivate = function() {
+				console.log("Background mode deactivated");
+				active = true;
+			};
+		});
 	}
 	
 	function createConnection(cb) {

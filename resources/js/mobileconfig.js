@@ -23,7 +23,6 @@ define(['jquery'], function($) {
 	    if (window.cordova) {
 		    $.support.cors = true;
 		    $.mobile.allowCrossDomainPages = true;
-		    cordova.plugins.backgroundMode.enable();
 	    }
 		$.mobile.document.bind('pagehide', function (event, ui) {
     		$(event.target).remove();
