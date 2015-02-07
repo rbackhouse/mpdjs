@@ -22,13 +22,18 @@ define(function() {
         {href: "search", label: "Song Search"}
 	];
 	
+	var connectionsMenuItem = {href: "connections", label: "Connections"};
+	
 	if (window.cordova) {
-		menuItems.push({href: "connections", label: "Connections"});
+		menuItems.push(connectionsMenuItem);
 	}	
 	
 	return {
 		getMenuItems: function() {
 			return menuItems;
+		},
+		getConnectionsMenuItem: function() {
+			return connectionsMenuItem;
 		}
 	}
 });

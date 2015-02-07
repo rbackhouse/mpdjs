@@ -32,23 +32,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 					this.addConnection();
 				},
 				"click #connect" : function(evt) {
-					if (MPDClient.isConnected()) {
-						MPDClient.disconnect();
-						$("#connect").val("Connect");
-						$("#connect").button('option', {icon : "check" });
-						$("#connect").button("refresh");
-					} else {
-						MPDClient.connect(function(error) {
-							if (error) {
-								MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnection().host+":"+config.getConnection().port+" Error: "+error);
-							} else {
-								$("#connect").val("Disconnect");
-								$("#connect").button('option', {icon : "minus" });
-								$("#connect").button("refresh");
-								MessagePopup.create("Connected", "Connected to "+config.getConnection().host+":"+config.getConnection().port);
-							}
-						});
-					}
+					this.connect();
 				},
 				"click #connectionList li" : function(evt) {
 					var index;
@@ -56,13 +40,20 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 					if (id.indexOf("delete-") != -1) {
 						MessagePopup.create("Delete Connection", "Are you sure you want to delete the Connection ?", undefined, function() {
 							index = parseInt(id.substring("delete-".length));
+							var reconnect = false;
+							if (config.getSelectedIndex() === index) {
+								reconnect = true;
+							}
 							config.removeConnection(index);
 							$("#connectionList li").remove();
 							config.getConnections().forEach(function(connection, index) {
 								$("#connectionList").append(_.template( itemTemplate, { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
 							});
 							$("#connectionList").listview('refresh');
-						}, true);
+							if (reconnect) {
+								this.connect();
+							}
+						}.bind(this), true);
 					} else {
 						index = parseInt(id);
 						config.setSelectedIndex(index);
@@ -77,6 +68,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 							$("#connectionList").append(_.template( itemTemplate, { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
 						});
 						$("#connectionList").listview('refresh');
+						this.connect();
 					}
 				}
 		    });	
@@ -88,6 +80,9 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template, { connections: config.getConnections(), selectedIndex: config.getSelectedIndex(), isConnected: MPDClient.isConnected() } );
+			if (!MPDClient.isConnected() && config.getConnection()) {
+				this.connect();
+			}
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
@@ -152,6 +147,27 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 			}).appendTo($popUp);
 			
 			$popUp.popup("open").trigger("create");
+		},
+		connect: function() {
+			if (MPDClient.isConnected()) {
+				MPDClient.disconnect();
+				$("#connect").val("Connect");
+				$("#connect").button('option', {icon : "check" });
+				$("#connect").button("refresh");
+				this.updateMenu();
+			} else {
+				MPDClient.connect(function(error) {
+					if (error) {
+						MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnection().host+":"+config.getConnection().port+" Error: "+error);
+					} else {
+						$("#connect").val("Disconnect");
+						$("#connect").button('option', {icon : "minus" });
+						$("#connect").button("refresh");
+						MessagePopup.create("Connected", "Connected to "+config.getConnection().host+":"+config.getConnection().port);
+						this.updateMenu();
+					}
+				}.bind(this));
+			}
 		}
 	});
 	

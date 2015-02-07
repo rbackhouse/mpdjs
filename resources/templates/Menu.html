@@ -1,5 +1,5 @@
 <div data-role="panel" id="menuPanel" data-position="left" data-display="reveal" data-theme="a">
-    <ul data-role="listview" data-theme="a">
+    <ul id="mpdjsmenu" data-role="listview" data-theme="a">
         <% _.each(menuItems, function(menuItem) { %>
             <li><a href="#<%= menuItem.href %>"><%= menuItem.label %></a></li>
         <% }); %>

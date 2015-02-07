@@ -18,11 +18,12 @@ define([
 		'jquery', 
 		'backbone',
 		'underscore',
-		"../routers/routes",
+		'../routers/routes',
+		'../mpd/MPDClient',
 		'text!templates/Menu.html',
 		'text!templates/Header.html'
 		], 
-function($, Backbone, _, routes, menuTemplate, headerTemplate){
+function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 	var View = Backbone.View.extend({
 		events: {
 			"click #menu" : function() {
@@ -35,6 +36,17 @@ function($, Backbone, _, routes, menuTemplate, headerTemplate){
 		initialize: function(options) {
 			this.headerTemplate = _.template( headerTemplate, {header: options.header } );
 			this.menuTemplate = _.template( menuTemplate, {menuItems: routes.getMenuItems()} );
+		},
+		updateMenu: function() {
+			$("#mpdjsmenu li").remove();
+			if (window.cordova && MPDClient.isConnected() == false) {
+				$("#mpdjsmenu").append('<li><a href="#'+routes.getConnectionsMenuItem().href+'">'+routes.getConnectionsMenuItem().label+'</a></li>');
+			} else {
+				routes.getMenuItems().forEach(function(menuItem) {
+					$("#mpdjsmenu").append('<li><a href="#'+menuItem.href+'">'+menuItem.label+'</a></li>');
+				});
+			}
+			$("#mpdjsmenu").listview('refresh');
 		}
 	});
 	
