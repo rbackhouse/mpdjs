@@ -23,10 +23,10 @@ From git
 Usage
 -----
 
-	node node_modules/mpdjs [http port] [MPD hostname] [MPD port] [javascript compression]
+	node node_modules/mpdjs [http port] [MPD hostname] [MPD port] [javascript compression] [MPD password]
 
 e.g
 
-	node node_modules/mpdjs 8080 localhost 6600 false
+	node node_modules/mpdjs 8080 localhost 6600 false mypass
 
 Point browser to http://[host]:[http port]/mpd.html
