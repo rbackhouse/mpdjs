@@ -23,15 +23,15 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 	
 	if (window.cordova) {
 		require(['deviceReady!'], function() {
-		    cordova.plugins.backgroundMode.enable();
-			cordova.plugins.backgroundMode.onactivate = function() {
-				console.log("Background mode activated");
-				active = false;
-			};
-			cordova.plugins.backgroundMode.ondeactivate = function() {
-				console.log("Background mode deactivated");
-				active = true;
-			};
+			SocketConnection.setActiveListener(function(status) {
+				if (status === "paused") {
+					console.log("paused");
+					active = false;
+				} else {
+					console.log("resumed");
+					active = true;
+				}
+			});
 		});
 	}
 	
@@ -85,9 +85,15 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 			}
 		},
 		getAllArtists: function(cb, errorcb) {
+			if (!connection) {
+				errorcb("notconnected");
+			}
 			connection.getAllArtists(cb, errorcb);
 		},
 		getAlbums: function(artist, cb, errorcb) {
+			if (!connection) {
+				errorcb("notconnected");
+			}
 			if (artist) {
 				connection.getAlbumsForArtist(artist, cb, errorcb);
 			} else {
@@ -95,12 +101,21 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 			}
 		},
 		getSongs: function(album, cb, errorcb) {
+			if (!connection) {
+				errorcb("notconnected");
+			}
 			connection.getSongsForAlbum(album, cb, errorcb);
 		},
 		getPlayList: function(cb, errorcb) {
+			if (!connection) {
+				errorcb("notconnected");
+			}
 			connection.getPlayListInfo(cb, errorcb);
 		},
 		searchSongs: function(searchValue, cb, errorcb) {
+			if (!connection) {
+				errorcb("notconnected");
+			}
 			connection.getSongs(searchValue, cb, errorcb);
 		},
 		addSongToPlayList: function(song, cb) {

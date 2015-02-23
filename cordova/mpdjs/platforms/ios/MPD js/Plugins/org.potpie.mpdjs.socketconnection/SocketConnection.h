@@ -23,10 +23,15 @@
 - (void)disconnect:(CDVInvokedUrlCommand*)command;
 - (void)writeMessage:(CDVInvokedUrlCommand*)command;
 - (void)listen:(CDVInvokedUrlCommand*)command;
+- (void)setActiveListener:(CDVInvokedUrlCommand*)command;
 
 @property (strong, nonatomic) CDVInvokedUrlCommand* connectCommand;
 @property (strong, nonatomic) CDVInvokedUrlCommand* listenerCommand;
+@property (strong, nonatomic) CDVInvokedUrlCommand* activeCommand;
 @property (strong, nonatomic) NSInputStream	*inputStream;
 @property (strong, nonatomic) NSOutputStream *outputStream;
+@property (strong, nonatomic) NSString* host;
+@property (nonatomic) int port;
+@property (nonatomic) BOOL internalConnect;
 
 @end

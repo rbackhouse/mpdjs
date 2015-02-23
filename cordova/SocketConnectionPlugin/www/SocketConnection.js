@@ -65,6 +65,18 @@ var SocketConnection = {
 			"listen",
 			[]
 		);
+	},
+	setActiveListener: function(listener) {
+		cordova.exec(
+			function(response) {
+				listener(response);
+			},
+			function(err) {
+			},
+			"SocketConnection",
+			"setActiveListener",
+			[]
+		);
 	}
 }
 

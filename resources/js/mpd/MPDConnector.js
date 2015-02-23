@@ -36,6 +36,7 @@ MPDConnection = function(host, port) {
 	this.port = port;
 	this.queue = [];
 	this.albumsForArtist = {};
+	this.isConnected = false;
 };
 
 MPDConnection.prototype = {
@@ -43,6 +44,7 @@ MPDConnection.prototype = {
 		console.log("Connect to "+this.host+":"+this.port);
 		SocketConnection.connect(this.host, this.port, function(error, state) {
 			if (error) {
+				this.isConnected = false;
 				console.log("Connection error : "+error);
 				if (this.queue.length > 0) {
 					var task = this.queue[0];
@@ -55,13 +57,20 @@ MPDConnection.prototype = {
 					callback(error);
 				}
 			} else if (state == "connected") {
+				this.queue = [];
+				this.isConnected = true;
 				console.log("Connected");
 				if (callback) {
 					callback();
 				}
+			} else if (state == "internalConnected") {
+				this.queue = [];
+				this.isConnected = true;
+				console.log("Internal Connected");
 			} else if (state == "disconnected") {
+				this.isConnected = false;
 				console.log("Disconnected");
-				this.connect();
+				//this.connect();
 			}
 		}.bind(this));
 		
@@ -73,7 +82,7 @@ MPDConnection.prototype = {
 					var task = this.queue.shift();
 					task.response += data.substring(0, data.indexOf("OK\n"));
 					task.state = COMPLETE;
-					//console.log("cmd ["+task.cmd+"] complete");
+					console.log("cmd ["+task.cmd+"] complete");
 					var result;
 					if (task.process) {
 						result = task.process(task.response);
@@ -102,15 +111,14 @@ MPDConnection.prototype = {
 				}
 			}
 		}.bind(this));
-		
 		var processQueue = function() {
-			if (this.queue.length > 0 && this.queue[0].state === INITIAL) {
-				//console.log("cmd ["+this.queue[0].cmd+"] started");
+			if (this.isConnected && this.queue.length > 0 && this.queue[0].state === INITIAL) {
+				console.log("cmd ["+this.queue[0].cmd+"] started");
 				SocketConnection.writeMessage(this.queue[0].cmd+"\n");
 				this.queue[0].state = WRITTEN;
 			}
 		}.bind(this);
-		
+	
 		var poller = function() {
 			processQueue();
 			setTimeout(poller, 500);
@@ -118,6 +126,8 @@ MPDConnection.prototype = {
 		poller();
 	},
 	disconnect: function() {
+		this.isConnected = false;
+		console.log("Disconnect from "+this.host+":"+this.port);
 		SocketConnection.disconnect();
 	},
 	getAllArtists: function(cb, errorcb) {
@@ -125,6 +135,7 @@ MPDConnection.prototype = {
 			cb(this.artists);
 			return;
 		}
+		
 		var processor = function(data) {
 			var lines = this._lineSplit(data);
 			var artists = [];

@@ -20,36 +20,23 @@
 @implementation SocketConnection
 
 - (void)pluginInitialize {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPause) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onResume) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)connect:(CDVInvokedUrlCommand*)command {
     self.connectCommand = command;
-    NSString* host = [command.arguments objectAtIndex:0];
+    self.host = [command.arguments objectAtIndex:0];
     NSString* strPort = [command.arguments objectAtIndex:1];
-    int port = [strPort intValue];
-    
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
-    CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)host, port, &readStream, &writeStream);
-    self.inputStream = (__bridge NSInputStream *)readStream;
-    self.outputStream = (__bridge NSOutputStream *)writeStream;
-    
-    [self.inputStream setDelegate:self];
-    [self.outputStream setDelegate:self];
-    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.inputStream open];
-    [self.outputStream open];
+    self.port = [strPort intValue];
+    self.internalConnect = false;
+    [self mpdConnect];
 }
 
 - (void)disconnect:(CDVInvokedUrlCommand *)command {
-    [self.inputStream close];
-    [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    self.inputStream = nil;
-    
-    [self.outputStream close];
-    [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    self.outputStream = nil;
+    [self mpdDisconnect];
+    self.host = nil;
+    self.port = 0;
 }
 
 - (void)writeMessage:(CDVInvokedUrlCommand *)command {
@@ -66,11 +53,23 @@
     self.listenerCommand = command;
 }
 
+- (void)setActiveListener:(CDVInvokedUrlCommand*)command {
+    self.activeCommand = command;
+}
+
+
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)streamEvent {
     switch (streamEvent) {
         case NSStreamEventOpenCompleted: {
             if (stream == self.inputStream) {
-                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"connected"];
+                NSString* statusMsg = nil;
+                if (self.internalConnect == false) {
+                    statusMsg = @"connected";
+                } else {
+                    statusMsg = @"internalConnected";
+                    self.internalConnect = false;
+                }
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:statusMsg];
                 [pluginResult setKeepCallbackAsBool:true];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:self.connectCommand.callbackId];
             }
@@ -127,5 +126,54 @@
     }
 }
 
+- (void) onPause {
+    if (self.activeCommand != nil) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"paused"];
+        [pluginResult setKeepCallbackAsBool:true];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.activeCommand.callbackId];
+    }
+    if (self.host != nil) {
+        [self mpdDisconnect];
+    }
+}
+
+- (void) onResume {
+    if (self.host != nil) {
+        [NSThread sleepForTimeInterval:1.0f];
+        self.internalConnect = true;
+        [self mpdConnect];
+    }
+    if (self.activeCommand != nil) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"resumed"];
+        [pluginResult setKeepCallbackAsBool:true];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.activeCommand.callbackId];
+    }
+}
+
+- (void) mpdConnect {
+    CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
+    CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)self.host, self.port, &readStream, &writeStream);
+    self.inputStream = (__bridge NSInputStream *)readStream;
+    self.outputStream = (__bridge NSOutputStream *)writeStream;
+    
+    [self.inputStream setDelegate:self];
+    [self.outputStream setDelegate:self];
+    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.inputStream open];
+    [self.outputStream open];
+
+}
+
+- (void) mpdDisconnect {
+    [self.inputStream close];
+    [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    self.inputStream = nil;
+    
+    [self.outputStream close];
+    [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    self.outputStream = nil;
+}
 
 @end

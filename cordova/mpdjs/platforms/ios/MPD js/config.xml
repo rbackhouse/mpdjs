@@ -31,9 +31,6 @@
     <feature name="SocketConnection">
         <param name="ios-package" value="SocketConnection" />
     </feature>
-    <feature name="BackgroundMode">
-        <param name="ios-package" value="APPBackgroundMode" />
-    </feature>
     <name>MPD js</name>
     <description>
 		Music Player Daemon client written in javascript        
