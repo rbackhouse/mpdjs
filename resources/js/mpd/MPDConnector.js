@@ -82,7 +82,7 @@ MPDConnection.prototype = {
 					var task = this.queue.shift();
 					task.response += data.substring(0, data.indexOf("OK\n"));
 					task.state = COMPLETE;
-					console.log("cmd ["+task.cmd+"] complete");
+					//console.log("cmd ["+task.cmd+"] complete");
 					var result;
 					if (task.process) {
 						result = task.process(task.response);
@@ -113,7 +113,7 @@ MPDConnection.prototype = {
 		}.bind(this));
 		var processQueue = function() {
 			if (this.isConnected && this.queue.length > 0 && this.queue[0].state === INITIAL) {
-				console.log("cmd ["+this.queue[0].cmd+"] started");
+				//console.log("cmd ["+this.queue[0].cmd+"] started");
 				SocketConnection.writeMessage(this.queue[0].cmd+"\n");
 				this.queue[0].state = WRITTEN;
 			}

@@ -132,9 +132,17 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				$popUp.popup("close");
 				var host = $("#host").val();
 				var port = $("#port").val();
-				var index = config.addConnection(host, port);
-				$("#connectionList").append(_.template( itemTemplate, { connection: {host: host, port: port }, index: index, selectedIndex: config.getSelectedIndex() }));
-				$("#connectionList").listview('refresh');
+				var dup = false;
+				config.getConnections().forEach(function(connection, index) {
+					if (connection.host === host && connection.port === port) {
+						dup = true;
+					}					
+				});
+				if (!dup) {
+					var index = config.addConnection(host, port);
+					$("#connectionList").append(_.template( itemTemplate, { connection: {host: host, port: port }, index: index, selectedIndex: config.getSelectedIndex() }));
+					$("#connectionList").listview('refresh');
+				}
 			}).appendTo($popUp);
 			
 			$("<a>", {
