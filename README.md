@@ -30,3 +30,8 @@ e.g
 	node node_modules/mpdjs 8080 localhost 6600 false mypass
 
 Point browser to http://[host]:[http port]/mpd.html
+
+iOS App
+-------
+
+You can install a iOS based version of MPDjs from iTunes via https://itunes.apple.com/in/app/mpdjs/id965553250?mt=8
