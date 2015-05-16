@@ -18,6 +18,9 @@ define(['backbone', './Album', '../uiconfig', '../mpd/MPDClient', '../util/Messa
 	var AlbumList = Backbone.Collection.extend({
 		initialize: function(options) {
 			this.artist = options.artist;
+			if (this.artist === null) {
+				this.artist = undefined;
+			}
 		},
 		model: Album,
 		url: function() {

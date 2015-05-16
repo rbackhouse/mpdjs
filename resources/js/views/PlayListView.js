@@ -64,7 +64,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 			this.volumeSet = false;
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.playlist = options.playlist;
-			this.template = _.template( template, { playlist: options.playlist.toJSON() } );
+			this.template = _.template( template ) ( { playlist: options.playlist.toJSON() } );
 			if (config.isDirect()) {
 				var statusListener = function(status) {
 					this.showStatus(status);

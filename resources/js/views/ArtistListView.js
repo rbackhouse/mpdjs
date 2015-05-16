@@ -31,7 +31,7 @@ function($, Backbone, _, BaseView, template){
 				title: "Artists"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template, { artists: options.artists.toJSON() } );
+			this.template = _.template( template ) ( { artists: options.artists.toJSON() } );
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );

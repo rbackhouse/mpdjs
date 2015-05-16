@@ -33,7 +33,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 				title: "Song Search"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template, {} );
+			this.template = _.template( template) ( {} );
 			$.mobile.document.one("filterablecreate", "#songList", function() {
 				$("#songList").on( "filterablebeforefilter", function(e, data) { 
 					e.preventDefault();

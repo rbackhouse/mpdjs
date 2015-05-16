@@ -79,7 +79,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				title: "Connections"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template, { connections: config.getConnections(), selectedIndex: config.getSelectedIndex(), isConnected: MPDClient.isConnected() } );
+			this.template = _.template( template ) ( { connections: config.getConnections(), selectedIndex: config.getSelectedIndex(), isConnected: MPDClient.isConnected() } );
 			if (!MPDClient.isConnected() && config.getConnection()) {
 				this.connect();
 			}

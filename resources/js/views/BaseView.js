@@ -34,8 +34,8 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 			}
 		},
 		initialize: function(options) {
-			this.headerTemplate = _.template( headerTemplate, {header: options.header } );
-			this.menuTemplate = _.template( menuTemplate, {menuItems: routes.getMenuItems()} );
+			this.headerTemplate = _.template( headerTemplate ) ( {header: options.header } );
+			this.menuTemplate = _.template( menuTemplate) ( {menuItems: routes.getMenuItems()} );
 		},
 		updateMenu: function() {
 			$("#mpdjsmenu li").remove();
