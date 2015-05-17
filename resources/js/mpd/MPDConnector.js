@@ -130,18 +130,19 @@ MPDConnection.prototype = {
 		console.log("Disconnect from "+this.host+":"+this.port);
 		SocketConnection.disconnect();
 	},
-	getAllArtists: function(cb, errorcb) {
-		if (this.artists) {
-			cb(this.artists);
-			return;
-		}
-		
+	getAllArtists: function(filter, cb, errorcb) {
 		var processor = function(data) {
 			var lines = this._lineSplit(data);
 			var artists = [];
 			for (var i = 0; i < lines.length; i++) {
 				var name = lines[i].substring(ARTIST_PREFIX.length);
-				artists.push({name: name});
+				if (filter) {
+					if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+						artists.push({name: name});
+					}
+				} else {
+					artists.push({name: name});
+				}
 			}
 			artists.sort(function(a,b) {
 				if (a.name < b.name) {
@@ -152,7 +153,6 @@ MPDConnection.prototype = {
 					return 0;
 				}
 			});
-			this.artists = artists;
 			return artists;
 		}.bind(this);
 		this.queue.push({
@@ -164,29 +164,39 @@ MPDConnection.prototype = {
 			state: INITIAL
 		});
 	},
-	getAllAlbums: function(cb, errorcb) {
-		this.getAllArtists(function(artists, errorcb) {
-			var allalbums = [];
-			for (var i = 0; i < artists.length; i++) {
-				var artistName = artists[i].name;
-				var state = {islast: i === (artists.length-1) ? true : false};
-				this.getAlbumsForArtist(artistName, function(albums) {
-					allalbums = allalbums.concat(albums);
-					if (this.islast === true) {
-						allalbums.sort(function(a,b) {
-							if (a.name < b.name) {
-								return -1;
-							} else if (a.name > b.name) {
-								return 1;
-							} else {
-								return 0;
-							}
-						});
-						cb(allalbums);
+	getAllAlbums: function(filter, cb, errorcb) {
+		var processor = function(data) {
+			var lines = this._lineSplit(data);
+			var albums = [];
+			for (var i = 0; i < lines.length; i++) {
+				var name = lines[i].substring(ALBUM_PREFIX.length);
+				if (filter) {
+					if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+						albums.push({name: name});
 					}
-				}.bind(state), errorcb);
+				} else {
+					albums.push({name: name});
+				}
 			}
-		}.bind(this));
+			albums.sort(function(a,b) {
+				if (a.name < b.name) {
+					return -1;
+				} else if (a.name > b.name) {
+					return 1;
+				} else {
+					return 0;
+				}
+			});
+			return albums;
+		}.bind(this);
+		this.queue.push({
+			cmd: "list album",
+			process: processor,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
 	},
 	getStatus: function(cb, errorcb) {
 		var processor = function(data) {
@@ -259,10 +269,6 @@ MPDConnection.prototype = {
 		});
 	},
 	getAlbumsForArtist: function(artist, cb, errorcb) {
-		if (this.albumsForArtist[artist]) {
-			cb(this.albumsForArtist[artist]);
-			return;
-		}
 		var processor = function(data) {
 			var lines = this._lineSplit(data);
 			var albums = [];
@@ -279,7 +285,6 @@ MPDConnection.prototype = {
 					return 0;
 				}
 			});
-			this.albumsForArtist[artist] = albums;
 			return albums;
 		}.bind(this);
 		this.queue.push({
@@ -497,8 +502,6 @@ MPDConnection.prototype = {
 	},
 	update: function() {
 		var cb = function() {
-			this.artists = undefined;
-			this.albumsForArtist = {};
 		}.bind(this);
 		this.queue.push({
 			cmd: "update ",

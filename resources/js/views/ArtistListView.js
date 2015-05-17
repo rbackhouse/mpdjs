@@ -30,11 +30,68 @@ function($, Backbone, _, BaseView, template){
 			options.header = {
 				title: "Artists"
 			};
+			this.artists = options.artists;
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template ) ( { artists: options.artists.toJSON() } );
+			this.template = _.template( template ) ( { artists: options.artists.toJSON(), total: options.artists.total } );
+			$.mobile.document.one("filterablecreate", "#artistList", function() {
+				$("#artistList").on( "filterablebeforefilter", function(e, data) { 
+					e.preventDefault();
+		            var $input = $( data.input );
+		            var value = $input.val();
+		            if (value && value.length > 0) {
+						this.artists.filterValue = value;
+		            } else {
+						this.artists.filterValue = "all";
+		            }
+		            this.artists.index = 0;
+		            this.artists.total = 0;
+		            this.load(false);
+				}.bind(this));
+				$("#artistList").filterable("option", "filterCallback", function( index, searchValue ) {
+		            return false;
+				});
+				$("#artistlistFilterForm").submit( function( evt ) {
+					evt.preventDefault();
+					$("#artistlistFilter").blur();
+				});
+			}.bind(this));
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+		},
+		load: function(loadMore, cb) {
+			$.mobile.loading("show", { textVisible: false });
+			this.artists.fetch({
+				success: function(collection, response, options) {
+					$.mobile.loading("hide");
+					if (!loadMore) {
+						$("#artistList li").remove();
+					}
+					this.artists.each(function(artist) {
+						var li = '<li data-icon="arrow-r"><a href="#albums/'+encodeURIComponent(artist.get("name"))+'"><p style="white-space:normal">'+artist.get("name")+'</p></a></li>'; 
+						$("#artistList").append(li);
+					}.bind(this));
+					$("#artistList").listview('refresh');
+					$("#total").text(this.artists.total);
+					if (cb) {
+						cb();
+					}
+				}.bind(this),
+				error: function(collection, xhr, options) {
+					$.mobile.loading("hide");
+					console.log("get artists failed :"+xhr.status);
+					if (cb) {
+						cb();
+					}
+				}
+			});
+		},
+		loadMore: function(cb) {
+			if (this.artists.hasMore()) {
+				this.load(true, cb);
+			} else {
+				cb();
+			}
 		}
 	});
 	

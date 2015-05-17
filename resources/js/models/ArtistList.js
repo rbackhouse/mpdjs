@@ -14,18 +14,23 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(['backbone', './Artist', '../uiconfig', '../mpd/MPDClient', '../util/MessagePopup'], function(Backbone, Artist, config, MPDClient, MessagePopup) {
+define(['jquery', 'backbone', './Artist', '../uiconfig', '../mpd/MPDClient', '../util/MessagePopup'], function($, Backbone, Artist, config, MPDClient, MessagePopup) {
 	var ArtistList = Backbone.Collection.extend({
+		index: 0,
+		total: 0,
+		filterValue: "all",
 		model: Artist,
 		url: function() {
-			return config.getBaseUrl()+"/music/artists";
+			return config.getBaseUrl()+"/music/artists/"+this.index+"/"+encodeURIComponent(this.filterValue);
 		},
 		fetch: function(options) {
 			if (config.isDirect()) {
-				MPDClient.getAllArtists(function(artists) {
-					this.set(artists, options);
-			        options.success(this, artists, options);
-        			this.trigger('sync', this, artists, options);
+				MPDClient.getAllArtists(this.index, this.filterValue, function(resp) {
+					this.index = resp.index;
+					this.total = resp.total;
+					this.set(resp.artists, options);
+			        options.success(this, resp.artists, options);
+        			this.trigger('sync', this, resp.artists, options);
 				}.bind(this),
 				function(error) {
 					MessagePopup.create("Connection Failure", "Not connected");
@@ -33,6 +38,27 @@ define(['backbone', './Artist', '../uiconfig', '../mpd/MPDClient', '../util/Mess
 			} else {
 				this.constructor.__super__.fetch.apply(this, [options]);
 			}
+		},
+		set: function(resp, options) {
+			var models = resp;
+			if ($.isPlainObject(resp)) {
+				this.index = resp.index;
+				this.total = resp.total;
+				models = resp.artists;
+			}
+			return Backbone.Collection.prototype.set.call(this, models, options);
+		},
+		reset: function(resp, options) {
+			var models = resp;
+			if ($.isPlainObject(resp)) {
+				this.index = resp.index;
+				this.total = resp.total;
+				models = resp.artists;
+			}
+			return Backbone.Collection.prototype.reset.call(this, models, options);
+		},
+		hasMore: function() {
+			return this.index < this.total; 
 		}
 	});
 	return ArtistList;

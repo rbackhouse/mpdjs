@@ -84,20 +84,51 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 				}
 			}
 		},
-		getAllArtists: function(cb, errorcb) {
+		getAllArtists: function(index, filter, cb, errorcb) {
 			if (!connection) {
 				errorcb("notconnected");
 			}
-			connection.getAllArtists(cb, errorcb);
+			if (filter === "all") {
+				filter = undefined;
+			}
+			connection.getAllArtists(filter, function(artists) {
+				var end = index + 50 > artists.length ? artists.length : index + 50;
+				var subset = artists.slice(index, end);
+				var resp = {
+					artists: subset,
+					index : end,
+					total : artists.length
+				};
+				cb(resp);
+			}, errorcb);
 		},
-		getAlbums: function(artist, cb, errorcb) {
+		getAlbums: function(artist, index, filter, cb, errorcb) {
 			if (!connection) {
 				errorcb("notconnected");
 			}
 			if (artist) {
-				connection.getAlbumsForArtist(artist, cb, errorcb);
+				connection.getAlbumsForArtist(artist, function(albums) {
+					var resp = {
+						albums: albums,
+						index : 0,
+						total : albums.length
+					};
+					cb(resp);
+				}, errorcb);
 			} else {
-				connection.getAllAlbums(cb, errorcb);
+				if (filter === "all") {
+					filter = undefined;
+				}
+				connection.getAllAlbums(filter, function(albums) {
+					var end = index + 50 > albums.length ? albums.length : index + 50;
+					var subset = albums.slice(index, end);
+					var resp = {
+						albums: subset,
+						index : end,
+						total : albums.length
+					};
+					cb(resp);
+				}, errorcb);
 			}
 		},
 		getSongs: function(album, cb, errorcb) {

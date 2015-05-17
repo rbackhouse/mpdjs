@@ -1,5 +1,11 @@
 <div data-role="content">
-	<ul id="artistList" data-role="listview" data-filter="true">
+	<table class="ui-filterable">
+       	<tr>
+        	<td style="width: 100%;"><form id="artistlistFilterForm"><input data-theme="g" id="artistlistFilter" data-type="search" placeholder="Find artists..."></form></td>
+        	<td nowrap>Total : <span id="total"><%= total %></span></td>
+		</tr>
+   	</table>
+	<ul id="artistList" data-role="listview" data-filter="true" data-input="#artistlistFilter">
 	<% _.each(artists, function(artist) { %>
 		<li data-icon="arrow-r"><a href="#albums/<%= encodeURIComponent(artist.name) %>"><p style="white-space:normal"><%= artist.name %></p></a></li> 
 	<% }); %>

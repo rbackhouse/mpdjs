@@ -14,9 +14,15 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(['backbone', './Album', '../uiconfig', '../mpd/MPDClient', '../util/MessagePopup'], function(Backbone, Album, config, MPDClient, MessagePopup){
+define(['jquery', 'backbone', './Album', '../uiconfig', '../mpd/MPDClient', '../util/MessagePopup'], function($, Backbone, Album, config, MPDClient, MessagePopup){
 	var AlbumList = Backbone.Collection.extend({
+		index: 0,
+		total: 0,
+		filterValue: "all",
 		initialize: function(options) {
+			this.index = 0;
+			this.total = 0;
+			this.filterValue = "all";
 			this.artist = options.artist;
 			if (this.artist === null) {
 				this.artist = undefined;
@@ -24,14 +30,16 @@ define(['backbone', './Album', '../uiconfig', '../mpd/MPDClient', '../util/Messa
 		},
 		model: Album,
 		url: function() {
-			return config.getBaseUrl()+"/music/albums"+(this.artist === undefined ? "" : "/"+encodeURIComponent(this.artist));
+			return config.getBaseUrl()+"/music/albums"+(this.artist === undefined ? "/all/" : "/"+encodeURIComponent(this.artist)+"/")+this.index+"/"+encodeURIComponent(this.filterValue);
 		},
 		fetch: function(options) {
 			if (config.isDirect()) {
-				MPDClient.getAlbums(this.artist, function(albums) {
-					this.set(albums, options);
-			        options.success(this, albums, options);
-        			this.trigger('sync', this, albums, options);
+				MPDClient.getAlbums(this.artist, this.index, this.filterValue, function(resp) {
+					this.index = resp.index;
+					this.total = resp.total;
+					this.set(resp.albums, options);
+			        options.success(this, resp.albums, options);
+        			this.trigger('sync', this, resp.albums, options);
 				}.bind(this),
 				function(error) {
 					MessagePopup.create("Connection Failure", "Not connected");
@@ -39,6 +47,27 @@ define(['backbone', './Album', '../uiconfig', '../mpd/MPDClient', '../util/Messa
 			} else {
 				this.constructor.__super__.fetch.apply(this, [options]);
 			}
+		},
+		set: function(resp, options) {
+			var models = resp;
+			if ($.isPlainObject(resp)) {
+				this.index = resp.index;
+				this.total = resp.total;
+				models = resp.albums;
+			}
+			return Backbone.Collection.prototype.set.call(this, models, options);
+		},
+		reset: function(resp, options) {
+			var models = resp;
+			if ($.isPlainObject(resp)) {
+				this.index = resp.index;
+				this.total = resp.total;
+				models = resp.albums;
+			}
+			return Backbone.Collection.prototype.reset.call(this, models, options);
+		},
+		hasMore: function() {
+			return this.index < this.total; 
 		}
 	});
 	return AlbumList;

@@ -30,11 +30,74 @@ function($, Backbone, _, BaseView, template){
 			options.header = {
 				title: "Albums"
 			};
+			this.albums = options.albums;
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template ) ( { albums: options.albums.toJSON() } );
+			this.template = _.template( template ) ( { albums: options.albums.toJSON(), total: options.albums.total } );
+			$.mobile.document.one("filterablecreate", "#albumList", function() {
+				$("#albumList").on( "filterablebeforefilter", function(e, data) { 
+					e.preventDefault();
+		            var $input = $( data.input );
+		            var value = $input.val();
+		            if (value && value.length > 0) {
+						this.albums.filterValue = value;
+		            } else {
+						this.albums.filterValue = "all";
+		            }
+		            this.albums.index = 0;
+		            this.albums.total = 0;
+		            this.load(false);
+				}.bind(this));
+				$("#albumList").filterable("option", "filterCallback", function( index, searchValue ) {
+		            return false;
+				});
+				$("#albumlistFilterForm").submit( function( evt ) {
+					evt.preventDefault();
+					$("#albumlistFilter").blur();
+				});
+			}.bind(this));
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+		},
+		load: function(loadMore, cb) {
+			if (this.albums.artist) {
+				if (cb) {
+					cb();
+				}
+				return;
+			}
+			$.mobile.loading("show", { textVisible: false });
+			this.albums.fetch({
+				success: function(collection, response, options) {
+					$.mobile.loading("hide");
+					if (!loadMore) {
+						$("#albumList li").remove();
+					}
+					this.albums.each(function(album) {
+						var li = '<li data-icon="arrow-r"><a href="#songs/'+encodeURIComponent(album.get("name"))+'"><p style="white-space:normal">'+album.get("name")+'</p></a></li>'; 
+						$("#albumList").append(li);
+					}.bind(this));
+					$("#albumList").listview('refresh');
+					$("#total").text(this.albums.total);
+					if (cb) {
+						cb();
+					}
+				}.bind(this),
+				error: function(collection, xhr, options) {
+					$.mobile.loading("hide");
+					console.log("get albums failed :"+xhr.status);
+					if (cb) {
+						cb();
+					}
+				}
+			});
+		},
+		loadMore: function(cb) {
+			if (this.albums.hasMore()) {
+				this.load(true, cb);
+			} else {
+				cb();
+			}
 		}
 	});
 	

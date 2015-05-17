@@ -125,7 +125,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 					this.changePage(new ConnectionListView({}));
 					return;
 	        	}
-				var albumslist = new AlbumList({artist: artist});
+				var albumslist = new AlbumList({artist: artist, index: 0, filterValue: "all"});
 				$.mobile.loading("show", { textVisible: false });
 				albumslist.fetch({
 					success: function(collection, response, options) {
@@ -169,6 +169,26 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 				this.changePage(new ConnectionListView({}));
 			});
 			Backbone.history.start();
+			
+			var checkScroll = function(evt) {
+				var activePage = $(':mobile-pagecontainer').pagecontainer('getActivePage');
+				var screenHeight = $.mobile.getScreenHeight();
+				var contentHeight = $(".ui-content", activePage).outerHeight();
+				var header = $(".ui-header", activePage).outerHeight() - 1;
+				var scrolled = $(window).scrollTop();
+				var footer = $(".ui-footer", activePage).outerHeight() - 1;
+				var scrollEnd = contentHeight - screenHeight + header + footer;
+				if (scrolled >= scrollEnd) {
+					if (this.currentPage && this.currentPage.loadMore) {
+						$(document).off("scrollstop");
+						this.currentPage.loadMore(function() {
+							$(document).on("scrollstop", checkScroll);
+						});
+					}
+				}
+			}.bind(this);
+			
+			$(document).on("scrollstop", checkScroll);
 		},
 		fetchPlayList: function(statusJSON) {
 			this.checkForConnection(function() {
@@ -194,6 +214,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 			}.bind(this));
 		},
 	    changePage:function (page, dontCheck) {
+	    	this.currentPage = page;
 	    	function cp() {
 				$(page.el).attr('data-role', 'page');
 				page.render();
