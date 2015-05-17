@@ -157,7 +157,7 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 		},
 		randomPlayList: function(cb) {
 			connection.clearPlayList();
-			connection.getAllArtists(function(artists) {
+			connection.getAllArtists(undefined, function(artists) {
 				var songlist = [];
 				for (var i = 0; i < 50; i++) {
 					var artistindex = Math.floor((Math.random()*artists.length-1)+1);
