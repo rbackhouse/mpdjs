@@ -47,7 +47,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 							config.removeConnection(index);
 							$("#connectionList li").remove();
 							config.getConnections().forEach(function(connection, index) {
-								$("#connectionList").append(_.template( itemTemplate, { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
+								$("#connectionList").append(_.template( itemTemplate ) ( { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
 							});
 							$("#connectionList").listview('refresh');
 							if (reconnect) {
@@ -65,7 +65,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 						}						
 						$("#connectionList li").remove();
 						config.getConnections().forEach(function(connection, index) {
-							$("#connectionList").append(_.template( itemTemplate, { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
+							$("#connectionList").append(_.template( itemTemplate ) ( { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
 						});
 						$("#connectionList").listview('refresh');
 						this.connect();
@@ -140,7 +140,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				});
 				if (!dup) {
 					var index = config.addConnection(host, port);
-					$("#connectionList").append(_.template( itemTemplate, { connection: {host: host, port: port }, index: index, selectedIndex: config.getSelectedIndex() }));
+					$("#connectionList").append(_.template( itemTemplate) ( { connection: {host: host, port: port }, index: index, selectedIndex: config.getSelectedIndex() }));
 					$("#connectionList").listview('refresh');
 				}
 			}).appendTo($popUp);
