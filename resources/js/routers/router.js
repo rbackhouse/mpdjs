@@ -46,7 +46,7 @@ function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, Arti
 	        this.on("route:addsong", function(song) {
 				$.mobile.loading("show", { textVisible: false });
 				if (config.isDirect()) {
-					MPDClient.addSongToPlayList(atob(song), function() {
+					MPDClient.addSongToPlayList(decodeURIComponent(atob(song)), function() {
 						$.mobile.loading("hide");
 						this.fetchPlayList();
 					}.bind(this));

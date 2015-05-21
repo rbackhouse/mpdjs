@@ -313,9 +313,13 @@ MPDConnection.prototype = {
 					song = {};
 					songs.push(song);
 					var file = line.substring(FILE_PREFIX.length);
-					var b64file = btoa(file);
 					song.file = file;
-					song.b64file = b64file;
+					try {
+						var b64file = btoa(encodeURIComponent(file));
+						song.b64file = b64file;
+					} catch(err) {
+						console.log(err);
+					}
 				}
 			}				
 			return songs;
@@ -354,9 +358,13 @@ MPDConnection.prototype = {
 					}
 					songs.push(song);
 					var file = line.substring(FILE_PREFIX.length);
-					var b64file = btoa(file);
 					song.file = file;
-					song.b64file = b64file;
+					try {
+						var b64file = btoa(encodeURIComponent(file));
+						song.b64file = b64file;
+					} catch(err) {
+						console.log(err);
+					}
 				}
 			}				
 			return songs;
