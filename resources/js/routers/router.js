@@ -30,11 +30,31 @@ define([
 	'views/SongSearchView',
 	'views/ConnectionListView',
 	'uiconfig',
-	'mpd/MPDClient'
+	'mpd/MPDClient',
+	'util/MessagePopup'
 	], 
-function($, Backbone, _, mobile, ArtistList, AlbumList, SongList, PlayList, ArtistListView, AlbumListView, SongListView, PlayListView, SongSearchView, ConnectionListView, config, MPDClient){
+function(
+	$, 
+	Backbone, 
+	_, 
+	mobile, 
+	ArtistList, 
+	AlbumList, 
+	SongList, 
+	PlayList, 
+	ArtistListView, 
+	AlbumListView, 
+	SongListView, 
+	PlayListView, 
+	SongSearchView, 
+	ConnectionListView, 
+	config, 
+	MPDClient, 
+	MessagePopup
+) {
 	window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
     	console.log('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber + ' Column: ' + column + ' StackTrace: ' +  errorObj);
+    	MessagePopup.create('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber + ' Column: ' + column+ ' StackTrace: ' +  errorObj);
 	}
 	var Router = Backbone.Router.extend({
 		initialize: function() {
