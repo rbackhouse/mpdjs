@@ -39,7 +39,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 					e.preventDefault();
 		            var $input = $( data.input );
 		            var value = $input.val();
-		            if (value && value.length > 0) {
+		            if (value && value.length > 2) {
 						this.songSearchList.searchValue = value;
 			            this.load();
 		            } else {
