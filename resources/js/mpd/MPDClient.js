@@ -15,11 +15,15 @@
 * DEALINGS IN THE SOFTWARE.
 */
 
-define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
+define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDConnector, config, MessagePopup) {
 	var connection;
 	var statusListeners = [];
 	var intervalId;
 	var active = true;
+	
+	function errorHandler(err) {
+		MessagePopup.create("MPD Error", "Error : "+err);
+	}
 	
 	if (window.cordova) {
 		require(['deviceReady!'], function() {
@@ -84,9 +88,9 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 				}
 			}
 		},
-		getAllArtists: function(index, filter, cb, errorcb) {
+		getAllArtists: function(index, filter, cb) {
 			if (!connection) {
-				errorcb("notconnected");
+				errorHandler("notconnected");
 			}
 			if (filter === "all") {
 				filter = undefined;
@@ -100,11 +104,11 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 					total : artists.length
 				};
 				cb(resp);
-			}, errorcb);
+			}, errorHandler);
 		},
-		getAlbums: function(artist, index, filter, cb, errorcb) {
+		getAlbums: function(artist, index, filter, cb) {
 			if (!connection) {
-				errorcb("notconnected");
+				errorHandler("notconnected");
 			}
 			if (artist) {
 				connection.getAlbumsForArtist(artist, function(albums) {
@@ -114,7 +118,7 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 						total : albums.length
 					};
 					cb(resp);
-				}, errorcb);
+				}, errorHandler);
 			} else {
 				if (filter === "all") {
 					filter = undefined;
@@ -128,26 +132,26 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 						total : albums.length
 					};
 					cb(resp);
-				}, errorcb);
+				}, errorHandler);
 			}
 		},
-		getSongs: function(album, cb, errorcb) {
+		getSongs: function(album, cb) {
 			if (!connection) {
-				errorcb("notconnected");
+				errorHandler("notconnected");
 			}
-			connection.getSongsForAlbum(album, cb, errorcb);
+			connection.getSongsForAlbum(album, cb, errorHandler);
 		},
-		getPlayList: function(cb, errorcb) {
+		getPlayList: function(cb) {
 			if (!connection) {
-				errorcb("notconnected");
+				errorHandler("notconnected");
 			}
-			connection.getPlayListInfo(cb, errorcb);
+			connection.getPlayListInfo(cb, errorHandler);
 		},
-		searchSongs: function(searchValue, cb, errorcb) {
+		searchSongs: function(searchValue, cb) {
 			if (!connection) {
-				errorcb("notconnected");
+				errorHandler("notconnected");
 			}
-			connection.getSongs(searchValue, cb, errorcb);
+			connection.getSongs(searchValue, cb, errorHandler);
 		},
 		addSongToPlayList: function(song, cb) {
 			connection.addSongToPlayList(song, cb);
@@ -157,27 +161,23 @@ define(['./MPDConnector', '../uiconfig'], function(MPDConnector, config) {
 		},
 		randomPlayList: function(cb) {
 			connection.clearPlayList();
-			connection.getAllArtists(undefined, function(artists) {
+			connection.getAllAlbums(undefined, function(albums) {
 				var songlist = [];
 				for (var i = 0; i < 50; i++) {
-					var artistindex = Math.floor((Math.random()*artists.length-1)+1);
-					var artistName = artists[artistindex].name;
-					connection.getAlbumsForArtist(artistName, function(albums) {
-						var albumindex = Math.floor((Math.random()*albums.length-1)+1);
-						var albumName = albums[albumindex].name;
-						connection.getSongsForAlbum(albumName, function(songs) {
-							var songindex = Math.floor((Math.random()*songs.length-1)+1);
-							var song = songs[songindex];
-							songlist.push(song.file);
-							if (songlist.length > 49) {
-								connection.addSongsToPlayList(songlist, function() {
-									cb();
-								});
-							}
-						});
-					});
-				}
-			});
+					var albumindex = Math.floor((Math.random()*albums.length-1)+1);
+					var albumName = albums[albumindex].name;
+					connection.getSongsForAlbum(albumName, function(songs) {
+						var songindex = Math.floor((Math.random()*songs.length-1)+1);
+						var song = songs[songindex];
+						songlist.push(song.file);
+						if (songlist.length > 49) {
+							connection.addSongsToPlayList(songlist, function() {
+								cb();
+							}, errorHandler);
+						}
+					}, errorHandler);
+				}				
+			}, errorHandler);
 		},
 		clearPlayList: function(cb) {
 			connection.clearPlayList();
