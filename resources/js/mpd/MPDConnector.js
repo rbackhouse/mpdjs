@@ -75,9 +75,11 @@ MPDConnection.prototype = {
 		}.bind(this));
 		
 		SocketConnection.listen(function(data) {
-			if (data.match(/^OK MPD/)) {
+			var lines = this._lineSplit(data);
+			var lastLine = lines[lines.length-1];
+			if (lastLine.match(/^OK MPD/)) {
 				console.log("MPD connection is ready");
-			} else if (data.indexOf("OK\n") > -1) {
+			} else if (lastLine == "OK") {
 				if (this.queue.length > 0) {
 					var task = this.queue.shift();
 					task.response += data.substring(0, data.indexOf("OK\n"));
@@ -92,8 +94,8 @@ MPDConnection.prototype = {
 					}
 					processQueue();
 				}
-			} else if (data.indexOf("ACK") > -1) {
-				var error = data.substring(data.indexOf("ACK"));
+			} else if (lastLine.match(/^ACK /)) {
+				var error = data;
 				if (this.queue.length > 0) {
 					var task = this.queue.shift();
 					task.error = error;
@@ -101,8 +103,10 @@ MPDConnection.prototype = {
 					if (task.errorcb) {
 						task.errorcb(task.error);
 					}
+					console.log("Error running task ["+task.cmd+"] : "+task.error);
+				} else {
+					console.log("Error : "+error);
 				}
-				console.log("Error running task ["+task.cmd+"] : "+task.error);
 			} else {
 				if (this.queue.length > 0) {
 					var task = this.queue[0];
@@ -136,12 +140,14 @@ MPDConnection.prototype = {
 			var artists = [];
 			for (var i = 0; i < lines.length; i++) {
 				var name = lines[i].substring(ARTIST_PREFIX.length);
-				if (filter) {
-					if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+				if (name.trim().length > 0) {
+					if (filter) {
+						if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+							artists.push({name: name});
+						}
+					} else {
 						artists.push({name: name});
 					}
-				} else {
-					artists.push({name: name});
 				}
 			}
 			artists.sort(function(a,b) {
@@ -170,12 +176,14 @@ MPDConnection.prototype = {
 			var albums = [];
 			for (var i = 0; i < lines.length; i++) {
 				var name = lines[i].substring(ALBUM_PREFIX.length);
-				if (filter) {
-					if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+				if (name.trim().length > 0) {
+					if (filter) {
+						if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+							albums.push({name: name});
+						}
+					} else {
 						albums.push({name: name});
 					}
-				} else {
-					albums.push({name: name});
 				}
 			}
 			albums.sort(function(a,b) {
@@ -274,7 +282,9 @@ MPDConnection.prototype = {
 			var albums = [];
 			for (var i = 0; i < lines.length; i++) {
 				var name = lines[i].substring(ALBUM_PREFIX.length);
-				albums.push({name: name, artist: artist});
+				if (name.trim().length > 0) {
+					albums.push({name: name, artist: artist});
+				}
 			}
 			albums.sort(function(a,b) {
 				if (a.name < b.name) {

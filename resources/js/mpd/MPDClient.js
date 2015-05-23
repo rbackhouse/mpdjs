@@ -169,11 +169,13 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 					connection.getSongsForAlbum(albumName, function(songs) {
 						var songindex = Math.floor((Math.random()*songs.length-1)+1);
 						var song = songs[songindex];
-						songlist.push(song.file);
-						if (songlist.length > 49) {
-							connection.addSongsToPlayList(songlist, function() {
-								cb();
-							}, errorHandler);
+						if (song) {
+							songlist.push(song.file);
+							if (songlist.length > 49) {
+								connection.addSongsToPlayList(songlist, function() {
+									cb();
+								}, errorHandler);
+							}
 						}
 					}, errorHandler);
 				}				
