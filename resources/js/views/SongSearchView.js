@@ -33,7 +33,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 				title: "Song Search"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template) ( {} );
+			this.template = _.template( template) ( {total: 0} );
 			$.mobile.document.one("filterablecreate", "#songList", function() {
 				$("#songList").on( "filterablebeforefilter", function(e, data) { 
 					e.preventDefault();
@@ -46,6 +46,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 						this.songSearchList.searchValue = undefined;
 						$("#songList li").remove();
 						$("#songList").listview('refresh');
+						$("#total").text("0");
 		            }
 				}.bind(this));
 				$("#songlist").filterable("option", "filterCallback", function( index, searchValue ) {
@@ -66,6 +67,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 						$("#songList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
 					});
 					$("#songList").listview('refresh');
+					$("#total").text(collection.length);
 				}.bind(this),
 				error: function(collection, xhr, options) {
 					$.mobile.loading("hide");
