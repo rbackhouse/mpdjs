@@ -29,7 +29,7 @@ e.g
 
 	node node_modules/mpdjs 8080 localhost 6600 false mypass
 
-Point browser to http://[host]:[http port]/mpd.html
+Point browser to http://[host]:[http port]
 
 iOS App
 -------
