@@ -200,9 +200,7 @@ function(
 				var scrollEnd = contentHeight - screenHeight + header + footer;
 				if (scrolled >= scrollEnd) {
 					if (this.currentPage && this.currentPage.loadMore) {
-						$(document).off("scrollstop");
 						this.currentPage.loadMore(function() {
-							$(document).on("scrollstop", checkScroll);
 						});
 					}
 				}
