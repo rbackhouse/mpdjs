@@ -8,7 +8,7 @@
 		<li>
 			<a id='<%= index %>'>
 				<p id='<%= index %>'>
-					<%= connection.host %> : <%= connection.port %>
+					<%= connection.host %> : <%= connection.port %> <% if (connection.streamingport != "") { %> : <%= connection.streamingport %> <% } %>
 					<% if (selectedIndex === index) { %>
 						<img style="float: right;" src="css/images/icons-png/check-black.png"/>
 					<% } %>

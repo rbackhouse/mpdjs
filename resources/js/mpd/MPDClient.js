@@ -20,6 +20,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 	var statusListeners = [];
 	var intervalId;
 	var active = true;
+	var audio;
+	var streamurl;
 	
 	function errorHandler(err) {
 		MessagePopup.create("MPD Error", "Error : "+err);
@@ -46,6 +48,10 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 				cb(error);
 				return;
 			}
+			if (config.getConnection().streamingport !== "") {
+				streamurl = "http://"+config.getConnection().host+":"+config.getConnection().streamingport;
+				createAudio();
+			}
 			if (intervalId) {
 				clearInterval(intervalId);
 				intervalId = undefined;
@@ -61,6 +67,48 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 			}, 1000);
 			cb();
 		});
+	}
+	
+	function createAudio() {
+		console.log("creating audio tag for "+streamurl);
+		audio = new Audio(streamurl);
+		console.log("can play flac = "+audio.canPlayType("audio/flac; codecs=\"vorbis\""));
+		audio.addEventListener("error", function() {
+			console.log("error playing audio");
+		}, false);
+		audio.addEventListener("canplay", function() {
+			console.log("can play audio");
+		}, false);
+		audio.addEventListener("waiting", function() {
+			console.log("waiting for audio");
+		}, false);
+		audio.addEventListener("playing", function() {
+			console.log("playing audio");
+		}, false);
+		audio.addEventListener("ended", function() {
+			console.log("audio ended");
+		}, false);
+		audio.addEventListener("canplaythrough", function() {
+			console.log("can play through");
+		}, false);
+		var eventListener = function(e) {
+			console.log("media event: "+e.type);
+		}
+		audio.addEventListener('durationchange', eventListener, false);
+		audio.addEventListener('emptied', eventListener, false);
+		audio.addEventListener('error', eventListener, false);
+		audio.addEventListener('loadeddata', eventListener, false);
+		audio.addEventListener('loadedmetadata', eventListener, false);
+		audio.addEventListener('loadstart', eventListener, false);
+		audio.addEventListener('pause', eventListener, false);
+		audio.addEventListener('progress', eventListener, false);
+		audio.addEventListener('ratechange', eventListener, false);
+		audio.addEventListener('readystatechange', eventListener, false);
+		audio.addEventListener('seeked', eventListener, false);
+		audio.addEventListener('seeking', eventListener, false);
+		audio.addEventListener('stalled', eventListener, false);
+		audio.addEventListener('suspend', eventListener, false);
+		audio.addEventListener('volumechange', eventListener, false);
 	}
 	
 	return {
@@ -82,6 +130,10 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 			if (connection) {
 				connection.disconnect();
 				connection = undefined;
+				if (audio) {
+					audio = undefined;
+					streamurl = undefined;
+				}
 				if (intervalId) {
 					clearInterval(intervalId);
 					intervalId = undefined;
@@ -181,6 +233,12 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 				}				
 			}, errorHandler);
 		},
+		randomPlayListByType: function(type, typevalue, cb) {
+			connection.clearPlayList();
+			connection.randomPlayList(type, typevalue, function() {
+				cb();
+			});
+		},
 		clearPlayList: function(cb) {
 			connection.clearPlayList();
 			cb();
@@ -196,14 +254,37 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 		sendControlCmd: function(type, cb) {
 			if (type === "play") {
 				connection.play();
+				if (audio) {
+					audio.play();
+				}
 			} else if (type === "pause") {
 				connection.pause();
+				if (audio) {
+					audio.play();
+				}
 			} else if (type === "stop") {
 				connection.stop();
+				if (audio) {
+					audio.pause();
+					audio = undefined;
+					createAudio();
+				}
 			} else if (type === "previous") {
 				connection.previous();
+				if (audio) {
+					audio.pause();
+					audio = undefined;
+					createAudio();
+					audio.play();
+				}
 			} else if (type === "next") {
 				connection.next();
+				if (audio) {
+					audio.pause();
+					audio = undefined;
+					createAudio();
+					audio.play();
+				}
 			} else if (type === "update") {
 				connection.update();
 			}

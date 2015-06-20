@@ -7,6 +7,11 @@ define(function() {
 		if (connectionsStr) {
 			var connectionsData = JSON.parse(connectionsStr);
 			connections = connectionsData.connections;
+			connections.forEach(function(connection) {
+				if (!connection.streamingport) {
+					connection.streamingport = "";
+				}
+			});
 			selectedIndex = connectionsData.selectedIndex;
 		}
 		isDirect = true;
@@ -43,10 +48,11 @@ define(function() {
 		getConnections: function() {
 			return connections;
 		},
-		addConnection: function(host, port) {
+		addConnection: function(host, port, streamingport) {
 			var connection = {
 				host: host,
-				port: port
+				port: port,
+				streamingport: streamingport
 			}
 			var index = connections.push(connection) - 1;
 			var connectionsStr = JSON.stringify({ connections: connections, selectedIndex: selectedIndex });

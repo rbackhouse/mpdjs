@@ -39,6 +39,12 @@
                 "parents": {
                     "UIBackgroundModes": []
                 }
+            },
+            "framework": {
+                "parents": {
+                    "AssetsLibrary.framework": [],
+                    "MobileCoreServices.framework": []
+                }
             }
         }
     },

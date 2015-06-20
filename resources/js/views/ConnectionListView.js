@@ -123,6 +123,18 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				autocapitalize: "off"
 			}).appendTo($popUp);
 			
+			/*
+			$("<p/>", {
+				text : "Streaming Port:"
+			}).appendTo($popUp);
+			
+			$("<input/>", {
+				id : "streamingport",
+				type : "text",
+				value : "",
+				autocapitalize: "off"
+			}).appendTo($popUp);
+			*/
 			$("<a>", {
 				text : "Ok"
 			}).buttonMarkup({
@@ -132,15 +144,17 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				$popUp.popup("close");
 				var host = $("#host").val();
 				var port = $("#port").val();
+				//var streamingport = $("#streamingport").val();
+				var streamingport = "";
 				var dup = false;
 				config.getConnections().forEach(function(connection, index) {
-					if (connection.host === host && connection.port === port) {
+					if (connection.host === host && connection.port === port && connection.streamingport === streamingport) {
 						dup = true;
 					}					
 				});
 				if (!dup) {
-					var index = config.addConnection(host, port);
-					$("#connectionList").append(_.template( itemTemplate) ( { connection: {host: host, port: port }, index: index, selectedIndex: config.getSelectedIndex() }));
+					var index = config.addConnection(host, port, streamingport);
+					$("#connectionList").append(_.template( itemTemplate) ( { connection: {host: host, port: port, streamingport: streamingport }, index: index, selectedIndex: config.getSelectedIndex() }));
 					$("#connectionList").listview('refresh');
 				}
 			}).appendTo($popUp);
