@@ -27,7 +27,7 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 	var View = Backbone.View.extend({
 		events: {
 			"click #menu" : function() {
-				$( "#menuPanel" ).panel().panel( "open" );
+				$( "#menuPanel" ).popup("open", {transition: "flow"}).trigger("create");
 			},
 			"click #back" : function() {
 				window.history.back();
