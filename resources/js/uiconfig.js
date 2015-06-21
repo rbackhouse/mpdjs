@@ -1,5 +1,6 @@
 define(function() {
 	var connections = [];
+	var randomPlaylistConfig = {};
 	var selectedIndex = 0;
 	var isDirect = false;
 	if (window.cordova) {
@@ -21,6 +22,17 @@ define(function() {
 			port: "0"
 		}
 	}
+	var randomPlaylistConfigStr = localStorage["mpdjs.randomPlaylistConfig"];
+	if (randomPlaylistConfigStr) {
+		randomPlaylistConfig = JSON.parse(randomPlaylistConfigStr);
+	} else {
+		randomPlaylistConfig = {
+			enabled: false,
+			type: "",
+			typevalue: ""
+		};
+	}
+
 	return {
 		getBaseUrl: function() {
 			if (connections[0].host === ".") {
@@ -74,6 +86,14 @@ define(function() {
 			selectedIndex = index;
 			var connectionsStr = JSON.stringify({ connections: connections, selectedIndex: selectedIndex });
 			localStorage["mpdjs.connections"] = connectionsStr;
+		},
+		getRandomPlaylistConfig: function() {
+			return randomPlaylistConfig;
+		},
+		setRandomPlaylistConfig: function(newRandomPlaylistConfig) {
+			randomPlaylistConfig = newRandomPlaylistConfig;
+			var randomPlaylistConfigStr = JSON.stringify(newRandomPlaylistConfig);
+			localStorage["mpdjs.randomPlaylistConfig"] = randomPlaylistConfigStr;
 		}
 	}
 });

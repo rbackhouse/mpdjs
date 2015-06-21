@@ -98,15 +98,121 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 			$("#playingList").listview('refresh');
 		},
 		randomPlayList: function() {
+			if (config.getRandomPlaylistConfig().enabled) {
+				var $popUp = $("<div/>").popup({
+					dismissible : false,
+					theme : "a",
+					overlyaTheme : "a",
+					transition : "pop"
+				}).bind("popupafterclose", function() {
+					$(this).remove();
+				});			
+				$popUp.addClass("ui-content");
+				$("<h3/>", {
+					text : "Random Playlist Type"
+				}).appendTo($popUp);
+			
+				$("<p/>", {
+					text : "Type:"
+				}).appendTo($popUp);
+			
+				var $select = $("<select/>", {
+					id : "type"
+				}).appendTo($popUp);
+				
+				var $artist = $("<option/>", {
+					value : "artist",
+				}).appendTo($select);
+				$artist.text("By Artist");
+				
+				var $album = $("<option/>", {
+					value : "album",
+				}).appendTo($select);
+				$album.text("By Album");
+				
+				var $title = $("<option/>", {
+					value : "title",
+				}).appendTo($select);
+				$title.text("By Title");
+				
+				var $genre = $("<option/>", {
+					value : "genre",
+				}).appendTo($select);
+				$genre.text("By Genre");
+				
+				if (config.getRandomPlaylistConfig().type === "artist") {
+					$artist.attr("selected", "true");
+				} if (config.getRandomPlaylistConfig().type === "album") {
+					$album.attr("selected", "true");
+				} if (config.getRandomPlaylistConfig().type === "title") {
+					$title.attr("selected", "true");
+				} if (config.getRandomPlaylistConfig().type === "genre") {
+					$genre.attr("selected", "true");
+				}
+				
+				$select.selectmenu();
+				
+				$("<p/>", {
+					text : "Type Value:"
+				}).appendTo($popUp);
+				
+				$("<input/>", {
+					id : "typevalue",
+					type : "text",
+					value : config.getRandomPlaylistConfig().typevalue,
+					autocapitalize: "off"
+				}).appendTo($popUp);
+				
+				$("<a>", {
+					text : "Ok"
+				}).buttonMarkup({
+					inline : true,
+					icon : "check"
+				}).bind("click", function() {
+					$popUp.popup("close");
+					var type = $("#type").find('option:selected').val();
+					var typevalue = $("#typevalue").val();
+					if (typevalue || typevalue !== "") {
+						config.setRandomPlaylistConfig({enabled: true, type: type, typevalue: typevalue});
+						this.randomPlayListRequest(type, typevalue);
+					}
+				}.bind(this)).appendTo($popUp);
+			
+				$("<a>", {
+					text : "Cancel"
+				}).buttonMarkup({
+					inline : true,
+					icon : "delete"
+				}).bind("click", function() {
+					$popUp.popup("close");
+				}).appendTo($popUp);
+			
+				$popUp.popup("open").trigger("create");
+			} else {
+				this.randomPlayListRequest();
+			}
+		},
+		randomPlayListRequest: function(type, typevalue) {	
 			$.mobile.loading("show", { textVisible: false });
 			if (config.isDirect()) {
-				MPDClient.randomPlayList(function() {
-					$.mobile.loading("hide");
-					this.fetchPlayList();
-				}.bind(this));
+				if (type) {
+					MPDClient.randomPlayListByType(type, typevalue, function() {
+						$.mobile.loading("hide");
+						this.fetchPlayList();
+					}.bind(this));
+				} else {
+					MPDClient.randomPlayList(function() {
+						$.mobile.loading("hide");
+						this.fetchPlayList();
+					}.bind(this));
+				}
 			} else {
+				var url = config.getBaseUrl()+"/music/playlist/random";
+				if (type) {
+					url += "/"+type+"/"+encodeURIComponent(typevalue);
+				}
 				$.ajax({
-					url: config.getBaseUrl()+"/music/playlist/random",
+					url: url,
 					type: "PUT",
 					headers: { "cache-control": "no-cache" },
 					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",

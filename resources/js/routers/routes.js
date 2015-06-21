@@ -19,7 +19,8 @@ define(function() {
         {href: "playlist", label: "Playlist"},
         {href: "artists", label: "Artists"},
         {href: "albums", label: "Albums"},
-        {href: "search", label: "Song Search"}
+        {href: "search", label: "Song Search"},
+        {href: "settings", label: "Settings"}
 	];
 	
 	var connectionsMenuItem = {href: "connections", label: "Connections"};

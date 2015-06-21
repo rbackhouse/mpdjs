@@ -531,9 +531,19 @@ MPDConnection.prototype = {
 	randomPlayList: function(type, typevalue, cb, errorcb) {
 		var callback = function(songs) {
 			var random = [];
-			for (var i = 0; songs.length > 50 ? i < 50 : i < songs.length; i++) {
-				var index = Math.floor((Math.random()*songs.length-1)+1);
-				random.push(songs[index]);
+			if (songs.length > 60) {
+				var count = 0;
+				while (count < 50) {
+					var index = Math.floor((Math.random()*songs.length-1)+1);
+					if (random.indexOf(songs[index]) < 0) {
+						count++;
+						random.push(songs[index]);
+					}
+				}
+			} else {
+				for (var i = 0; songs.length > 50 ? i < 50 : i < songs.length; i++) {
+					random.push(songs[i]);
+				}
 			}
 			this.addSongsToPlayList(random, function() {
 				cb();
