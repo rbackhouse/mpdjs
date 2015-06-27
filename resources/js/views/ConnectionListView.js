@@ -156,8 +156,11 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 					var index = config.addConnection(host, port, streamingport);
 					$("#connectionList").append(_.template( itemTemplate) ( { connection: {host: host, port: port, streamingport: streamingport }, index: index, selectedIndex: config.getSelectedIndex() }));
 					$("#connectionList").listview('refresh');
+					if (config.getConnections().length === 1) {
+						this.connect();
+					}
 				}
-			}).appendTo($popUp);
+			}.bind(this)).appendTo($popUp);
 			
 			$("<a>", {
 				text : "Cancel"
