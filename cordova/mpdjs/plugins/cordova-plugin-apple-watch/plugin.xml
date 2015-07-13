@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<plugin id="cordova-plugin-apple-watch" version="0.8.8" xmlns="http://apache.org/cordova/ns/plugins/1.0">
+    <name>Apple Watch</name>
+    <author>Lee Crossley (http://ilee.co.uk/)</author>
+    <description>Cordova / PhoneGap Plugin for the Apple Watch (WatchKit) to allow communication
+        between a Cordova app and an Apple WatchKit Extension (and vice versa)</description>
+    <keywords>cordova, apple, watch, watchkit, message, queue, json, extension,
+        darwin, notification, glance, user, defaults, nsuserdefaults</keywords>
+    <license>MIT</license>
+    <engines>
+        <engine name="cordova" version=">=3.0.0"/>
+        <engine name="apple-ios" version=">=8.2.0"/>
+    </engines>
+    <js-module name="AppleWatch" src="www/applewatch.js">
+        <clobbers target="applewatch"/>
+    </js-module>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="AppleWatch">
+                <param name="ios-package" value="AppleWatch"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/AppleWatch.h"/>
+        <source-file src="src/ios/AppleWatch.m"/>
+        <framework autogen="true" src="Foundation.framework"/>
+        <header-file autogen="true" src="src/ios/vendor/headers/MMWormhole.h"/>
+        <source-file autogen="true" framework="true" src="src/ios/vendor/libmmwormhole.a"/>
+    </platform>
+</plugin>

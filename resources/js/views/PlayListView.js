@@ -23,8 +23,9 @@ define([
 		'../uiconfig',
 		'./BaseView',
 		'../mpd/MPDClient',
+		'../applewatch/AppleWatchUtil',
 		'text!templates/PlayList.html'], 
-function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template){
+function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, AppleWatchUtil, template){
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
@@ -382,9 +383,12 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 				var minutes = Math.floor(time / 60);
 				var seconds = time - minutes * 60;
 				seconds = (seconds < 10 ? '0' : '') + seconds;
-				$("#currentlyPlaying").text("Playing ["+status.currentsong+"] "+minutes+":"+seconds);
+				var playingText = "Playing ["+status.currentsong+"] "+minutes+":"+seconds;
+				$("#currentlyPlaying").text(playingText);
+				AppleWatchUtil.sendMessage({state: status.state, volume: parseInt(status.volume), playing: playingText});
 			} else {
 				$("#currentlyPlaying").text("Playing []");
+				AppleWatchUtil.sendMessage({state: status.state, volume: -1, playing: "Playing []"});
 			}
 		},
 		_openWebSocket: function() {

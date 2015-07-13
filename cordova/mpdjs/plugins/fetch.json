@@ -16,5 +16,12 @@
             "type": "registry",
             "id": "org.apache.cordova.file"
         }
+    },
+    "cordova-plugin-apple-watch": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/leecrossley/cordova-plugin-apple-watch.git",
+            "subdir": "."
+        }
     }
 }

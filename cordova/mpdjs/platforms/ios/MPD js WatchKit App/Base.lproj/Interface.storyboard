@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="7701"/>
+    </dependencies>
+    <scenes>
+        <!--MPD js-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller title="MPD js" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="MPD_js_WatchKit_Extension">
+                    <items>
+                        <group width="1" height="47" alignment="center" id="1EZ-2A-mOd">
+                            <items>
+                                <button alignment="left" verticalAlignment="center" backgroundImage="rewind" id="H3T-ee-nbj">
+                                    <connections>
+                                        <action selector="previous" destination="AgC-eL-Hgc" id="QOl-JW-5yI"/>
+                                    </connections>
+                                </button>
+                                <button alignment="left" verticalAlignment="center" backgroundImage="stop" id="FQ3-f3-pEz">
+                                    <connections>
+                                        <action selector="stop" destination="AgC-eL-Hgc" id="gB1-xt-rrY"/>
+                                    </connections>
+                                </button>
+                                <button alignment="left" verticalAlignment="center" backgroundImage="play" id="3a5-uW-ms4">
+                                    <connections>
+                                        <action selector="playPause" destination="AgC-eL-Hgc" id="wU5-Pm-XKm"/>
+                                    </connections>
+                                </button>
+                                <button alignment="left" verticalAlignment="center" backgroundImage="fastForward" id="XzE-JF-5iG">
+                                    <connections>
+                                        <action selector="next" destination="AgC-eL-Hgc" id="bQP-6Y-atB"/>
+                                    </connections>
+                                </button>
+                            </items>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </group>
+                        <separator alignment="left" id="Z4P-kK-ipz"/>
+                        <slider width="1" height="34.5" alignment="center" value="50" maximum="100" steps="10" id="als-Bp-N3L">
+                            <connections>
+                                <action selector="volumeChange:" destination="AgC-eL-Hgc" id="v9d-bX-lq4"/>
+                            </connections>
+                        </slider>
+                        <separator alignment="left" id="MEG-94-iDj"/>
+                        <label height="48.5" alignment="left" text="Playing []" textAlignment="left" numberOfLines="3" id="Vur-Gi-BlA"/>
+                    </items>
+                    <connections>
+                        <outlet property="playPauseButton" destination="3a5-uW-ms4" id="z0U-Yw-Xt4"/>
+                        <outlet property="playingLabel" destination="Vur-Gi-BlA" id="IHy-GD-BdY"/>
+                        <outlet property="volume" destination="als-Bp-N3L" id="XmQ-mZ-IhE"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="235" y="347"/>
+        </scene>
+        <!--Glance Interface Controller-->
+        <scene sceneID="BOz-TT-tkC">
+            <objects>
+                <glanceController spacing="0.0" id="0uZ-2p-rRc" customClass="GlanceController" customModule="MPD_js_WatchKit_App" customModuleProvider="target">
+                    <items>
+                        <group alignment="left" id="t8f-Gd-c4y">
+                            <items>
+                                <label width="121.5" height="40.5" alignment="left" text="MPD js" textAlignment="center" id="Jwy-xR-mdw">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                </label>
+                            </items>
+                        </group>
+                        <group alignment="left" id="uCw-4Q-Ouw">
+                            <items>
+                                <label width="135.5" height="94.5" alignment="left" text="Playing []" numberOfLines="4" id="LfV-UK-g7d"/>
+                            </items>
+                        </group>
+                    </items>
+                    <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="14"/>
+                    <connections>
+                        <outlet property="playingLabel" destination="LfV-UK-g7d" id="Q5K-Wg-P2m"/>
+                    </connections>
+                </glanceController>
+            </objects>
+            <point key="canvasLocation" x="235" y="672"/>
+        </scene>
+        <!--Static Notification Interface Controller-->
+        <scene sceneID="AEw-b0-oYE">
+            <objects>
+                <notificationController id="YCC-NB-fut">
+                    <items>
+                        <label alignment="left" text="Alert Label" id="XkS-y5-khE"/>
+                    </items>
+                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <connections>
+                        <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="49B-RR-99y"/>
+                        <segue destination="gdX-wl-uQE" kind="relationship" relationship="dynamicNotificationInterface" id="fKh-qV-3T2"/>
+                    </connections>
+                </notificationController>
+            </objects>
+            <point key="canvasLocation" x="235" y="1001"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="KIl-fV-djm">
+            <objects>
+                <controller id="gdX-wl-uQE" customClass="NotificationController" customModule="MPD_js_WatchKit_App" customModuleProvider="target"/>
+            </objects>
+            <point key="canvasLocation" x="553" y="1001"/>
+        </scene>
+    </scenes>
+</document>

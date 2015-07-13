@@ -31,6 +31,10 @@
                         {
                             "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppleWatch\"><param name=\"ios-package\" value=\"AppleWatch\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -43,7 +47,13 @@
             "framework": {
                 "parents": {
                     "AssetsLibrary.framework": [],
-                    "MobileCoreServices.framework": []
+                    "MobileCoreServices.framework": [],
+                    "Foundation.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ]
                 }
             }
         }
@@ -59,6 +69,9 @@
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
         "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "org.potpie.mpdjs"
+        },
+        "cordova-plugin-apple-watch": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         }
     },
