@@ -13,13 +13,20 @@ class InterfaceController: WKInterfaceController {
 
     @IBOutlet weak var volume: WKInterfaceSlider!
     @IBOutlet weak var playPauseButton: WKInterfaceButton!
-    @IBOutlet weak var playingLabel: WKInterfaceLabel!
+    @IBOutlet weak var artistLabel: WKInterfaceLabel!
+    @IBOutlet weak var timeLabel: WKInterfaceLabel!
+    @IBOutlet weak var titleLabel: WKInterfaceLabel!
     var wormhole: MMWormhole!
     var currentState: String!
+    var pauseImage: UIImage!
+    var playImage: UIImage!
+    var volumeSet: Bool!
     
     override init() {
         super.init()
         NSLog("%@ init", self)
+        self.pauseImage = UIImage(named: "pause")
+        self.playImage = UIImage(named: "play")
     }
     
     override func awakeWithContext(context: AnyObject?) {
@@ -34,16 +41,21 @@ class InterfaceController: WKInterfaceController {
                 let data = strmsg.dataUsingEncoding(NSUTF8StringEncoding)
                 var jsonError: NSError?
                 let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
-                self.playingLabel.setText(json.valueForKeyPath("playing") as? String)
+                self.artistLabel.setText(json.valueForKeyPath("currentSong.artist") as? String)
+                self.timeLabel.setText(json.valueForKeyPath("time") as? String)
+                self.titleLabel.setText(json.valueForKeyPath("currentSong.title") as? String)
                 self.currentState = (json.valueForKeyPath("state") as? String)!
                 if (self.currentState == "play") {
-                    if let image = UIImage(named: "pause") {
-                        self.playPauseButton.setBackgroundImage(image)
-                    }
+                    self.playPauseButton.setBackgroundImage(self.pauseImage)
                 } else {
-                    if let image = UIImage(named: "play") {
-                        self.playPauseButton.setBackgroundImage(image)
-                    }
+                    self.playPauseButton.setBackgroundImage(self.playImage)
+                }
+                var vol = (json.valueForKeyPath("volume") as? Float)
+                
+                if (self.volumeSet == false &&  vol > -1) {
+                    NSLog("set volume %f", vol!)
+                    self.volumeSet = true;
+                    self.volume.setValue(vol!)
                 }
             }
         })
@@ -52,6 +64,7 @@ class InterfaceController: WKInterfaceController {
     override func willActivate() {
         super.willActivate()
         NSLog("%@ will activate", self)
+        self.volumeSet = false;
     }
 
     override func didDeactivate() {

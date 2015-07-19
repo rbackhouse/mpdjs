@@ -259,11 +259,16 @@ MPDConnection.prototype = {
 	getCurrentSong: function(cb, errorcb) {
 		var processor = function(data) {
 			var lines = this._lineSplit(data);
-			var currentsong = "";
+			var currentsong = {};
 			for (var i = 0; i < lines.length; i++) {
-				if (lines[i].indexOf(TITLE_PREFIX) === 0) {
-					currentsong = lines[i].substring(TITLE_PREFIX.length);
-				}
+				var line = lines[i];
+				if (line.indexOf(TITLE_PREFIX) === 0) {
+					currentsong.title = lines[i].substring(TITLE_PREFIX.length);
+				} else if (line.indexOf(ARTIST_PREFIX) === 0) {
+					currentsong.artist = lines[i].substring(ARTIST_PREFIX.length);
+				} else if (line.indexOf(ALBUM_PREFIX) === 0) {
+					currentsong.album = lines[i].substring(ALBUM_PREFIX.length);
+				} 
 			}
 			return currentsong;
 		}.bind(this);

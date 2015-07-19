@@ -32,7 +32,8 @@ define([
 	'views/SettingsView',
 	'uiconfig',
 	'mpd/MPDClient',
-	'util/MessagePopup'
+	'util/MessagePopup',
+	'applewatch/AppleWatchUtil'
 	], 
 function(
 	$, 

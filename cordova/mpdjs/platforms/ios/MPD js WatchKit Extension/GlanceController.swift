@@ -13,8 +13,10 @@ import Foundation
 class GlanceController: WKInterfaceController {
     var wormhole: MMWormhole!
 
-    @IBOutlet weak var playingLabel: WKInterfaceLabel!
-    
+    @IBOutlet weak var timeLabel: WKInterfaceLabel!
+    @IBOutlet weak var titleLabel: WKInterfaceLabel!
+    @IBOutlet weak var albumLabel: WKInterfaceLabel!
+    @IBOutlet weak var artistLabel: WKInterfaceLabel!
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         let wormhole = MMWormhole(applicationGroupIdentifier: "group.org.potpie.mpdjs", optionalDirectory: nil)
@@ -25,7 +27,10 @@ class GlanceController: WKInterfaceController {
                 let data = strmsg.dataUsingEncoding(NSUTF8StringEncoding)
                 var jsonError: NSError?
                 let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
-                self.playingLabel.setText(json.valueForKeyPath("playing") as? String)
+                self.artistLabel.setText(json.valueForKeyPath("currentSong.artist") as? String)
+                self.albumLabel.setText(json.valueForKeyPath("currentSong.album") as? String)
+                self.titleLabel.setText(json.valueForKeyPath("currentSong.title") as? String)
+                self.timeLabel.setText(json.valueForKeyPath("time") as? String)
             }
         })
         

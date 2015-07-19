@@ -36,17 +36,23 @@
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         </group>
                         <separator alignment="left" id="Z4P-kK-ipz"/>
-                        <slider width="1" height="34.5" alignment="center" value="50" maximum="100" steps="10" id="als-Bp-N3L">
+                        <slider width="1" height="23.5" alignment="center" value="50" maximum="100" steps="10" id="als-Bp-N3L">
                             <connections>
                                 <action selector="volumeChange:" destination="AgC-eL-Hgc" id="v9d-bX-lq4"/>
                             </connections>
                         </slider>
                         <separator alignment="left" id="MEG-94-iDj"/>
-                        <label height="48.5" alignment="left" text="Playing []" textAlignment="left" numberOfLines="3" id="Vur-Gi-BlA"/>
+                        <label width="1" height="18" alignment="left" id="Vur-Gi-BlA" userLabel="Artist">
+                            <fontDescription key="font" style="UICTFontTextStyleBody"/>
+                        </label>
+                        <label width="1" height="18" alignment="left" id="9wH-o2-rrb" userLabel="Title"/>
+                        <label width="1" height="18" alignment="left" id="UU4-td-3oQ" userLabel="Time"/>
                     </items>
                     <connections>
+                        <outlet property="artistLabel" destination="Vur-Gi-BlA" id="PAj-u6-0YM"/>
                         <outlet property="playPauseButton" destination="3a5-uW-ms4" id="z0U-Yw-Xt4"/>
-                        <outlet property="playingLabel" destination="Vur-Gi-BlA" id="IHy-GD-BdY"/>
+                        <outlet property="timeLabel" destination="UU4-td-3oQ" id="GXQ-Ak-fqp"/>
+                        <outlet property="titleLabel" destination="9wH-o2-rrb" id="VbV-ke-Nv6"/>
                         <outlet property="volume" destination="als-Bp-N3L" id="XmQ-mZ-IhE"/>
                     </connections>
                 </controller>
@@ -60,21 +66,31 @@
                     <items>
                         <group alignment="left" id="t8f-Gd-c4y">
                             <items>
-                                <label width="121.5" height="40.5" alignment="left" text="MPD js" textAlignment="center" id="Jwy-xR-mdw">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                <label width="1" height="1" alignment="left" text="MPD js" id="Jwy-xR-mdw">
+                                    <color key="textColor" red="1" green="0.12661642966846676" blue="0.14754697811891426" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="font" style="UICTFontTextStyleCaption1"/>
                                 </label>
                             </items>
                         </group>
-                        <group alignment="left" id="uCw-4Q-Ouw">
+                        <group alignment="left" layout="vertical" id="uCw-4Q-Ouw">
                             <items>
-                                <label width="135.5" height="94.5" alignment="left" text="Playing []" numberOfLines="4" id="LfV-UK-g7d"/>
+                                <label alignment="left" text="Playing :" id="83i-9S-pVx" userLabel="NowPlaying">
+                                    <color key="textColor" red="0.057171852563241199" green="0.8747328969515995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="font" style="UICTFontTextStyleCaption1"/>
+                                </label>
+                                <label width="135.5" height="18" alignment="left" numberOfLines="4" id="LfV-UK-g7d" userLabel="Artist"/>
+                                <label width="1" height="18" alignment="left" id="TbY-T6-IpW" userLabel="Album"/>
+                                <label width="1" height="18" alignment="left" id="hQG-Gi-MDa" userLabel="Title"/>
+                                <label width="1" height="18" alignment="left" id="tu1-VZ-Q1D" userLabel="Time"/>
                             </items>
                         </group>
                     </items>
                     <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="14"/>
                     <connections>
-                        <outlet property="playingLabel" destination="LfV-UK-g7d" id="Q5K-Wg-P2m"/>
+                        <outlet property="albumLabel" destination="TbY-T6-IpW" id="R6g-tl-VrZ"/>
+                        <outlet property="artistLabel" destination="LfV-UK-g7d" id="qw8-3l-amG"/>
+                        <outlet property="timeLabel" destination="tu1-VZ-Q1D" id="amX-O7-o3t"/>
+                        <outlet property="titleLabel" destination="hQG-Gi-MDa" id="vvN-l7-dOf"/>
                     </connections>
                 </glanceController>
             </objects>

@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MPD js WatchKit Extension/InterfaceController.swift"
-            timestampString = "458438302.718238"
+            timestampString = "458938481.195451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "playPause()"
             landmarkType = "5">
          </BreakpointContent>
@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MPD js WatchKit Extension/InterfaceController.swift"
-            timestampString = "458420084.84199"
+            timestampString = "458938573.636304"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "awakeWithContext(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MPD js WatchKit Extension/InterfaceController.swift"
-            timestampString = "458420084.84199"
+            timestampString = "458938573.636304"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "awakeWithContext(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MPD js WatchKit Extension/InterfaceController.swift"
-            timestampString = "458435975.805621"
+            timestampString = "458925220.671"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
             landmarkName = "awakeWithContext(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -278,15 +278,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MPD js WatchKit Extension/InterfaceController.swift"
-            timestampString = "458437153.182003"
+            timestampString = "458938573.636304"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "awakeWithContext(_:)"
             landmarkType = "5">
          </BreakpointContent>

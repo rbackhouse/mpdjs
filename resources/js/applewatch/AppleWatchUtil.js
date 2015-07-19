@@ -19,24 +19,76 @@ define([
 	'../mpd/MPDClient'
 ],
 function(MPDClient) {
-	var listeners = [];
 	var available = false;
+	var previousStatus;
+	
+	function statusHasChanged(status) {
+		if (previousStatus) {
+			if (status.state !== previousStatus.state) {
+				return true;				
+			} 
+			if (status.volume !== previousStatus.volume) {
+				return true;				
+			} 
+			if (status.currentsong) {
+				if (status.currentsong.title !== previousStatus.currentsong.title) {
+					return true;				
+				} 
+				if (status.currentsong.artist !== previousStatus.currentsong.artist) {
+					return true;				
+				} 
+				if (status.currentsong.album !== previousStatus.currentsong.album) {
+					return true;				
+				} 
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	var statusListener = function(status) {
+		var sendStatus = true;
+		//if (statusHasChanged(status)) {
+			var currentSong = {artist: "", album: "", title: ""};
+			var strTime = "";
+			var volume = -1;
+			if (status.currentsong && status.currentsong.artist && status.state != "stop") {
+				currentSong = status.currentsong;
+				var time = Math.floor(parseInt(status.time));
+				var minutes = Math.floor(time / 60);
+				var seconds = time - minutes * 60;
+				seconds = (seconds < 10 ? '0' : '') + seconds;
+				strTime = minutes+":"+seconds;
+				volume = parseInt(status.volume)
+			}
+			var message = {state: status.state, volume: volume, currentSong: currentSong, time: strTime};
+			applewatch.sendMessage(message, "mpdjsStatus", 
+				function() {
+				},
+				function(err) {
+					console.log("Apple Watch sending message failed "+err);
+				}
+			);
+		//}
+		previousStatus = status;
+	}.bind(this);
+	
 	
 	if (window.cordova) {
 		require(['deviceReady!'], function() {
 			applewatch.init(function (appGroupId) {
 				console.log("Apple Watch initialized");
 				available = true;
+				MPDClient.addStatusListener(statusListener);
 				applewatch.addListener("mpdjsCommand", function (command) {
+					previousStatus = undefined;
 					console.log("Apple Watch Command : "+JSON.stringify(command));
 					if (command.command === "changeVolume") {
 						MPDClient.changeVolume(command.value, function() {});
 					} else {
 						MPDClient.sendControlCmd(command.command, function() {});
 					}
-					listeners.forEach(function(listener) {
-						listener(command);
-					});
 				});		
 			}, function (err) {
 				console.log("Apple Watch error :"+err);
@@ -45,26 +97,5 @@ function(MPDClient) {
 		});
 	}
 	
-	return {
-		sendMessage: function(message) {
-			if (available) {
-				applewatch.sendMessage(message, "mpdjsStatus", 
-					function() {
-					},
-					function(err) {
-						console.log("Apple Watch sending message failed "+err);
-					}
-				);
-			}
-		},
-		addListener: function(listener) {
-			listeners.push(listener);
-		},
-		removeListener: function(listener) {
-			var index = listeners.indexOf(listener);
-			if (index > -1) {
-				listeners.splice(index, 1);
-			}
-		}
-	}
+	return {}
 });
