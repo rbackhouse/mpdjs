@@ -22,14 +22,6 @@
 		2FB7CDB61B4813D8001EFFD2 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; };
 		2FB7CDBA1B481490001EFFD2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */; };
 		2FB7CDC41B48570A001EFFD2 /* libmmwormhole.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FB7CDC31B48570A001EFFD2 /* libmmwormhole.a */; settings = {ATTRIBUTES = (Required, ); }; };
-		2FB7CDEE1B499AC6001EFFD2 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; };
-		2FB7CDEF1B499AC6001EFFD2 /* AssetsLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2FB7CDF01B499AC6001EFFD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		2FB7CDF11B499AC6001EFFD2 /* CoreGraphics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2FB7CDF21B499AC6001EFFD2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */; };
-		2FB7CDF31B499AC6001EFFD2 /* MobileCoreServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2FB7CDF41B499AC6001EFFD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 411CF83D9C0440D7AF70A538 /* Foundation.framework */; };
-		2FB7CDF51B499AC6001EFFD2 /* Foundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 411CF83D9C0440D7AF70A538 /* Foundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
@@ -106,20 +98,6 @@
 				2FB7CDAE1B480494001EFFD2 /* MPD js WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2FB7CDF61B499AC6001EFFD2 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				2FB7CDF31B499AC6001EFFD2 /* MobileCoreServices.framework in Embed Frameworks */,
-				2FB7CDF11B499AC6001EFFD2 /* CoreGraphics.framework in Embed Frameworks */,
-				2FB7CDEF1B499AC6001EFFD2 /* AssetsLibrary.framework in Embed Frameworks */,
-				2FB7CDF51B499AC6001EFFD2 /* Foundation.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -221,10 +199,6 @@
 				2FB7CDC41B48570A001EFFD2 /* libmmwormhole.a in Frameworks */,
 				2FB7CDBA1B481490001EFFD2 /* MobileCoreServices.framework in Frameworks */,
 				2FB7CDB61B4813D8001EFFD2 /* AssetsLibrary.framework in Frameworks */,
-				2FB7CDF21B499AC6001EFFD2 /* MobileCoreServices.framework in Frameworks */,
-				2FB7CDF01B499AC6001EFFD2 /* CoreGraphics.framework in Frameworks */,
-				2FB7CDF41B499AC6001EFFD2 /* Foundation.framework in Frameworks */,
-				2FB7CDEE1B499AC6001EFFD2 /* AssetsLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,7 +464,6 @@
 				2FB7CD8D1B480494001EFFD2 /* Sources */,
 				2FB7CD8E1B480494001EFFD2 /* Frameworks */,
 				2FB7CD8F1B480494001EFFD2 /* Resources */,
-				2FB7CDF61B499AC6001EFFD2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -769,7 +742,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "MPD js/MPD js-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/MPD js/Plugins/cordova-plugin-apple-watch\"",
@@ -802,13 +775,13 @@
 				CODE_SIGN_ENTITLEMENTS = "MPD js/MPD js.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPD js/MPD js-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "MPD js/MPD js-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/MPD js/Plugins/cordova-plugin-apple-watch\"",
@@ -848,6 +821,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -892,6 +866,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -997,6 +972,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_THUMB_SUPPORT = NO;
@@ -1011,7 +987,7 @@
 					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"\"$(BUILT_PRODUCTS_DIR)\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -1029,6 +1005,7 @@
 				);
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -1044,6 +1021,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_THUMB_SUPPORT = NO;
@@ -1058,7 +1036,7 @@
 					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"\"$(BUILT_PRODUCTS_DIR)\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					CoreFoundation,
@@ -1075,6 +1053,7 @@
 				);
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
