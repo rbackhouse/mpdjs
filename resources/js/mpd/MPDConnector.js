@@ -87,7 +87,14 @@ MPDConnection.prototype = {
 					//console.log("cmd ["+task.cmd+"] complete");
 					var result;
 					if (task.process) {
-						result = task.process(task.response);
+						try {
+							result = task.process(task.response);
+						} catch(err) {
+							if (task.errorcb) {
+								task.errorcb(err);
+							}
+							console.log("Error running task ["+task.cmd+"] : "+err);
+						}
 					}
 					if (task.cb) {
 						task.cb(result);
