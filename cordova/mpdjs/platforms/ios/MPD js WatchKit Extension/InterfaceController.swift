@@ -27,6 +27,7 @@ class InterfaceController: WKInterfaceController {
         NSLog("%@ init", self)
         self.pauseImage = UIImage(named: "pause")
         self.playImage = UIImage(named: "play")
+        self.currentState = "pause"
     }
     
     override func awakeWithContext(context: AnyObject?) {
