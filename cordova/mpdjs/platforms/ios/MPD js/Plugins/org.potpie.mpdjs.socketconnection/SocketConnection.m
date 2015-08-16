@@ -79,7 +79,7 @@
         case NSStreamEventHasBytesAvailable:
             if (stream == self.inputStream) {
                 uint8_t buffer[1024];
-                int len;
+                long len;
                 
                 while ([self.inputStream hasBytesAvailable]) {
                     len = [self.inputStream read:buffer maxLength:sizeof(buffer)];
