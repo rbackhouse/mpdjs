@@ -33,3 +33,15 @@
     padding-bottom:.22em;
     width: 160px;
 }
+
+.ui-header .ui-btn, .ui-header .ui-icon, .ui-header .ui-btn-inner {
+    width: 33px;
+    height: 33px;
+}
+.ui-header .ui-btn-inner .ui-icon {
+    margin: 0px;
+    border-radius: 0;
+}
+.ui-header {
+    height: 47px;
+}
