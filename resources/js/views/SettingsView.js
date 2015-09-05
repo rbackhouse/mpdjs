@@ -36,6 +36,10 @@ function($, Backbone, _, BaseView, MPDClient, config, template){
 						typevalue: config.getRandomPlaylistConfig().typevalue
 					};
 					config.setRandomPlaylistConfig(randomPlaylistConfig);
+				},
+				"change #startPage" : function(evt) {
+					var option = $("#startPage").find('option:selected').val();
+					config.setStartPage(option);
 				}
 		    });	
 		},
@@ -44,7 +48,7 @@ function($, Backbone, _, BaseView, MPDClient, config, template){
 				title: "Settings"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template ) ( {randomPlaylistConfig: config.getRandomPlaylistConfig()} );
+			this.template = _.template( template ) ( {randomPlaylistConfig: config.getRandomPlaylistConfig(), startPage: config.getStartPage() } );
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );

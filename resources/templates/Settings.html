@@ -7,4 +7,16 @@
 		<h3>Random Playlist</h3> 
 		<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>
 	</div>	
+	<div data-role="collapsible" data-collapsed="true" data-inset="false"> 
+		<h3>Start Page</h3>
+		<select id="startPage">
+			<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>
+			<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>
+			<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>
+			<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>
+			<% if (window.cordova) { %>
+				<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>
+			<% } %>	
+		</select>
+	</div>	
 </div>

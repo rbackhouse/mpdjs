@@ -115,78 +115,67 @@ function(
 	        	}
 	        });
 	        this.on("route:playlist", function() {
-	        	if (config.isDirect() && MPDClient.isConnected() == false) {
-	        		Backbone.history.navigate("connections", {replace: true});
-					this.changePage(new ConnectionListView({}));
-	        	} else {
+	        	this.connectIfRequired(function(proceed) {
+	        		if (!proceed) return;
 		        	this.fetchPlayList();
-	        	}
+	        	}.bind(this));
 			});
 			this.on("route:songs", function(album) {
-	        	if (config.isDirect() && MPDClient.isConnected() == false) {
-	        		Backbone.history.navigate("connections", {replace: true});
-					this.changePage(new ConnectionListView({}));
-					return;
-	        	}
-				
-				var songlist = new SongList({album: album});
-				$.mobile.loading("show", { textVisible: false });
-				songlist.fetch({
-					success: function(collection, response, options) {
-		        		$.mobile.loading("hide");
-						this.changePage(new SongListView({songs: collection, album: album}));
-					}.bind(this),
-					error: function(collection, xhr, options) {
-		        		$.mobile.loading("hide");
-						console.log("get songs failed :"+xhr.status);
-					}
-				});
+	        	this.connectIfRequired(function(proceed) {
+	        		if (!proceed) return;
+					var songlist = new SongList({album: album});
+					$.mobile.loading("show", { textVisible: false });
+					songlist.fetch({
+						success: function(collection, response, options) {
+							$.mobile.loading("hide");
+							this.changePage(new SongListView({songs: collection, album: album}));
+						}.bind(this),
+						error: function(collection, xhr, options) {
+							$.mobile.loading("hide");
+							console.log("get songs failed :"+xhr.status);
+						}
+					});
+	        	}.bind(this));
 			});
 			this.on("route:albums", function(artist) {
-	        	if (config.isDirect() && MPDClient.isConnected() == false) {
-	        		Backbone.history.navigate("connections", {replace: true});
-					this.changePage(new ConnectionListView({}));
-					return;
-	        	}
-				var albumslist = new AlbumList({artist: artist, index: 0, filterValue: "all"});
-				$.mobile.loading("show", { textVisible: false });
-				albumslist.fetch({
-					success: function(collection, response, options) {
-		        		$.mobile.loading("hide");
-						this.changePage(new AlbumListView({albums: collection}));
-					}.bind(this),
-					error: function(collection, xhr, options) {
-		        		$.mobile.loading("hide");
-						console.log("get albums failed :"+xhr.status);
-					}
-				});
+	        	this.connectIfRequired(function(proceed) {
+	        		if (!proceed) return;
+					var albumslist = new AlbumList({artist: artist, index: 0, filterValue: "all"});
+					$.mobile.loading("show", { textVisible: false });
+					albumslist.fetch({
+						success: function(collection, response, options) {
+							$.mobile.loading("hide");
+							this.changePage(new AlbumListView({albums: collection}));
+						}.bind(this),
+						error: function(collection, xhr, options) {
+							$.mobile.loading("hide");
+							console.log("get albums failed :"+xhr.status);
+						}
+					});
+	        	}.bind(this));
 			});
 			this.on("route:artists", function() {
-	        	if (config.isDirect() && MPDClient.isConnected() == false) {
-	        		Backbone.history.navigate("connections", {replace: true});
-					this.changePage(new ConnectionListView({}));
-					return;
-	        	}
-				var artistlist = new ArtistList();
-				$.mobile.loading("show", { textVisible: false });
-				artistlist.fetch({
-					success: function(collection, response, options) {
-		        		$.mobile.loading("hide");
-						this.changePage(new ArtistListView({artists: collection}));
-					}.bind(this),
-					error: function(collection, xhr, options) {
-		        		$.mobile.loading("hide");
-						console.log("get artists failed :"+xhr.status);
-					}
-				});
+	        	this.connectIfRequired(function(proceed) {
+	        		if (!proceed) return;
+					var artistlist = new ArtistList();
+					$.mobile.loading("show", { textVisible: false });
+					artistlist.fetch({
+						success: function(collection, response, options) {
+							$.mobile.loading("hide");
+							this.changePage(new ArtistListView({artists: collection}));
+						}.bind(this),
+						error: function(collection, xhr, options) {
+							$.mobile.loading("hide");
+							console.log("get artists failed :"+xhr.status);
+						}
+					});
+	        	}.bind(this));
 			});
 			this.on("route:search", function() {
-	        	if (config.isDirect() && MPDClient.isConnected() == false) {
-	        		Backbone.history.navigate("connections", {replace: true});
-					this.changePage(new ConnectionListView({}));
-					return;
-	        	}
-				this.changePage(new SongSearchView({}));
+	        	this.connectIfRequired(function(proceed) {
+	        		if (!proceed) return;
+					this.changePage(new SongSearchView({}));
+	        	}.bind(this));
 			});
 			this.on("route:connections", function() {
 				this.changePage(new ConnectionListView({}));
@@ -253,12 +242,34 @@ function(
 				});
 			}
 	    },
-	    checkForConnection : function(cb) {
+	    checkForConnection: function(cb) {
 			if (config.promptForConnection()) {
 				this.changePage(new ConnectionListView({}), true);
 			} else {
 				cb();
 			}
+	    },
+	    connectIfRequired: function(cb) {
+	        if (config.isDirect() && !MPDClient.isConnected()) {
+	        	if (config.getConnections().length < 1) {
+	        		Backbone.history.navigate("connections", {replace: true});
+					this.changePage(new ConnectionListView({}));
+					cb(false);
+	        	} else {
+					MPDClient.connect(function(error) {
+						if (error) {
+							MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnection().host+":"+config.getConnection().port+" Error: "+error);
+			        		Backbone.history.navigate("connections", {replace: true});
+							this.changePage(new ConnectionListView({}));
+							cb(false);
+						} else {
+							cb(true);
+						}
+					}.bind(this));
+	        	}
+	    	} else {
+	    		cb(true);
+	    	}
 	    },
 		routes: {
 			'playlist': 'playlist',
@@ -272,7 +283,7 @@ function(
 			'search': 'search',
 			'connections': 'connections',
 			'settings': 'settings',
-			'': 'playlist'
+			'': config.getStartPage()
 		}
 	});
 	

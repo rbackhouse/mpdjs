@@ -94,6 +94,21 @@ define(function() {
 			randomPlaylistConfig = newRandomPlaylistConfig;
 			var randomPlaylistConfigStr = JSON.stringify(newRandomPlaylistConfig);
 			localStorage["mpdjs.randomPlaylistConfig"] = randomPlaylistConfigStr;
+		},
+		getStartPage: function() {
+			var startPage = localStorage["mpdjs.startPage"];
+			if (!startPage) {
+				if (window.cordova) {
+					startPage = "connections";
+				} else {
+					startPage = "playlist";
+				}
+				this.setStartPage(startPage);
+			}
+			return startPage;
+		},
+		setStartPage: function(startPage) {
+			localStorage["mpdjs.startPage"] = startPage;
 		}
 	}
 });
