@@ -74,15 +74,22 @@ MPDConnection.prototype = {
 			}
 		}.bind(this));
 		
-		SocketConnection.listen(function(data) {
+		var data = "";
+		
+		SocketConnection.listen(function(buffer) {
+			data += buffer;
+			var lastChar = buffer.charAt(buffer.length-1);
+			if (lastChar != "\n" && lastChar != "\r") {
+				return;
+			}
 			var lines = this._lineSplit(data);
 			var lastLine = lines[lines.length-1];
 			if (lastLine.match(/^OK MPD/)) {
 				console.log("MPD connection is ready");
-			} else if (lastLine == "OK") {
+			} else if (lastLine.match(/^OK$/)) {
 				if (this.queue.length > 0) {
 					var task = this.queue.shift();
-					task.response += data.substring(0, data.indexOf("OK\n"));
+					task.response += data.substring(0, data.length - 4);
 					task.state = COMPLETE;
 					//console.log("cmd ["+task.cmd+"] complete");
 					var result;
@@ -121,15 +128,28 @@ MPDConnection.prototype = {
 					task.response += data;
 				}
 			}
+			data = "";
 		}.bind(this));
 		var processQueue = function() {
-			if (this.isConnected && this.queue.length > 0 && this.queue[0].state === INITIAL) {
-				//console.log("cmd ["+this.queue[0].cmd+"] started");
-				SocketConnection.writeMessage(this.queue[0].cmd+"\n");
-				this.queue[0].state = WRITTEN;
+			if (this.isConnected && this.queue.length > 0) {
+				if (this.queue[0].state === INITIAL) {
+					//console.log("cmd ["+this.queue[0].cmd+"] started");
+					SocketConnection.writeMessage(this.queue[0].cmd+"\n");
+					this.queue[0].state = WRITTEN;
+					this.queue[0].count = 0;
+				}
+				if (this.queue[0].count > 20) {
+					var task = this.queue.shift();
+					if (task.errorcb) {
+						task.errorcb("Timeout on "+task.cmd);
+					}
+					console.log("Timeout on "+task.cmd);
+				} else {
+					this.queue[0].count++;
+				}
 			}
 		}.bind(this);
-	
+		
 		var poller = function() {
 			processQueue();
 			setTimeout(poller, 500);
