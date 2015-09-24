@@ -56,19 +56,21 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 						}.bind(this), true);
 					} else {
 						index = parseInt(id);
-						config.setSelectedIndex(index);
-						if (MPDClient.isConnected()) {
-							MPDClient.disconnect();
-							$("#connect").val("Connect");
-							$("#connect").button('option', {icon : "check" });
-							$("#connect").button("refresh");
-						}						
-						$("#connectionList li").remove();
-						config.getConnections().forEach(function(connection, index) {
-							$("#connectionList").append(_.template( itemTemplate ) ( { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
-						});
-						$("#connectionList").listview('refresh');
-						this.connect();
+						if (config.getSelectedIndex() !== index) {
+							config.setSelectedIndex(index);
+							if (MPDClient.isConnected()) {
+								MPDClient.disconnect();
+								$("#connect").val("Connect");
+								$("#connect").button('option', {icon : "check" });
+								$("#connect").button("refresh");
+							}						
+							$("#connectionList li").remove();
+							config.getConnections().forEach(function(connection, index) {
+								$("#connectionList").append(_.template( itemTemplate ) ( { connection: connection, index: index, selectedIndex: config.getSelectedIndex() }));
+							});
+							$("#connectionList").listview('refresh');
+							this.connect();
+						}
 					}
 				}
 		    });	
