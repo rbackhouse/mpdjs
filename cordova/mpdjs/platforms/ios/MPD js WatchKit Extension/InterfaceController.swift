@@ -41,7 +41,7 @@ class InterfaceController: WKInterfaceController {
             if let strmsg: String = messageObject as? String {
                 let data = strmsg.dataUsingEncoding(NSUTF8StringEncoding)
                 var jsonError: NSError?
-                let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
+                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: [])) as! NSDictionary
                 self.artistLabel.setText(json.valueForKeyPath("currentSong.artist") as? String)
                 self.timeLabel.setText(json.valueForKeyPath("time") as? String)
                 self.titleLabel.setText(json.valueForKeyPath("currentSong.title") as? String)
@@ -51,7 +51,7 @@ class InterfaceController: WKInterfaceController {
                 } else {
                     self.playPauseButton.setBackgroundImage(self.playImage)
                 }
-                var vol = (json.valueForKeyPath("volume") as? Float)
+                let vol = (json.valueForKeyPath("volume") as? Float)
                 
                 if (self.volumeSet == false &&  vol > -1) {
                     NSLog("set volume %f", vol!)

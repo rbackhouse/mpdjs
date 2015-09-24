@@ -134,7 +134,7 @@ applewatch.addListener("test", function (message) {
 #### Initialise message passing (WatchKit extension, swift)
 
 ```swift
-// assumes your WatchKit extension references the packaged MMWormhole library `libmmwormhole.a`
+// assumes your WatchKit extension references Wormhole.h
 
 let wormhole = MMWormhole(applicationGroupIdentifier: "group.com.yourcompany", optionalDirectory: nil)
 ```
@@ -221,6 +221,16 @@ var myValue: String? {
     return userDefaults?.stringForKey("myKey")
 }
 ```
+
+### getUserDefaults
+
+Allows retrieval of user default data.
+
+```js
+applewatch.getUserDefaults(successHandler, errorHandler, "myKey", appGroupId);
+```
+
+The app bundleId will be used for identification by default, prefixed by "group." if `appGroupId` is not supplied.
 
 ## Live demo
 
