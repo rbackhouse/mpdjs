@@ -66,6 +66,8 @@
     <true/>
     <key>NSMainNibFile~ipad</key>
     <string></string>
+    <key>UIRequiresFullScreen</key>
+    <true/>
     <key>UISupportedInterfaceOrientations~ipad</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>

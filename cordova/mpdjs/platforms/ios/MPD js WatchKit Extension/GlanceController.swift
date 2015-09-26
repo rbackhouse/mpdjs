@@ -25,7 +25,6 @@ class GlanceController: WKInterfaceController {
         self.wormhole.listenForMessageWithIdentifier("mpdjsStatus", listener: { (messageObject) -> Void in
             if let strmsg: String = messageObject as? String {
                 let data = strmsg.dataUsingEncoding(NSUTF8StringEncoding)
-                var jsonError: NSError?
                 let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: [])) as! NSDictionary
                 self.artistLabel.setText(json.valueForKeyPath("currentSong.artist") as? String)
                 self.albumLabel.setText(json.valueForKeyPath("currentSong.album") as? String)
