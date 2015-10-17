@@ -201,15 +201,28 @@ MPDConnection.prototype = {
 		var processor = function(data) {
 			var lines = this._lineSplit(data);
 			var albums = [];
+			var line;
+			var album;
 			for (var i = 0; i < lines.length; i++) {
-				var name = lines[i].substring(ALBUM_PREFIX.length);
-				if (name.trim().length > 0) {
-					if (filter) {
-						if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
-							albums.push({name: name});
+				line = lines[i];
+				if (line.indexOf(ARTIST_PREFIX) === 0) {
+					var artist = lines[i].substring(ARTIST_PREFIX.length);
+					if (name.trim().length > 0 && album) {
+						album.artist = artist;
+					}
+				} else if (line.indexOf(ALBUM_PREFIX) === 0) {
+					var name = lines[i].substring(ALBUM_PREFIX.length);
+					if (name.trim().length > 0) {
+						album = {name: name};
+						if (filter) {
+							if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+								albums.push(album);
+							} else {
+								album = undefined;
+							}
+						} else {
+							albums.push(album);
 						}
-					} else {
-						albums.push({name: name});
 					}
 				}
 			}
@@ -225,7 +238,7 @@ MPDConnection.prototype = {
 			return albums;
 		}.bind(this);
 		this.queue.push({
-			cmd: "list album",
+			cmd: "list album group artist",
 			process: processor,
 			cb: cb,
 			errorcb: errorcb,
@@ -338,7 +351,7 @@ MPDConnection.prototype = {
 			state: INITIAL
 		});
 	},
-	getSongsForAlbum: function(album, cb, errorcb) {
+	getSongsForAlbum: function(album, artist, cb, errorcb) {
 		var processor = function(data) {
 			var lines = this._lineSplit(data);
 			var songs = [];
@@ -366,8 +379,12 @@ MPDConnection.prototype = {
 			}				
 			return songs;
 		}.bind(this);
+		var cmd = "find album \""+album.replace(/"/g, "\\\"")+"\"";
+		if (artist) {
+			cmd += " artist \""+artist.replace(/"/g, "\\\"")+"\"";
+		}
 		this.queue.push({
-			cmd: "find album \""+album.replace(/"/g, "\\\"")+"\"",
+			cmd: cmd,
 			process: processor,
 			cb: cb,
 			errorcb: errorcb,
@@ -500,8 +517,8 @@ MPDConnection.prototype = {
 			state: INITIAL
 		});
 	},
-	addAlbumToPlayList: function(albumName, cb) {
-		this.getSongsForAlbum(albumName, function(songs) {
+	addAlbumToPlayList: function(albumName, artist, cb) {
+		this.getSongsForAlbum(albumName, artist, function(songs) {
 			var cmd = "command_list_begin\n";
 			for (var i = 0; i < songs.length; i++) {
 				cmd += "add \""+songs[i].file+"\"\n";

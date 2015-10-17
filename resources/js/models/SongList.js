@@ -18,14 +18,15 @@ define(['backbone', './Song', '../uiconfig', '../mpd/MPDClient', '../util/Messag
 	var SongList = Backbone.Collection.extend({
 		initialize: function(options) {
 			this.album = options.album;
+			this.artist = options.artist;
 		},
 		model: Song,
 		url: function() {
-			return config.getBaseUrl()+"/music/songs/"+(this.album === undefined ? "" : encodeURIComponent(this.album));	
+			return config.getBaseUrl()+"/music/songs/"+(this.album === undefined ? "" : encodeURIComponent(this.album))+(this.artist === undefined ? "" : "/"+encodeURIComponent(this.artist));	
 		},
 		fetch: function(options) {
 			if (config.isDirect()) {
-				MPDClient.getSongs(this.album, function(songs) {
+				MPDClient.getSongs(this.album, this.artist, function(songs) {
 					this.set(songs, options);
 			        options.success(this, songs, options);
         			this.trigger('sync', this, songs, options);

@@ -90,16 +90,16 @@ function(
 					});
 				}
 	        });
-	        this.on("route:addalbum", function(album) {
+	        this.on("route:addalbum", function(album, artist) {
 				$.mobile.loading("show", { textVisible: false });
 				if (config.isDirect()) {
-					MPDClient.addAlbumToPlayList(album, function() {
+					MPDClient.addAlbumToPlayList(album, artist, function() {
 						$.mobile.loading("hide");
 						this.fetchPlayList();
 					}.bind(this));
 				} else {
 					$.ajax({
-						url: config.getBaseUrl()+"/music/playlist/album/"+album,
+						url: config.getBaseUrl()+"/music/playlist/album/"+album+"/"+artist,
 						type: "PUT",
 						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
 						dataType: "text",
@@ -120,15 +120,18 @@ function(
 		        	this.fetchPlayList();
 	        	}.bind(this));
 			});
-			this.on("route:songs", function(album) {
+			this.on("route:songs", function(album, artist) {
+				if (artist === "null") {
+					artist = undefined;
+				}
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
-					var songlist = new SongList({album: album});
+					var songlist = new SongList({album: album, artist: artist});
 					$.mobile.loading("show", { textVisible: false });
 					songlist.fetch({
 						success: function(collection, response, options) {
 							$.mobile.loading("hide");
-							this.changePage(new SongListView({songs: collection, album: album}));
+							this.changePage(new SongListView({songs: collection, album: album, artist: artist}));
 						}.bind(this),
 						error: function(collection, xhr, options) {
 							$.mobile.loading("hide");
@@ -274,8 +277,8 @@ function(
 		routes: {
 			'playlist': 'playlist',
 			'playlist/song/:song': 'addsong',
-			'playlist/album/:album': 'addalbum',
-			'songs/:album': 'songs',
+			'playlist/album/:album/:artist': 'addalbum',
+			'songs/:album/:artist': 'songs',
 			'albums/:artist': 'albums',
 			'artists': 'artists',
 			'albums': 'albums',

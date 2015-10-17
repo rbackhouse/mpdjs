@@ -74,7 +74,7 @@ function($, Backbone, _, BaseView, template){
 						$("#albumList li").remove();
 					}
 					this.albums.each(function(album) {
-						var li = '<li data-icon="arrow-r"><a href="#songs/'+encodeURIComponent(album.get("name"))+'"><p style="white-space:normal">'+album.get("name")+'</p></a></li>'; 
+						var li = '<li data-icon="arrow-r"><a href="#songs/'+encodeURIComponent(album.get("name"))+'/'+encodeURIComponent(album.get("artist"))+'"><p style="white-space:normal">'+album.get("name")+' ('+album.get("artist")+')</p></a></li>'; 
 						$("#albumList").append(li);
 					}.bind(this));
 					$("#albumList").listview('refresh');

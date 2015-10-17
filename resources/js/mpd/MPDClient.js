@@ -187,11 +187,11 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 				}, errorHandler);
 			}
 		},
-		getSongs: function(album, cb) {
+		getSongs: function(album, artist, cb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
-			connection.getSongsForAlbum(album, cb, errorHandler);
+			connection.getSongsForAlbum(album, artist, cb, errorHandler);
 		},
 		getPlayList: function(cb) {
 			if (!connection) {
@@ -208,8 +208,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 		addSongToPlayList: function(song, cb) {
 			connection.addSongToPlayList(song, cb);
 		},
-		addAlbumToPlayList: function(album, cb) {
-			connection.addAlbumToPlayList(album, cb);
+		addAlbumToPlayList: function(album, artist, cb) {
+			connection.addAlbumToPlayList(album, artist, cb);
 		},
 		randomPlayList: function(cb) {
 			connection.clearPlayList();
@@ -218,7 +218,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 				for (var i = 0; i < 50; i++) {
 					var albumindex = Math.floor((Math.random()*albums.length-1)+1);
 					var albumName = albums[albumindex].name;
-					connection.getSongsForAlbum(albumName, function(songs) {
+					connection.getSongsForAlbum(albumName, undefined, function(songs) {
 						var songindex = Math.floor((Math.random()*songs.length-1)+1);
 						var song = songs[songindex];
 						if (song) {

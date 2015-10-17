@@ -1,4 +1,4 @@
-<a href="#playlist/album/<%= encodeURIComponent(album) %>" id="addAllButton" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a> 
+<a href="#playlist/album/<%= encodeURIComponent(album) %>/<%= encodeURIComponent(artist) %>" id="addAllButton" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a> 
 <div data-role="content">
 	<ul id="songList" data-role="listview">
 	<% _.each(songs, function(song) { %>
