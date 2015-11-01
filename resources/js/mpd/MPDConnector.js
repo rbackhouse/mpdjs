@@ -169,7 +169,7 @@ MPDConnection.prototype = {
 				var name = lines[i].substring(ARTIST_PREFIX.length);
 				if (name.trim().length > 0) {
 					if (filter) {
-						if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+						if (name.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
 							artists.push({name: name});
 						}
 					} else {
@@ -215,7 +215,7 @@ MPDConnection.prototype = {
 					if (name.trim().length > 0) {
 						album = {name: name};
 						if (filter) {
-							if (name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+							if (name.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
 								albums.push(album);
 							} else {
 								album = undefined;

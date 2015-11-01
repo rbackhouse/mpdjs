@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -14,9 +15,9 @@
 		277CD8D7CE4544E4AC807167 /* SocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = B761647AF8264DA6BE4D25D2 /* SocketConnection.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		2F12517F1BB40E050032C6C0 /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; };
-		2F1251881BB42A500032C6C0 /* MMWormhole.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D11D91241C643B998573BB4 /* MMWormhole.m */; settings = {ASSET_TAGS = (); }; };
-		2F1251891BB42BD70032C6C0 /* MMWormholeCoordinatedFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 454C389609D748C9A3F32581 /* MMWormholeCoordinatedFileTransiting.m */; settings = {ASSET_TAGS = (); }; };
-		2F12518A1BB42BDD0032C6C0 /* MMWormholeFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A1591470CC42A49C2AAAAE /* MMWormholeFileTransiting.m */; settings = {ASSET_TAGS = (); }; };
+		2F1251881BB42A500032C6C0 /* MMWormhole.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D11D91241C643B998573BB4 /* MMWormhole.m */; };
+		2F1251891BB42BD70032C6C0 /* MMWormholeCoordinatedFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 454C389609D748C9A3F32581 /* MMWormholeCoordinatedFileTransiting.m */; };
+		2F12518A1BB42BDD0032C6C0 /* MMWormholeFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A1591470CC42A49C2AAAAE /* MMWormholeFileTransiting.m */; };
 		2FB7CD971B480494001EFFD2 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7CD961B480494001EFFD2 /* InterfaceController.swift */; };
 		2FB7CD991B480494001EFFD2 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7CD981B480494001EFFD2 /* NotificationController.swift */; };
 		2FB7CD9B1B480494001EFFD2 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7CD9A1B480494001EFFD2 /* GlanceController.swift */; };
@@ -757,6 +758,12 @@
 				GCC_PREFIX_HEADER = "MPD js/MPD js-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+					"\"$(OBJROOT)/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+				);
 				INFOPLIST_FILE = "MPD js/MPD js-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -793,6 +800,12 @@
 				GCC_PREFIX_HEADER = "MPD js/MPD js-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+					"\"$(OBJROOT)/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+				);
 				INFOPLIST_FILE = "MPD js/MPD js-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";

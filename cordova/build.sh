@@ -5,5 +5,6 @@ cp -r ../resources/* ./mpdjs/www
 cd ./mpdjs/jsbuild
 node r.js -o build.js optimize=uglify2
 cd ..
-cordova build ios
+cordova prepare ios
+cordova compile ios
 cd ..
