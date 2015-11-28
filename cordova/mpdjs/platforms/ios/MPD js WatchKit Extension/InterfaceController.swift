@@ -34,7 +34,7 @@ class InterfaceController: WKInterfaceController {
         super.awakeWithContext(context)
         NSLog("%@ awakeWithContext", self)
         
-        let wormhole = MMWormhole(applicationGroupIdentifier: "group.org.potpie.mpdjs", optionalDirectory: nil)
+        let wormhole = MMWormhole(applicationGroupIdentifier: "group.org.potpie.mpdjs2", optionalDirectory: nil)
         
         self.wormhole = wormhole
         self.wormhole.listenForMessageWithIdentifier("mpdjsStatus", listener: { (messageObject) -> Void in

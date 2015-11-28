@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    id="org.potpie.mpdjs.mmwormhole"
+    version="1.0.0">
+
+    <name>MMWormholePlugin</name>
+
+    <engines>
+        <engine name="cordova" version=">=3.2.0" />
+        <engine name="apple-ios" version=">=9.1.0"/>
+    </engines>
+
+    <js-module src="www/MMWormholePlugin.js" name="MMWormhole">
+        <clobbers target="window.MMWormhole" />
+    </js-module>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="MMWormholePlugin">
+                <param name="ios-package" value="MMWormholePlugin" />
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+		<header-file src="src/ios/MMWormholePlugin.h" />
+        <source-file src="src/ios/MMWormholePlugin.m" />
+        <header-file src="src/ios/MMWormhole.h"/>
+        <source-file src="src/ios/MMWormhole.m"/>
+        <header-file src="src/ios/MMWormholeCoordinatedFileTransiting.h"/>
+        <source-file src="src/ios/MMWormholeCoordinatedFileTransiting.m"/>
+        <header-file src="src/ios/MMWormholeFileTransiting.h"/>
+        <source-file src="src/ios/MMWormholeFileTransiting.m"/>
+      	<source-file src="src/ios/MMWormholeSession.h"/>
+      	<source-file src="src/ios/MMWormholeSession.m"/>
+      	<source-file src="src/ios/MMWormholeSessionContextTransiting.h"/>
+      	<source-file src="src/ios/MMWormholeSessionContextTransiting.m"/>
+      	<source-file src="src/ios/MMWormholeSessionFileTransiting.h"/>
+      	<source-file src="src/ios/MMWormholeSessionFileTransiting.m"/>
+      	<source-file src="src/ios/MMWormholeSessionMessageTransiting.h"/>
+      	<source-file src="src/ios/MMWormholeSessionMessageTransiting.m"/>
+      	<source-file src="src/ios/MMWormholeTransiting.h"/>
+        <framework src="Foundation.framework"/>
+        <framework src="WatchConnectivity.framework"/>
+    </platform>
+    
+</plugin>

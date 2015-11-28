@@ -63,7 +63,7 @@ function(MPDClient) {
 				volume = parseInt(status.volume)
 			}
 			var message = {state: status.state, volume: volume, currentSong: currentSong, time: strTime};
-			applewatch.sendMessage(message, "mpdjsStatus", 
+			MMWormhole.sendMessage(message, "mpdjsStatus", 
 				function() {
 				},
 				function(err) {
@@ -77,11 +77,11 @@ function(MPDClient) {
 	
 	if (window.cordova) {
 		require(['deviceReady!'], function() {
-			applewatch.init(function (appGroupId) {
+			MMWormhole.init("group.org.potpie.mpdjs2", function () {
 				console.log("Apple Watch initialized");
 				available = true;
 				MPDClient.addStatusListener(statusListener);
-				applewatch.addListener("mpdjsCommand", function (command) {
+				MMWormhole.listen("mpdjsCommand", function (command) {
 					previousStatus = undefined;
 					console.log("Apple Watch Command : "+JSON.stringify(command));
 					if (command.command === "changeVolume") {
@@ -92,8 +92,7 @@ function(MPDClient) {
 				});		
 			}, function (err) {
 				console.log("Apple Watch error :"+err);
-			},
-			"group.org.potpie.mpdjs");
+			});
 		});
 	}
 	

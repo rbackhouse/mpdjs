@@ -59,19 +59,19 @@
         }
     },
     "installed_plugins": {
-        "org.apache.cordova.device": {
+        "cordova-plugin-console": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
-        "org.apache.cordova.console": {
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "org.potpie.mpdjs"
+        },
+        "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
         "org.potpie.mpdjs.socketconnection": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
-        "org.apache.cordova.statusbar": {
-            "PACKAGE_NAME": "org.potpie.mpdjs"
-        },
-        "cordova-plugin-apple-watch": {
+        "org.potpie.mpdjs.mmwormhole": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         }
     },

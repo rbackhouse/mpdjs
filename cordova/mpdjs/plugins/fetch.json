@@ -1,10 +1,4 @@
 {
-    "org.apache.cordova.statusbar": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.statusbar"
-        }
-    },
     "org.apache.cordova.media": {
         "source": {
             "type": "registry",
@@ -17,11 +11,44 @@
             "id": "org.apache.cordova.file"
         }
     },
-    "cordova-plugin-apple-watch": {
+    "cordova-plugin-console": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/leecrossley/cordova-plugin-apple-watch.git",
-            "subdir": "."
-        }
+            "type": "registry",
+            "id": "cordova-plugin-console"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-device": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-device"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-statusbar": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-statusbar"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.potpie.mpdjs.socketconnection": {
+        "source": {
+            "type": "local",
+            "path": "/Users/rbackhouse/development/musicserver/mpdjs.new/mpdjs/cordova/SocketConnectionPlugin"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.potpie.mpdjs.mmwormhole": {
+        "source": {
+            "type": "local",
+            "path": "/Users/rbackhouse/development/musicserver/mpdjs.new/mpdjs/cordova/MMWormholePlugin"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

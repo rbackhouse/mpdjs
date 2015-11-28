@@ -109,6 +109,9 @@ define(function() {
 		},
 		setStartPage: function(startPage) {
 			localStorage["mpdjs.startPage"] = startPage;
+		},
+		getVersionNumber: function() {
+			return "1.7";
 		}
 	}
 });

@@ -48,7 +48,13 @@ function($, Backbone, _, BaseView, MPDClient, config, template){
 				title: "Settings"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template ) ( {randomPlaylistConfig: config.getRandomPlaylistConfig(), startPage: config.getStartPage() } );
+			this.template = _.template( template ) ( 
+				{
+					randomPlaylistConfig: config.getRandomPlaylistConfig(), 
+					startPage: config.getStartPage(),
+					version: config.getVersionNumber()
+				}
+			);
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );

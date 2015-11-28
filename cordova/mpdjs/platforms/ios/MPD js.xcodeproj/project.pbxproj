@@ -7,17 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1610BDD6187D4531AEE6A564 /* MMWormholeSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F52E769AD8A4F9C9AE7B8DD /* MMWormholeSession.m */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		1E9E79C960B345CD8E97C550 /* MMWormholeFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A1591470CC42A49C2AAAAE /* MMWormholeFileTransiting.m */; };
 		1F766FE113BBADB100FB74C0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F766FDC13BBADB100FB74C0 /* Localizable.strings */; };
-		25CE737947DC413FBA7BED22 /* MMWormholeCoordinatedFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 454C389609D748C9A3F32581 /* MMWormholeCoordinatedFileTransiting.m */; };
-		277CD8D7CE4544E4AC807167 /* SocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = B761647AF8264DA6BE4D25D2 /* SocketConnection.m */; };
+		240532B913B1446DB8453790 /* MMWormholeSession.h in Sources */ = {isa = PBXBuildFile; fileRef = DCDAB9F346524370B8C73F33 /* MMWormholeSession.h */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		2F12517F1BB40E050032C6C0 /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; };
-		2F1251881BB42A500032C6C0 /* MMWormhole.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D11D91241C643B998573BB4 /* MMWormhole.m */; };
-		2F1251891BB42BD70032C6C0 /* MMWormholeCoordinatedFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 454C389609D748C9A3F32581 /* MMWormholeCoordinatedFileTransiting.m */; };
-		2F12518A1BB42BDD0032C6C0 /* MMWormholeFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A1591470CC42A49C2AAAAE /* MMWormholeFileTransiting.m */; };
+		2F802B271C09C5DA009087EC /* MMWormhole.m in Sources */ = {isa = PBXBuildFile; fileRef = EDE14F6B1C124C79928F13B7 /* MMWormhole.m */; };
+		2F802B281C09C5DD009087EC /* MMWormholeCoordinatedFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = E429F20B4FFC4170818A918F /* MMWormholeCoordinatedFileTransiting.m */; };
+		2F802B291C09C5E0009087EC /* MMWormholeFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C8D7CB7062C453EA750379A /* MMWormholeFileTransiting.m */; };
+		2F802B2A1C09C5E3009087EC /* MMWormholeSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F52E769AD8A4F9C9AE7B8DD /* MMWormholeSession.m */; };
+		2F802B2B1C09C5E6009087EC /* MMWormholeSessionContextTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = E22D0C68A4F54C4C80CA840E /* MMWormholeSessionContextTransiting.m */; };
+		2F802B2C1C09C5EA009087EC /* MMWormholeSessionFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = AE9910D378DF44ED976A1790 /* MMWormholeSessionFileTransiting.m */; };
+		2F802B2D1C09C5EE009087EC /* MMWormholeSessionMessageTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E958BE604D4B5AB1220A5C /* MMWormholeSessionMessageTransiting.m */; };
 		2FB7CD971B480494001EFFD2 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7CD961B480494001EFFD2 /* InterfaceController.swift */; };
 		2FB7CD991B480494001EFFD2 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7CD981B480494001EFFD2 /* NotificationController.swift */; };
 		2FB7CD9B1B480494001EFFD2 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7CD9A1B480494001EFFD2 /* GlanceController.swift */; };
@@ -43,10 +46,12 @@
 		308D05391370CCF300D202BF /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D05301370CCF300D202BF /* icon@2x.png */; };
 		30A0434814DC770100060A13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 30A0434314DC770100060A13 /* Localizable.strings */; };
 		30FC414916E50CA1004E6F35 /* icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 30FC414816E50CA1004E6F35 /* icon-72@2x.png */; };
-		35BD624F43524AD283F249CE /* MMWormhole.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D11D91241C643B998573BB4 /* MMWormhole.m */; };
-		3659FC92AA744EC3A68DC999 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A114E8B96848F4B37CF524 /* CDVStatusBar.m */; };
+		421332618E58429DB205DE5E /* MMWormholeSessionMessageTransiting.h in Sources */ = {isa = PBXBuildFile; fileRef = 7380615534A649038676A400 /* MMWormholeSessionMessageTransiting.h */; };
+		49D58CE2740746839C36168F /* MMWormholeCoordinatedFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = E429F20B4FFC4170818A918F /* MMWormholeCoordinatedFileTransiting.m */; };
+		586D7C192BB1480D894F959E /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B84369EABA4337865246EA /* CDVLogger.m */; };
 		5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; };
-		644E8C1E867640A499A1445C /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B3ABCB61C1AF43E6BBED20B0 /* CDVLogger.m */; };
+		5EECBEF7D7184AE9A2A7A586 /* MMWormholeFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C8D7CB7062C453EA750379A /* MMWormholeFileTransiting.m */; };
+		689A9D8A494046E5B3D93C6C /* MMWormhole.m in Sources */ = {isa = PBXBuildFile; fileRef = EDE14F6B1C124C79928F13B7 /* MMWormhole.m */; };
 		7E7966DE1810823500FA85AD /* icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966D41810823500FA85AD /* icon-40.png */; };
 		7E7966DF1810823500FA85AD /* icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966D51810823500FA85AD /* icon-40@2x.png */; };
 		7E7966E01810823500FA85AD /* icon-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966D61810823500FA85AD /* icon-50.png */; };
@@ -57,9 +62,19 @@
 		7E7966E51810823500FA85AD /* icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DB1810823500FA85AD /* icon-76@2x.png */; };
 		7E7966E61810823500FA85AD /* icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DC1810823500FA85AD /* icon-small.png */; };
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
-		CF089F7553884AAA99E1B957 /* AppleWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4156381DE329420B83EA729B /* AppleWatch.m */; };
+		8FC461931BFB4E14BB810D72 /* MMWormholeSessionContextTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = E22D0C68A4F54C4C80CA840E /* MMWormholeSessionContextTransiting.m */; };
+		9317B06777124ABBA296DD13 /* MMWormholeSessionContextTransiting.h in Sources */ = {isa = PBXBuildFile; fileRef = C3C58EB630C84F1A8E8005C4 /* MMWormholeSessionContextTransiting.h */; };
+		9A8DBF312AE24DBCB6F30418 /* MMWormholePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FEBF973ACB4A3CBCC32765 /* MMWormholePlugin.m */; };
+		9EB500C1E67F406C9920348A /* MMWormholeTransiting.h in Sources */ = {isa = PBXBuildFile; fileRef = EDAB704119A245689AAAE5AE /* MMWormholeTransiting.h */; };
+		A1249B0F382C44F3A93BCE60 /* SocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 14DEA77E637C46B7BF5D4F1B /* SocketConnection.m */; };
+		A1643830689D45AB9DAF706C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A54DBFB8C9C24F2BBEAF2CA6 /* Foundation.framework */; };
+		A56F3A0ADDB9471C9B27E41F /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = B335F005A5D54E28A691CB85 /* CDVStatusBar.m */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
-		DE64BB8A9B6C472184825C5A /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 47730BC8294A48C8B40A0373 /* CDVDevice.m */; };
+		E83C32A3BC9942AA84959F40 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 385221A4EB584A1A865B3882 /* WatchConnectivity.framework */; };
+		EECE2A9CCFF64826893D2807 /* MMWormholeSessionFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = AE9910D378DF44ED976A1790 /* MMWormholeSessionFileTransiting.m */; };
+		F54D2C3B089B4D1B8D178FB7 /* MMWormholeSessionMessageTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E958BE604D4B5AB1220A5C /* MMWormholeSessionMessageTransiting.m */; };
+		F6E2EDF1011D4C7083C2671C /* MMWormholeSessionFileTransiting.h in Sources */ = {isa = PBXBuildFile; fileRef = 55A80DCBE6A2463D836063C1 /* MMWormholeSessionFileTransiting.h */; };
+		FEC3001D595A4C9A9C59C0F4 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 73E85CE151E648219B3830BB /* CDVDevice.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,15 +123,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0FD1C2B4AEF949A6B5AC38F3 /* CDVDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVDevice.h; path = org.apache.cordova.device/CDVDevice.h; sourceTree = "<group>"; };
+		14DEA77E637C46B7BF5D4F1B /* SocketConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocketConnection.m; path = org.potpie.mpdjs.socketconnection/SocketConnection.m; sourceTree = "<group>"; };
+		1C8D7CB7062C453EA750379A /* MMWormholeFileTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeFileTransiting.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeFileTransiting.m; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* MPD js.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MPD js.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F52E769AD8A4F9C9AE7B8DD /* MMWormholeSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeSession.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeSession.m; sourceTree = "<group>"; };
 		1F766FDD13BBADB100FB74C0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		1F766FE013BBADB100FB74C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
-		24EDB6920B3449CBB8A5B4DF /* MMWormholeFileTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeFileTransiting.h; path = "cordova-plugin-apple-watch/MMWormholeFileTransiting.h"; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2A1D966F1C13438B8237E95F /* MMWormholeFileTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeFileTransiting.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeFileTransiting.h; sourceTree = "<group>"; };
 		2FA80D051B52C00F001BC31E /* MPD js.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "MPD js.entitlements"; path = "MPD js/MPD js.entitlements"; sourceTree = "<group>"; };
 		2FB7CD911B480494001EFFD2 /* MPD js WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MPD js WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FB7CD941B480494001EFFD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -148,17 +165,16 @@
 		30A0434414DC770100060A13 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Localizable.strings; sourceTree = "<group>"; };
 		30A0434714DC770100060A13 /* se */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = se; path = Localizable.strings; sourceTree = "<group>"; };
 		30FC414816E50CA1004E6F35 /* icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72@2x.png"; sourceTree = "<group>"; };
-		310BFD3FA31A4B358D322977 /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVStatusBar.h; path = org.apache.cordova.statusbar/CDVStatusBar.h; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* MPD js-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MPD js-Prefix.pch"; sourceTree = "<group>"; };
-		403312C0A4574F18B26509E2 /* CDVStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVStatusBar.m; path = com.phonegap.plugin.statusbar/CDVStatusBar.m; sourceTree = "<group>"; };
-		411CF83D9C0440D7AF70A538 /* Foundation.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		4156381DE329420B83EA729B /* AppleWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppleWatch.m; path = "cordova-plugin-apple-watch/AppleWatch.m"; sourceTree = "<group>"; };
-		454C389609D748C9A3F32581 /* MMWormholeCoordinatedFileTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeCoordinatedFileTransiting.m; path = "cordova-plugin-apple-watch/MMWormholeCoordinatedFileTransiting.m"; sourceTree = "<group>"; };
-		47730BC8294A48C8B40A0373 /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = org.apache.cordova.device/CDVDevice.m; sourceTree = "<group>"; };
-		4D11D91241C643B998573BB4 /* MMWormhole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormhole.m; path = "cordova-plugin-apple-watch/MMWormhole.m"; sourceTree = "<group>"; };
-		57DAD1FB7A3549E3A3C8A9FB /* MMWormholeCoordinatedFileTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeCoordinatedFileTransiting.h; path = "cordova-plugin-apple-watch/MMWormholeCoordinatedFileTransiting.h"; sourceTree = "<group>"; };
+		385221A4EB584A1A865B3882 /* WatchConnectivity.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
+		38E958BE604D4B5AB1220A5C /* MMWormholeSessionMessageTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeSessionMessageTransiting.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeSessionMessageTransiting.m; sourceTree = "<group>"; };
+		3C49E6C67D0C47D5B7A4167A /* MMWormholePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholePlugin.h; path = org.potpie.mpdjs.mmwormhole/MMWormholePlugin.h; sourceTree = "<group>"; };
+		484FDB7CD0D14ACFB2DE4F98 /* CDVDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVDevice.h; path = "cordova-plugin-device/CDVDevice.h"; sourceTree = "<group>"; };
+		49B84369EABA4337865246EA /* CDVLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVLogger.m; path = "cordova-plugin-console/CDVLogger.m"; sourceTree = "<group>"; };
+		55A80DCBE6A2463D836063C1 /* MMWormholeSessionFileTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeSessionFileTransiting.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeSessionFileTransiting.h; sourceTree = "<group>"; };
 		5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		62F9B519A17849B78486BB18 /* SocketConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketConnection.h; path = org.potpie.mpdjs.socketconnection/SocketConnection.h; sourceTree = "<group>"; };
+		7380615534A649038676A400 /* MMWormholeSessionMessageTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeSessionMessageTransiting.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeSessionMessageTransiting.h; sourceTree = "<group>"; };
+		73E85CE151E648219B3830BB /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = "cordova-plugin-device/CDVDevice.m"; sourceTree = "<group>"; };
 		7E7966D41810823500FA85AD /* icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-40.png"; sourceTree = "<group>"; };
 		7E7966D51810823500FA85AD /* icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-40@2x.png"; sourceTree = "<group>"; };
 		7E7966D61810823500FA85AD /* icon-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-50.png"; sourceTree = "<group>"; };
@@ -170,19 +186,28 @@
 		7E7966DC1810823500FA85AD /* icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small.png"; sourceTree = "<group>"; };
 		7E7966DD1810823500FA85AD /* icon-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small@2x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MPD js-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "MPD js-Info.plist"; path = "../MPD js-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		93C2A743DCCB4AE08242AE70 /* MMWormhole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormhole.h; path = "cordova-plugin-apple-watch/MMWormhole.h"; sourceTree = "<group>"; };
-		A6983C53B8D542B884F7A11A /* CDVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVLogger.h; path = org.apache.cordova.console/CDVLogger.h; sourceTree = "<group>"; };
-		B3ABCB61C1AF43E6BBED20B0 /* CDVLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVLogger.m; path = org.apache.cordova.console/CDVLogger.m; sourceTree = "<group>"; };
-		B4A1591470CC42A49C2AAAAE /* MMWormholeFileTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeFileTransiting.m; path = "cordova-plugin-apple-watch/MMWormholeFileTransiting.m"; sourceTree = "<group>"; };
-		B761647AF8264DA6BE4D25D2 /* SocketConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocketConnection.m; path = org.potpie.mpdjs.socketconnection/SocketConnection.m; sourceTree = "<group>"; };
+		A10204173407414B80FEA8A3 /* CDVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVLogger.h; path = "cordova-plugin-console/CDVLogger.h"; sourceTree = "<group>"; };
+		A54DBFB8C9C24F2BBEAF2CA6 /* Foundation.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A88B2164EA14413A8D051CE4 /* MMWormholeCoordinatedFileTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeCoordinatedFileTransiting.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeCoordinatedFileTransiting.h; sourceTree = "<group>"; };
+		A9B45F3DF6224374BFF14C14 /* MMWormhole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormhole.h; path = org.potpie.mpdjs.mmwormhole/MMWormhole.h; sourceTree = "<group>"; };
+		AE9910D378DF44ED976A1790 /* MMWormholeSessionFileTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeSessionFileTransiting.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeSessionFileTransiting.m; sourceTree = "<group>"; };
+		B0FEBF973ACB4A3CBCC32765 /* MMWormholePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholePlugin.m; path = org.potpie.mpdjs.mmwormhole/MMWormholePlugin.m; sourceTree = "<group>"; };
+		B335F005A5D54E28A691CB85 /* CDVStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVStatusBar.m; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; };
+		C3C58EB630C84F1A8E8005C4 /* MMWormholeSessionContextTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeSessionContextTransiting.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeSessionContextTransiting.h; sourceTree = "<group>"; };
 		CB556511448E4F6997176F6F /* appbeep.wav */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = unknown; path = appbeep.wav; sourceTree = "<group>"; };
+		D3A2F51B1EEC4725AD6CEB8A /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVStatusBar.h; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
+		DCDAB9F346524370B8C73F33 /* MMWormholeSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeSession.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeSession.h; sourceTree = "<group>"; };
+		E22D0C68A4F54C4C80CA840E /* MMWormholeSessionContextTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeSessionContextTransiting.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeSessionContextTransiting.m; sourceTree = "<group>"; };
 		E2A114E8B96848F4B37CF524 /* CDVStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVStatusBar.m; path = org.apache.cordova.statusbar/CDVStatusBar.m; sourceTree = "<group>"; };
+		E429F20B4FFC4170818A918F /* MMWormholeCoordinatedFileTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeCoordinatedFileTransiting.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeCoordinatedFileTransiting.m; sourceTree = "<group>"; };
 		EB87FDF21871DA7A0020F90C /* merges */ = {isa = PBXFileReference; lastKnownFileType = folder; name = merges; path = ../../merges; sourceTree = "<group>"; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
-		EDEED7E5EE964542BC0197A3 /* AppleWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleWatch.h; path = "cordova-plugin-apple-watch/AppleWatch.h"; sourceTree = "<group>"; };
+		EDAB704119A245689AAAE5AE /* MMWormholeTransiting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeTransiting.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeTransiting.h; sourceTree = "<group>"; };
+		EDE14F6B1C124C79928F13B7 /* MMWormhole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormhole.m; path = org.potpie.mpdjs.mmwormhole/MMWormhole.m; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "MPD js/config.xml"; sourceTree = "<group>"; };
+		FDFD24684D294CA3A5A9993A /* SocketConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketConnection.h; path = org.potpie.mpdjs.socketconnection/SocketConnection.h; sourceTree = "<group>"; };
 		FF8B03A8C5AC4ED2B3287035 /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVStatusBar.h; path = com.phonegap.plugin.statusbar/CDVStatusBar.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,6 +220,8 @@
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
+				A1643830689D45AB9DAF706C /* Foundation.framework in Frameworks */,
+				E83C32A3BC9942AA84959F40 /* WatchConnectivity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,7 +330,8 @@
 				5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
-				411CF83D9C0440D7AF70A538 /* Foundation.framework */,
+				A54DBFB8C9C24F2BBEAF2CA6 /* Foundation.framework */,
+				385221A4EB584A1A865B3882 /* WatchConnectivity.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -359,24 +387,33 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				403312C0A4574F18B26509E2 /* CDVStatusBar.m */,
 				FF8B03A8C5AC4ED2B3287035 /* CDVStatusBar.h */,
-				47730BC8294A48C8B40A0373 /* CDVDevice.m */,
-				0FD1C2B4AEF949A6B5AC38F3 /* CDVDevice.h */,
-				B3ABCB61C1AF43E6BBED20B0 /* CDVLogger.m */,
-				A6983C53B8D542B884F7A11A /* CDVLogger.h */,
-				B761647AF8264DA6BE4D25D2 /* SocketConnection.m */,
-				62F9B519A17849B78486BB18 /* SocketConnection.h */,
 				E2A114E8B96848F4B37CF524 /* CDVStatusBar.m */,
-				310BFD3FA31A4B358D322977 /* CDVStatusBar.h */,
-				4156381DE329420B83EA729B /* AppleWatch.m */,
-				4D11D91241C643B998573BB4 /* MMWormhole.m */,
-				454C389609D748C9A3F32581 /* MMWormholeCoordinatedFileTransiting.m */,
-				B4A1591470CC42A49C2AAAAE /* MMWormholeFileTransiting.m */,
-				EDEED7E5EE964542BC0197A3 /* AppleWatch.h */,
-				93C2A743DCCB4AE08242AE70 /* MMWormhole.h */,
-				57DAD1FB7A3549E3A3C8A9FB /* MMWormholeCoordinatedFileTransiting.h */,
-				24EDB6920B3449CBB8A5B4DF /* MMWormholeFileTransiting.h */,
+				49B84369EABA4337865246EA /* CDVLogger.m */,
+				A10204173407414B80FEA8A3 /* CDVLogger.h */,
+				73E85CE151E648219B3830BB /* CDVDevice.m */,
+				484FDB7CD0D14ACFB2DE4F98 /* CDVDevice.h */,
+				B335F005A5D54E28A691CB85 /* CDVStatusBar.m */,
+				D3A2F51B1EEC4725AD6CEB8A /* CDVStatusBar.h */,
+				14DEA77E637C46B7BF5D4F1B /* SocketConnection.m */,
+				FDFD24684D294CA3A5A9993A /* SocketConnection.h */,
+				B0FEBF973ACB4A3CBCC32765 /* MMWormholePlugin.m */,
+				EDE14F6B1C124C79928F13B7 /* MMWormhole.m */,
+				E429F20B4FFC4170818A918F /* MMWormholeCoordinatedFileTransiting.m */,
+				1C8D7CB7062C453EA750379A /* MMWormholeFileTransiting.m */,
+				DCDAB9F346524370B8C73F33 /* MMWormholeSession.h */,
+				1F52E769AD8A4F9C9AE7B8DD /* MMWormholeSession.m */,
+				C3C58EB630C84F1A8E8005C4 /* MMWormholeSessionContextTransiting.h */,
+				E22D0C68A4F54C4C80CA840E /* MMWormholeSessionContextTransiting.m */,
+				55A80DCBE6A2463D836063C1 /* MMWormholeSessionFileTransiting.h */,
+				AE9910D378DF44ED976A1790 /* MMWormholeSessionFileTransiting.m */,
+				7380615534A649038676A400 /* MMWormholeSessionMessageTransiting.h */,
+				38E958BE604D4B5AB1220A5C /* MMWormholeSessionMessageTransiting.m */,
+				EDAB704119A245689AAAE5AE /* MMWormholeTransiting.h */,
+				3C49E6C67D0C47D5B7A4167A /* MMWormholePlugin.h */,
+				A9B45F3DF6224374BFF14C14 /* MMWormhole.h */,
+				A88B2164EA14413A8D051CE4 /* MMWormholeCoordinatedFileTransiting.h */,
+				2A1D966F1C13438B8237E95F /* MMWormholeFileTransiting.h */,
 			);
 			name = Plugins;
 			path = "MPD js/Plugins";
@@ -506,7 +543,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 700;
-				LastSwiftUpdateCheck = 700;
+				LastSwiftUpdateCheck = 710;
 				LastUpgradeCheck = 510;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
@@ -655,14 +692,23 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				DE64BB8A9B6C472184825C5A /* CDVDevice.m in Sources */,
-				644E8C1E867640A499A1445C /* CDVLogger.m in Sources */,
-				277CD8D7CE4544E4AC807167 /* SocketConnection.m in Sources */,
-				3659FC92AA744EC3A68DC999 /* CDVStatusBar.m in Sources */,
-				CF089F7553884AAA99E1B957 /* AppleWatch.m in Sources */,
-				35BD624F43524AD283F249CE /* MMWormhole.m in Sources */,
-				25CE737947DC413FBA7BED22 /* MMWormholeCoordinatedFileTransiting.m in Sources */,
-				1E9E79C960B345CD8E97C550 /* MMWormholeFileTransiting.m in Sources */,
+				586D7C192BB1480D894F959E /* CDVLogger.m in Sources */,
+				FEC3001D595A4C9A9C59C0F4 /* CDVDevice.m in Sources */,
+				A56F3A0ADDB9471C9B27E41F /* CDVStatusBar.m in Sources */,
+				A1249B0F382C44F3A93BCE60 /* SocketConnection.m in Sources */,
+				9A8DBF312AE24DBCB6F30418 /* MMWormholePlugin.m in Sources */,
+				689A9D8A494046E5B3D93C6C /* MMWormhole.m in Sources */,
+				49D58CE2740746839C36168F /* MMWormholeCoordinatedFileTransiting.m in Sources */,
+				5EECBEF7D7184AE9A2A7A586 /* MMWormholeFileTransiting.m in Sources */,
+				240532B913B1446DB8453790 /* MMWormholeSession.h in Sources */,
+				1610BDD6187D4531AEE6A564 /* MMWormholeSession.m in Sources */,
+				9317B06777124ABBA296DD13 /* MMWormholeSessionContextTransiting.h in Sources */,
+				8FC461931BFB4E14BB810D72 /* MMWormholeSessionContextTransiting.m in Sources */,
+				F6E2EDF1011D4C7083C2671C /* MMWormholeSessionFileTransiting.h in Sources */,
+				EECE2A9CCFF64826893D2807 /* MMWormholeSessionFileTransiting.m in Sources */,
+				421332618E58429DB205DE5E /* MMWormholeSessionMessageTransiting.h in Sources */,
+				F54D2C3B089B4D1B8D178FB7 /* MMWormholeSessionMessageTransiting.m in Sources */,
+				9EB500C1E67F406C9920348A /* MMWormholeTransiting.h in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,12 +716,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F802B2C1C09C5EA009087EC /* MMWormholeSessionFileTransiting.m in Sources */,
 				2FB7CD991B480494001EFFD2 /* NotificationController.swift in Sources */,
-				2F12518A1BB42BDD0032C6C0 /* MMWormholeFileTransiting.m in Sources */,
+				2F802B291C09C5E0009087EC /* MMWormholeFileTransiting.m in Sources */,
+				2F802B2B1C09C5E6009087EC /* MMWormholeSessionContextTransiting.m in Sources */,
 				2FB7CD971B480494001EFFD2 /* InterfaceController.swift in Sources */,
-				2F1251891BB42BD70032C6C0 /* MMWormholeCoordinatedFileTransiting.m in Sources */,
-				2F1251881BB42A500032C6C0 /* MMWormhole.m in Sources */,
+				2F802B281C09C5DD009087EC /* MMWormholeCoordinatedFileTransiting.m in Sources */,
+				2F802B271C09C5DA009087EC /* MMWormhole.m in Sources */,
 				2FB7CD9B1B480494001EFFD2 /* GlanceController.swift in Sources */,
+				2F802B2D1C09C5EE009087EC /* MMWormholeSessionMessageTransiting.m in Sources */,
+				2F802B2A1C09C5E3009087EC /* MMWormholeSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,15 +911,12 @@
 				INFOPLIST_FILE = "MPD js WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/rbackhouse/development/musicserver/mpdjs/cordova/mpdjs/plugins/cordova-plugin-apple-watch/src/ios/vendor",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "/Users/rbackhouse/development/musicserver/mpdjs/cordova/mpdjs/plugins/cordova-plugin-apple-watch/src/ios/vendor/headers/MMWormhole.h";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -900,15 +947,12 @@
 				INFOPLIST_FILE = "MPD js WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/rbackhouse/development/musicserver/mpdjs/cordova/mpdjs/plugins/cordova-plugin-apple-watch/src/ios/vendor",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "/Users/rbackhouse/development/musicserver/mpdjs/cordova/mpdjs/plugins/cordova-plugin-apple-watch/src/ios/vendor/headers/MMWormhole.h";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Bridging-Header.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
