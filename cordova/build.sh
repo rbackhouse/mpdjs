@@ -1,5 +1,8 @@
 #!/bin/bash
 
+if [ ! -d ./mpdjs/www ]; then
+	mkdir ./mpdjs/www
+fi
 rm -r ./mpdjs/www/*
 cp -r ../resources/* ./mpdjs/www
 cd ./mpdjs/jsbuild
