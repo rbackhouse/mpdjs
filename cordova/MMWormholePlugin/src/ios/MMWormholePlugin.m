@@ -34,9 +34,9 @@
     NSMutableDictionary *args = [command.arguments objectAtIndex:0];
     NSString *appGroupId = [args objectForKey:@"appGroupId"];
 
-    self.wormholeSession = [MMWormholeSession sharedListeningSession];
+    //self.wormholeSession = [MMWormholeSession sharedListeningSession];
     
-    self.wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:appGroupId optionalDirectory:nil transitingType:MMWormholeTransitingTypeSessionContext];
+    self.wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:appGroupId optionalDirectory:nil];
     
 	CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:appGroupId];
 
@@ -57,14 +57,14 @@
     NSMutableDictionary *args = [command.arguments objectAtIndex:0];
     NSString *queueName = [args objectForKey:@"queueName"];
 
-    [self.wormholeSession listenForMessageWithIdentifier:queueName listener:^(id message) {
+    [self.wormhole listenForMessageWithIdentifier:queueName listener:^(id message) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
         [pluginResult setKeepCallbackAsBool:YES];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
     
-    [self.wormholeSession activateSessionListening];
+    //[self.wormholeSession activateSessionListening];
 }
 
 
