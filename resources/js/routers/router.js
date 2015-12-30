@@ -196,7 +196,7 @@ function(
 				var scrolled = $(window).scrollTop();
 				var footer = $(".ui-footer", activePage).outerHeight() - 1;
 				var scrollEnd = contentHeight - screenHeight + header + footer;
-				if (scrolled >= scrollEnd) {
+				if (scrolled >= scrollEnd && scrolled > 0) {
 					if (this.currentPage && this.currentPage.loadMore) {
 						this.currentPage.loadMore(function() {
 						});

@@ -22,12 +22,17 @@ define([
 		'../mpd/MPDClient',
 		'../uiconfig',
 		'text!templates/Settings.html'], 
-function($, Backbone, _, BaseView, MPDClient, config, template){
+function($, Backbone, _, BaseView, MPDClient, config, template) {
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
 				"click #update" : function() {
 					this.sendControlCmd("update");
+				},
+				"click #clearCache" : function() {
+					if (config.isDirect()) {
+						MPDClient.clearCache();	
+					}
 				},
 				"change #randomByType" : function() {
 					var randomPlaylistConfig = {
@@ -40,6 +45,9 @@ function($, Backbone, _, BaseView, MPDClient, config, template){
 				"change #startPage" : function(evt) {
 					var option = $("#startPage").find('option:selected').val();
 					config.setStartPage(option);
+				},
+				"change #isSongToPlaylist" : function() {
+					config.setSongToPlaylist($("#isSongToPlaylist").is(":checked"));
 				}
 		    });	
 		},
@@ -52,7 +60,8 @@ function($, Backbone, _, BaseView, MPDClient, config, template){
 				{
 					randomPlaylistConfig: config.getRandomPlaylistConfig(), 
 					startPage: config.getStartPage(),
-					version: config.getVersionNumber()
+					version: config.getVersionNumber(),
+					isSongToPlaylist: config.isSongToPlaylist()
 				}
 			);
 		},

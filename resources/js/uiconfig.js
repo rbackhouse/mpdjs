@@ -111,7 +111,18 @@ define(function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "1.7";
+			return "1.8";
+		},
+		setSongToPlaylist: function(songToPlaylist) {
+			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;
+		},
+		isSongToPlaylist: function() {
+			var songToPlaylist = localStorage["mpdjs.songToPlaylist"];
+			if (!songToPlaylist) {
+				songToPlaylist = "true";
+				this.setSongToPlaylist(songToPlaylist);
+			}
+			return songToPlaylist === "true" ? true : false;
 		}
 	}
 });

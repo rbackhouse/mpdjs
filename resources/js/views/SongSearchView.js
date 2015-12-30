@@ -34,8 +34,8 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template) ( {total: 0} );
-			$.mobile.document.one("filterablecreate", "#songList", function() {
-				$("#songList").on( "filterablebeforefilter", function(e, data) { 
+			$.mobile.document.one("filterablecreate", "#songSearchList", function() {
+				$("#songSearchList").on( "filterablebeforefilter", function(e, data) { 
 					e.preventDefault();
 		            var $input = $( data.input );
 		            var value = $input.val();
@@ -44,13 +44,17 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 			            this.load();
 		            } else {
 						this.songSearchList.searchValue = undefined;
-						$("#songList li").remove();
-						$("#songList").listview('refresh');
+						$("#songSearchList li").remove();
+						$("#songSearchList").listview('refresh');
 						$("#total").text("0");
 		            }
 				}.bind(this));
-				$("#songlist").filterable("option", "filterCallback", function( index, searchValue ) {
+				$("#songSearchList").filterable("option", "filterCallback", function( index, searchValue ) {
 		            return false;
+				});
+				$("#songsearchFilterForm").submit( function( evt ) {
+					evt.preventDefault();
+					$("#songsearchFilter").blur();
 				});
 			}.bind(this));
 		},
@@ -62,11 +66,11 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 			this.songSearchList.fetch({
 				success: function(collection, response, options) {
 					$.mobile.loading("hide");
-					$("#songList li").remove();
+					$("#songSearchList li").remove();
 					collection.each(function(song) {
-						$("#songList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
+						$("#songSearchList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
 					});
-					$("#songList").listview('refresh');
+					$("#songSearchList").listview('refresh');
 					$("#total").text(collection.length);
 				}.bind(this),
 				error: function(collection, xhr, options) {

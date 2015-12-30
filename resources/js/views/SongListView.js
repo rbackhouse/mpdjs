@@ -19,11 +19,65 @@ define([
 		'backbone',
 		'underscore', 
 		'./BaseView',
-		'text!templates/SongList.html'], 
-function($, Backbone, _, BaseView, template){
+		'../uiconfig',
+		'../mpd/MPDClient',
+		'text!templates/SongList.html',
+		'text!templates/SongListAlt.html'], 
+function($, Backbone, _, BaseView, config, MPDClient, template, templateAlt){
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
+				"click #addAllButtonAlt" : function() {
+					$.mobile.loading("show", { textVisible: false });
+					if (config.isDirect()) {
+						MPDClient.addAlbumToPlayList(this.album, this.artist, function() {
+							$.mobile.loading("hide");
+						});
+					} else {
+						$.ajax({
+							url: config.getBaseUrl()+"/music/playlist/album/"+this.album+"/"+this.artist,
+							type: "PUT",
+							contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+							dataType: "text",
+							success: function(data, textStatus, jqXHR) {
+								$.mobile.loading("hide");
+							},
+							error: function(jqXHR, textStatus, errorThrown) {
+								$.mobile.loading("hide");
+								console.log("addalbum failed :"+errorThrown);
+							}
+						});
+					}
+				},
+				"click #songList li" : function(evt) {
+					var id = evt.target.id;
+					if (id === "") {
+						id = evt.target.parentNode.id;
+					}
+					if (id !== "") {
+						var song = id.substring(5);
+						$.mobile.loading("show", { textVisible: false });
+						if (config.isDirect()) {
+							MPDClient.addSongToPlayList(decodeURIComponent(atob(song)), function() {
+								$.mobile.loading("hide");
+							});
+						} else {
+							$.ajax({
+								url: config.getBaseUrl()+"/music/playlist/song/"+song,
+								type: "PUT",
+								contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+								dataType: "text",
+								success: function(data, textStatus, jqXHR) {
+									$.mobile.loading("hide");
+								},
+								error: function(jqXHR, textStatus, errorThrown) {
+									$.mobile.loading("hide");
+									console.log("addsong failed :"+errorThrown);
+								}
+							});
+						}
+					}					
+				}				
 		    });	
 		},
 		initialize: function(options) {
@@ -31,7 +85,13 @@ function($, Backbone, _, BaseView, template){
 				title: "Songs"
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template ) ( { songs: options.songs.toJSON(), album: options.album, artist: options.artist } );
+			this.album = options.album;
+			this.artist = options.artist;
+			if (config.isSongToPlaylist()) {
+				this.template = _.template( template ) ( { songs: options.songs.toJSON(), album: options.album, artist: options.artist } );
+			} else {
+				this.template = _.template( templateAlt ) ( { songs: options.songs.toJSON(), album: options.album, artist: options.artist } );
+			}
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );

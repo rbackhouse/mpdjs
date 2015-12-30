@@ -15,7 +15,7 @@
 * DEALINGS IN THE SOFTWARE.
 */
 
-define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDConnector, config, MessagePopup) {
+define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], function(MPDConnector, config, MessagePopup, FS) {
 	var connection;
 	var statusListeners = [];
 	var intervalId;
@@ -119,6 +119,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 			if (connection) {
 				this.disconnect();
 			}
+			this.artists = undefined;
+			this.albums = undefined;
 			createConnection(function(error) {
 				if (error) {
 					connection = undefined;
@@ -147,7 +149,23 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 			if (filter === "all") {
 				filter = undefined;
 			}
-			connection.getAllArtists(filter, function(artists) {
+			
+			var filterArtists = function(artists) {
+				this.artists = artists;
+				if (filter) {
+					var filtered = [];
+					artists.forEach(function(artist) {
+						if (artist.name.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
+							filtered.push(artist);
+						}
+					});
+					processArtists(filtered);
+				} else {
+					processArtists(artists);
+				}
+			}.bind(this);
+			
+			var processArtists = function(artists) {
 				var end = index + 50 > artists.length ? artists.length : index + 50;
 				var subset = artists.slice(index, end);
 				var resp = {
@@ -156,7 +174,27 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 					total : artists.length
 				};
 				cb(resp);
-			}, errorHandler);
+			};
+			
+			if (this.artists) {
+				filterArtists(this.artists);
+				return;
+			}
+			
+			var fileName = config.getConnection().host+"_"+config.getConnection().port+"_artists.json";
+			FS.readFile(
+				fileName, 
+				filterArtists, 
+				function(err) {
+					connection.getAllArtists(filter, function(artists) {
+						this.artists = artists;
+						processArtists(artists);
+						FS.writeFile(fileName, artists, function() {
+							console.log(fileName+" written");
+						});
+					}.bind(this), errorHandler);
+				}.bind(this)
+			);
 		},
 		getAlbums: function(artist, index, filter, cb) {
 			if (!connection) {
@@ -175,7 +213,23 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 				if (filter === "all") {
 					filter = undefined;
 				}
-				connection.getAllAlbums(filter, function(albums) {
+				
+				var filterAlbums = function(albums) {
+					this.albums = albums;
+					if (filter) {
+						var filtered = [];
+						albums.forEach(function(album) {
+							if (album.name.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
+								filtered.push(album);
+							}
+						});
+						processAlbums(filtered);
+					} else {
+						processAlbums(albums);
+					}
+				}.bind(this);
+				
+				var processAlbums = function(albums) {
 					var end = index + 50 > albums.length ? albums.length : index + 50;
 					var subset = albums.slice(index, end);
 					var resp = {
@@ -184,7 +238,25 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 						total : albums.length
 					};
 					cb(resp);
-				}, errorHandler);
+				};
+				
+				if (this.albums) {
+					filterAlbums(this.albums);
+					return;
+				}
+				var fileName = config.getConnection().host+"_"+config.getConnection().port+"_albums.json";
+				FS.readFile(fileName, 
+					filterAlbums,
+					function(err) {
+						connection.getAllAlbums(filter, function(albums) {
+							this.albums = albums;
+							processAlbums(albums);
+							FS.writeFile(fileName, albums, function() {
+								console.log(fileName+" written");
+							});
+						}.bind(this), errorHandler);
+					}.bind(this)
+				);
 			}
 		},
 		getSongs: function(album, artist, cb) {
@@ -213,7 +285,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 		},
 		randomPlayList: function(cb) {
 			connection.clearPlayList();
-			connection.getAllAlbums(undefined, function(albums) {
+			
+			function createPlaylist(albums) {
 				var songlist = [];
 				for (var i = 0; i < 50; i++) {
 					var albumindex = Math.floor((Math.random()*albums.length-1)+1);
@@ -231,7 +304,15 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 						}
 					}, errorHandler);
 				}				
-			}, errorHandler);
+			}
+			
+			if (this.albums) {
+				createPlaylist(this.albums);
+			} else {
+				connection.getAllAlbums(undefined, function(albums) {
+					createPlaylist(albums);
+				}, errorHandler);
+			}
 		},
 		randomPlayListByType: function(type, typevalue, cb) {
 			connection.clearPlayList();
@@ -298,6 +379,23 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup'], function(MPDCo
 			if (index > -1) {
 				statusListeners.splice(index, 1);
 			}
+		},
+		clearCache: function() {
+			this.artists = undefined;
+			this.albums = undefined;
+			var artistsFileName = config.getConnection().host+"_"+config.getConnection().port+"_artists.json";
+			var albumsFileName = config.getConnection().host+"_"+config.getConnection().port+"_albums.json";
+
+			FS.deleteFile(artistsFileName, function() {
+				console.log(artistsFileName+" deleted");
+			}, function(err) {
+				console.log("Error deleting "+artistsFileName+" : "+err);
+			});
+			FS.deleteFile(albumsFileName, function() {
+				console.log(albumsFileName+" deleted");
+			}, function(err) {
+				console.log("Error deleting "+albumsFileName+" : "+err);
+			});
 		}
 	};
 });
