@@ -17,19 +17,19 @@ class GlanceController: WKInterfaceController {
     @IBOutlet weak var titleLabel: WKInterfaceLabel!
     @IBOutlet weak var albumLabel: WKInterfaceLabel!
     @IBOutlet weak var artistLabel: WKInterfaceLabel!
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
         let wormhole = MMWormhole(applicationGroupIdentifier: "group.org.potpie.mpdjs2", optionalDirectory: nil)
         
         self.wormhole = wormhole
-        self.wormhole.listenForMessageWithIdentifier("mpdjsStatus", listener: { (messageObject) -> Void in
+        self.wormhole.listenForMessage(withIdentifier: "mpdjsStatus", listener: { (messageObject) -> Void in
             if let strmsg: String = messageObject as? String {
-                let data = strmsg.dataUsingEncoding(NSUTF8StringEncoding)
-                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: [])) as! NSDictionary
-                self.artistLabel.setText(json.valueForKeyPath("currentSong.artist") as? String)
-                self.albumLabel.setText(json.valueForKeyPath("currentSong.album") as? String)
-                self.titleLabel.setText(json.valueForKeyPath("currentSong.title") as? String)
-                self.timeLabel.setText(json.valueForKeyPath("time") as? String)
+                let data = strmsg.data(using: String.Encoding.utf8)
+                let json = (try! JSONSerialization.jsonObject(with: data!, options: [])) as! NSDictionary
+                self.artistLabel.setText(json.value(forKeyPath: "currentSong.artist") as? String)
+                self.albumLabel.setText(json.value(forKeyPath: "currentSong.album") as? String)
+                self.titleLabel.setText(json.value(forKeyPath: "currentSong.title") as? String)
+                self.timeLabel.setText(json.value(forKeyPath: "time") as? String)
             }
         })
         

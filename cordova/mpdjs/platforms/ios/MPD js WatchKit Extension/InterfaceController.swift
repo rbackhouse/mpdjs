@@ -8,6 +8,30 @@
 
 import WatchKit
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class InterfaceController: WKInterfaceController {
 
@@ -30,27 +54,27 @@ class InterfaceController: WKInterfaceController {
         self.currentState = "pause"
     }
     
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
         NSLog("%@ awakeWithContext", self)
         
         let wormhole = MMWormhole(applicationGroupIdentifier: "group.org.potpie.mpdjs2", optionalDirectory: nil)
         
         self.wormhole = wormhole
-        self.wormhole.listenForMessageWithIdentifier("mpdjsStatus", listener: { (messageObject) -> Void in
+        self.wormhole.listenForMessage(withIdentifier: "mpdjsStatus", listener: { (messageObject) -> Void in
             if let strmsg: String = messageObject as? String {
-                let data = strmsg.dataUsingEncoding(NSUTF8StringEncoding)
-                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: [])) as! NSDictionary
-                self.artistLabel.setText(json.valueForKeyPath("currentSong.artist") as? String)
-                self.timeLabel.setText(json.valueForKeyPath("time") as? String)
-                self.titleLabel.setText(json.valueForKeyPath("currentSong.title") as? String)
-                self.currentState = (json.valueForKeyPath("state") as? String)!
+                let data = strmsg.data(using: String.Encoding.utf8)
+                let json = (try! JSONSerialization.jsonObject(with: data!, options: [])) as! NSDictionary
+                self.artistLabel.setText(json.value(forKeyPath: "currentSong.artist") as? String)
+                self.timeLabel.setText(json.value(forKeyPath: "time") as? String)
+                self.titleLabel.setText(json.value(forKeyPath: "currentSong.title") as? String)
+                self.currentState = (json.value(forKeyPath: "state") as? String)!
                 if (self.currentState == "play") {
                     self.playPauseButton.setBackgroundImage(self.pauseImage)
                 } else {
                     self.playPauseButton.setBackgroundImage(self.playImage)
                 }
-                let vol = (json.valueForKeyPath("volume") as? Float)
+                let vol = (json.value(forKeyPath: "volume") as? Float)
                 
                 if (self.volumeSet == false &&  vol > -1) {
                     NSLog("set volume %f", vol!)
@@ -74,25 +98,25 @@ class InterfaceController: WKInterfaceController {
 
     @IBAction func playPause() {
         if (self.currentState == "play") {
-            self.wormhole.passMessageObject(["command": "pause"], identifier: "mpdjsCommand")
+            self.wormhole.passMessageObject(["command": "pause"] as NSCoding?, identifier: "mpdjsCommand")
         } else {
-            self.wormhole.passMessageObject(["command": "play"], identifier: "mpdjsCommand")
+            self.wormhole.passMessageObject(["command": "play"] as NSCoding?, identifier: "mpdjsCommand")
         }
     }
 
     @IBAction func stop() {
-        self.wormhole.passMessageObject(["command": "stop"], identifier: "mpdjsCommand")
+        self.wormhole.passMessageObject(["command": "stop"] as NSCoding?, identifier: "mpdjsCommand")
     }
     
     @IBAction func previous() {
-        self.wormhole.passMessageObject(["command": "previous"], identifier: "mpdjsCommand")
+        self.wormhole.passMessageObject(["command": "previous"] as NSCoding?, identifier: "mpdjsCommand")
     }
 
     @IBAction func next() {
-        self.wormhole.passMessageObject(["command": "next"], identifier: "mpdjsCommand")
+        self.wormhole.passMessageObject(["command": "next"] as NSCoding?, identifier: "mpdjsCommand")
     }
     
-    @IBAction func volumeChange(value: Float) {
-        self.wormhole.passMessageObject(["command": "changeVolume", "value": value], identifier: "mpdjsCommand")
+    @IBAction func volumeChange(_ value: Float) {
+        self.wormhole.passMessageObject(["command": "changeVolume", "value": value] as NSCoding?, identifier: "mpdjsCommand")
     }
 }
