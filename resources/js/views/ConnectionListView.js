@@ -125,6 +125,16 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				autocapitalize: "off"
 			}).appendTo($popUp);
 			
+			$("<p/>", {
+				text : "Password:"
+			}).appendTo($popUp);
+			
+			$("<input/>", {
+				id : "pwd",
+				type : "password",
+				autocapitalize: "off"
+			}).appendTo($popUp);
+			
 			/*
 			$("<p/>", {
 				text : "Streaming Port:"
@@ -146,6 +156,10 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				$popUp.popup("close");
 				var host = $("#host").val();
 				var port = $("#port").val();
+				var pwd = $("#pwd").val();
+				if (pwd === "") {
+					pwd = undefined;
+				}
 				//var streamingport = $("#streamingport").val();
 				var streamingport = "";
 				var dup = false;
@@ -155,7 +169,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 					}					
 				});
 				if (!dup) {
-					var index = config.addConnection(host, port, streamingport);
+					var index = config.addConnection(host, port, streamingport, pwd);
 					$("#connectionList").append(_.template( itemTemplate) ( { connection: {host: host, port: port, streamingport: streamingport }, index: index, selectedIndex: config.getSelectedIndex() }));
 					$("#connectionList").listview('refresh');
 					if (config.getConnections().length === 1) {

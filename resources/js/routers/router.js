@@ -152,8 +152,11 @@ function(
 						}.bind(this),
 						error: function(collection, xhr, options) {
 							$.mobile.loading("hide");
-							console.log("get albums failed :"+xhr.status);
-						}
+							if (config.isDirect()) {
+								Backbone.history.navigate("connections", {replace: true});
+								this.changePage(new ConnectionListView({}));
+							}
+						}.bind(this)
 					});
 	        	}.bind(this));
 			});
@@ -169,8 +172,11 @@ function(
 						}.bind(this),
 						error: function(collection, xhr, options) {
 							$.mobile.loading("hide");
-							console.log("get artists failed :"+xhr.status);
-						}
+							if (config.isDirect()) {
+								Backbone.history.navigate("connections", {replace: true});
+								this.changePage(new ConnectionListView({}));
+							}
+						}.bind(this)
 					});
 	        	}.bind(this));
 			});
@@ -224,8 +230,11 @@ function(
 					}.bind(this),
 					error: function(collection, xhr, options) {
 		        		$.mobile.loading("hide");
-						console.log("get playlist failed :"+xhr.status);
-					}
+		        		if (config.isDirect()) {
+			        		Backbone.history.navigate("connections", {replace: true});
+							this.changePage(new ConnectionListView({}));
+						}
+					}.bind(this)
 				});
 			}.bind(this));
 		},

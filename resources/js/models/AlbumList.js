@@ -41,8 +41,9 @@ define(['jquery', 'backbone', './Album', '../uiconfig', '../mpd/MPDClient', '../
 			        options.success(this, resp.albums, options);
         			this.trigger('sync', this, resp.albums, options);
 				}.bind(this),
-				function(error) {
-					MessagePopup.create("Connection Failure", "Not connected");
+				function(err) {
+					options.error(undefined, {status: err}, options);
+					MessagePopup.create("Get Albums Failed", "Error : "+err);
 				});								
 			} else {
 				this.constructor.__super__.fetch.apply(this, [options]);

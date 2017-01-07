@@ -31,8 +31,9 @@ define(['backbone', './Song', '../uiconfig', '../mpd/MPDClient', '../util/Messag
 			        options.success(this, songs, options);
         			this.trigger('sync', this, songs, options);
 				}.bind(this),
-				function(error) {
-					MessagePopup.create("Connection Failure", "Not connected");
+				function(err) {
+					options.error(undefined, {status: err}, options);
+					MessagePopup.create("Get Songs Failed", "Error : "+err);
 				});								
 			} else {
 				this.constructor.__super__.fetch.apply(this, [options]);

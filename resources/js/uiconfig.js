@@ -60,11 +60,12 @@ define(function() {
 		getConnections: function() {
 			return connections;
 		},
-		addConnection: function(host, port, streamingport) {
+		addConnection: function(host, port, streamingport, pwd) {
 			var connection = {
 				host: host,
 				port: port,
-				streamingport: streamingport
+				streamingport: streamingport,
+				pwd: pwd
 			}
 			var index = connections.push(connection) - 1;
 			var connectionsStr = JSON.stringify({ connections: connections, selectedIndex: selectedIndex });

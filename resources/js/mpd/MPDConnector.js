@@ -31,9 +31,10 @@ var WRITTEN = 1;
 var READING = 2;
 var COMPLETE = 3;
 
-MPDConnection = function(host, port) {
+MPDConnection = function(host, port, pwd) {
 	this.host = host;
 	this.port = port;
+	this.pwd = pwd;
 	this.queue = [];
 	this.albumsForArtist = {};
 	this.isConnected = false;
@@ -620,6 +621,13 @@ MPDConnection.prototype = {
 			process: processor,
 			cb: callback,
 			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	},
+	login: function(password) {
+		this.queue.push({
+			cmd: "password "+password,
 			response: "",
 			state: INITIAL
 		});

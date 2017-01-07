@@ -42,7 +42,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 	}
 	
 	function createConnection(cb) {
-		connection = new MPDConnector(config.getConnection().host, config.getConnection().port);
+		connection = new MPDConnector(config.getConnection().host, config.getConnection().port, config.getConnection().pwd);
 		connection.connect(function(error) {
 			if (error) {
 				cb(error);
@@ -65,6 +65,9 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 					});
 				}
 			}, 1000);
+			if (config.getConnection().pwd) {
+				connection.login(config.getConnection().pwd);
+			}
 			cb();
 		});
 	}
@@ -142,7 +145,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 				}
 			}
 		},
-		getAllArtists: function(index, filter, cb) {
+		getAllArtists: function(index, filter, cb, errcb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
@@ -192,11 +195,11 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 						FS.writeFile(fileName, artists, function() {
 							console.log(fileName+" written");
 						});
-					}.bind(this), errorHandler);
+					}.bind(this), errcb);
 				}.bind(this)
 			);
 		},
-		getAlbums: function(artist, index, filter, cb) {
+		getAlbums: function(artist, index, filter, cb, errcb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
@@ -208,7 +211,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 						total : albums.length
 					};
 					cb(resp);
-				}, errorHandler);
+				}, errcb);
 			} else {
 				if (filter === "all") {
 					filter = undefined;
@@ -254,28 +257,28 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 							FS.writeFile(fileName, albums, function() {
 								console.log(fileName+" written");
 							});
-						}.bind(this), errorHandler);
+						}.bind(this), errcb);
 					}.bind(this)
 				);
 			}
 		},
-		getSongs: function(album, artist, cb) {
+		getSongs: function(album, artist, cb, errcb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
-			connection.getSongsForAlbum(album, artist, cb, errorHandler);
+			connection.getSongsForAlbum(album, artist, cb, errcb);
 		},
-		getPlayList: function(cb) {
+		getPlayList: function(cb, errcb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
-			connection.getPlayListInfo(cb, errorHandler);
+			connection.getPlayListInfo(cb, errcb);
 		},
-		searchSongs: function(searchValue, cb) {
+		searchSongs: function(searchValue, cb, errcb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
-			connection.getSongs(searchValue, cb, errorHandler);
+			connection.getSongs(searchValue, cb, errcb);
 		},
 		addSongToPlayList: function(song, cb) {
 			connection.addSongToPlayList(song, cb);
