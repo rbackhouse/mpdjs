@@ -20,6 +20,7 @@ define(function() {
         {href: "artists", label: "Artists"},
         {href: "albums", label: "Albums"},
         {href: "search", label: "Song Search"},
+        {href: "files", label: "Files"},
         {href: "settings", label: "Settings"}
 	];
 	

@@ -30,6 +30,7 @@ define([
 	'views/SongSearchView',
 	'views/ConnectionListView',
 	'views/SettingsView',
+	'views/FileListView',
 	'uiconfig',
 	'mpd/MPDClient',
 	'util/MessagePopup',
@@ -51,6 +52,7 @@ function(
 	SongSearchView, 
 	ConnectionListView, 
 	SettingsView, 
+	FileListView,
 	config, 
 	MPDClient, 
 	MessagePopup
@@ -192,6 +194,12 @@ function(
 			this.on("route:settings", function() {
 				this.changePage(new SettingsView({}));
 			});
+			this.on("route:files", function() {
+	        	this.connectIfRequired(function(proceed) {
+	        		if (!proceed) return;
+					this.changePage(new FileListView({}));
+	        	}.bind(this));
+			});
 			Backbone.history.start();
 			
 			var checkScroll = function(evt) {
@@ -295,6 +303,7 @@ function(
 			'search': 'search',
 			'connections': 'connections',
 			'settings': 'settings',
+			'files': 'files',
 			'': config.getStartPage()
 		}
 	});

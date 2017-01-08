@@ -34,6 +34,9 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 			}
 		},
 		initialize: function(options) {
+			if (options.header.backLink === undefined) {
+				options.header.backLink = true;
+			}
 			this.headerTemplate = _.template( headerTemplate ) ( {header: options.header } );
 			this.menuTemplate = _.template( menuTemplate) ( {menuItems: routes.getMenuItems()} );
 		},

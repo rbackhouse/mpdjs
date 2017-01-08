@@ -3,5 +3,7 @@
     <h1>
         <%= header.title %>
     </h1>
-    <a id="back" class="ui-btn ui-icon-back ui-btn-icon-notext ui-btn-b ui-corner-all">Back</a>
+    <% if (header.backLink === true) { %>
+	    <a id="back" class="ui-btn ui-icon-back ui-btn-icon-notext ui-btn-b ui-corner-all">Back</a>
+    <% } %>
 </div>

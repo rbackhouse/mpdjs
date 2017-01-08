@@ -280,8 +280,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 			}
 			connection.getSongs(searchValue, cb, errcb);
 		},
-		addSongToPlayList: function(song, cb) {
-			connection.addSongToPlayList(song, cb);
+		addSongToPlayList: function(song, cb, errcb) {
+			connection.addSongToPlayList(song, cb, errcb);
 		},
 		addAlbumToPlayList: function(album, artist, cb) {
 			connection.addAlbumToPlayList(album, artist, cb);
@@ -399,6 +399,12 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 			}, function(err) {
 				console.log("Error deleting "+albumsFileName+" : "+err);
 			});
+		},
+		listFiles: function(uri, cb, errorcb) {
+			if (!connection) {
+				errorHandler("notconnected");
+			}
+			connection.listFiles(uri, cb, errorcb);			
 		}
 	};
 });

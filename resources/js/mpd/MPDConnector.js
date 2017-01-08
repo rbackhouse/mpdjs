@@ -25,6 +25,7 @@ var FILE_PREFIX = "file: ";
 var TIME_PREFIX = "Time: ";
 var ID_PREFIX = "Id: ";
 var POS_PREFIX = "Pos: ";
+var DIR_PREFIX = "directory: ";
 
 var INITIAL = 0;
 var WRITTEN = 1;
@@ -533,11 +534,12 @@ MPDConnection.prototype = {
 			});
 		}.bind(this));
 	},
-	addSongToPlayList: function(song, cb) {
+	addSongToPlayList: function(song, cb, errorcb) {
 		this.queue.push({
 			cmd: "add \""+song+"\"",
 			cb: cb,
 			response: "",
+			errorcb: errorcb,
 			state: INITIAL
 		});
 	},
@@ -628,6 +630,38 @@ MPDConnection.prototype = {
 	login: function(password) {
 		this.queue.push({
 			cmd: "password "+password,
+			response: "",
+			state: INITIAL
+		});
+	},
+	listFiles: function(uri, cb, errorcb) {
+		var processor = function(data) {
+			var lines = this._lineSplit(data);
+			var dirs = [];
+			var files = [];
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i];
+				if (line.indexOf(FILE_PREFIX) === 0) {
+					var file = line.substring(FILE_PREFIX.length);
+					var b64file = btoa(encodeURIComponent(file));
+					files.push({file: file, b64file: b64file});
+				} else if (line.indexOf(DIR_PREFIX) === 0) {
+					var dir = line.substring(DIR_PREFIX.length);
+					var b64dir = btoa(encodeURIComponent(dir));
+					dirs.push({dir: dir, b64dir: b64dir});
+				}				
+			}
+			return {files: files, dirs: dirs};			
+		}.bind(this);
+		var cmd = "listfiles";
+		if (uri && uri !== "") {
+			cmd += " \""+decodeURIComponent(uri) + "\"";
+		}
+		this.queue.push({
+			cmd: cmd,
+			process: processor,
+			cb: cb,
+			errorcb: errorcb,
 			response: "",
 			state: INITIAL
 		});
