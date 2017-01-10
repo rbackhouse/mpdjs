@@ -4,18 +4,25 @@
 		<label for="volume" class="ui-hidden-accessible">Volume:</label>
 		<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
 	</div>
-	<div data-role="collapsible" data-collapsed="false" data-inset="false"> 
-		<h3>PlayList</h3>
+	<div data-role="collapsible" data-collapsed="false" data-inset="true"> 
+		<h3>Queue</h3>
 		<div data-role="controlgroup" data-type="horizontal" data-mini="true">
-			<input id="editButton" data-icon="edit" value="Edit" type="button" data-mini="true">
-			<input id="randomButton" data-icon="recycle" value="Random" type="button" data-mini="true">
-			<input id="clearButton" data-icon="delete" value="Clear" type="button" data-mini="true">
-		</div>
+			<input id="editButton" data-iconpos="notext" data-inline="true" data-icon="edit" value="Edit" type="button" data-mini="true">
+			<input id="randomButton" data-iconpos="notext" data-inline="true" data-icon="recycle" value="Random" type="button" data-mini="true">
+			<input id="saveButton" data-iconpos="notext" data-icon="tag" value="Save" type="button" data-mini="true">
+			<input id="clearButton" data-iconpos="notext" data-icon="delete" value="Clear" type="button" data-mini="true">
+		</div>		
 		<ol id="playingList" data-role="listview" style="margin-top:0;">
 		<% _.each(playlist, function(song) { %>
 			<li><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></li> 
 		<% }); %>
 		</ol>
+		<br>
+	</div>	
+	<div data-role="collapsible" data-collapsed="false" data-inset="true"> 
+		<h3>Play Lists</h3>
+		<ul id="playLists" data-role="listview" style="margin-top:0;">
+		</ul>
 	</div>	
 </div>
 <div data-id="thefooter "data-role="footer" data-position="fixed" class="ui-bar">

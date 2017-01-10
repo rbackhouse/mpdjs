@@ -112,7 +112,7 @@ define(function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "1.8";
+			return "1.9";
 		},
 		setSongToPlaylist: function(songToPlaylist) {
 			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;

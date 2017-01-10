@@ -53,6 +53,8 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 				"click #editButton" : "editPlayList",
 				"click #randomButton" : "randomPlayList",
 				"click #clearButton" : "clearPlayList",
+				"click #playLists li" : "loadPlayList",
+				"click #saveButton" : "savePlayList",
 				"click #playingList li" : "removeSong",
 				"change #volume" : "changeVolume"
 		    });	
@@ -77,6 +79,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 		},
 		render: function(){
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			this.loadPlayLists();
 		},
 		editPlayList: function() {
 			$("#playingList li").remove();
@@ -386,6 +389,157 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 				$("#currentlyPlaying").text(playingText);
 			} else {
 				$("#currentlyPlaying").text("Playing []");
+			}
+		},
+		loadPlayList: function(evt) {
+			var name = evt.target.id;
+			if (name === "") {
+				name = evt.target.parentNode.id;
+			}
+			console.log("name ["+name+"]");
+			if (name.indexOf("del-") != -1) {
+				name = name.substring("del-".length);
+				if (config.isDirect()) {
+					MPDClient.deletePlayList(name, function() {
+						$.mobile.loading("hide");
+						this.loadPlayLists();
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/playlist/delete/"+name,
+						type: "PUT",
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+							this.loadPlayLists();
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("delete playlist failed :"+errorThrown);
+						}
+					});
+				}				
+			} else {
+				if (config.isDirect()) {
+					MPDClient.loadPlayList(name, function() {
+						$.mobile.loading("hide");
+						this.fetchPlayList();
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/playlist/load/"+name,
+						type: "PUT",
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+							this.fetchPlayList();
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("save playlist failed :"+errorThrown);
+						}
+					});
+				}
+			}
+		},		
+		savePlayList: function() {
+			var $popUp = $("<div/>").popup({
+				dismissible : false,
+				theme : "a",
+				overlyaTheme : "a",
+				transition : "pop"
+			}).bind("popupafterclose", function() {
+				$(this).remove();
+			});			
+			$popUp.addClass("ui-content");
+			$("<h3/>", {
+				text : "Save Playlist"
+			}).appendTo($popUp);
+			
+			$("<p/>", {
+				text : "Name:"
+			}).appendTo($popUp);
+			
+			$("<input/>", {
+				id : "plname",
+				type : "text",
+				value : "",
+				autocapitalize: "off"
+			}).appendTo($popUp);
+			
+			$("<a>", {
+				text : "Ok"
+			}).buttonMarkup({
+				inline : true,
+				icon : "check"
+			}).bind("click", function() {
+				$popUp.popup("close");
+				var plname = $("#plname").val();
+				$.mobile.loading("show", { textVisible: false });
+				if (config.isDirect()) {
+					MPDClient.savePlayList(plname, function() {
+						$.mobile.loading("hide");
+						this.loadPlayLists();
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/playlist/save/"+plname,
+						type: "PUT",
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+							this.loadPlayLists();
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("save playlist failed :"+errorThrown);
+						}
+					});
+				}
+			}.bind(this)).appendTo($popUp);
+			
+			$("<a>", {
+				text : "Cancel"
+			}).buttonMarkup({
+				inline : true,
+				icon : "delete"
+			}).bind("click", function() {
+				$popUp.popup("close");
+			}).appendTo($popUp);
+			
+			$popUp.popup("open").trigger("create");
+		},
+		loadPlayLists: function() {
+			$.mobile.loading("show", { textVisible: false });
+			if (config.isDirect()) {
+				MPDClient.listPlayLists(function(playlists) {
+					$.mobile.loading("hide");
+					$("#playLists li").remove();
+					playlists.forEach(function(playlist) {
+						$("#playLists").append('<li data-icon="minusIcon"><a id="'+playlist+'"><p style="white-space:normal">'+playlist+'</p></a><a id="del-'+playlist+'"></a></li>');								
+					});						
+					$("#playLists").listview('refresh');
+				}.bind(this));
+			} else {
+				$.ajax({
+					url: config.getBaseUrl()+"/music/playlists",
+					type: "GET",
+					headers: { "cache-control": "no-cache" },
+					success: function(playlists, textStatus, jqXHR) {
+						$.mobile.loading("hide");
+						$("#playLists li").remove();
+						playlists.forEach(function(playlist) {
+							$("#playLists").append('<li data-icon="minusIcon"><a id="'+playlist+'"><p style="white-space:normal">'+playlist+'</p></a><a id="del-'+playlist+'"></a></li>');								
+						});						
+						$("#playLists").listview('refresh');
+					}.bind(this),
+					error: function(jqXHR, textStatus, errorThrown) {
+						$.mobile.loading("hide");
+					}
+				});
 			}
 		},
 		_openWebSocket: function() {
