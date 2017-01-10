@@ -28,6 +28,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
 				"click #fileList li" : function(evt) {
+					$("#filterFiles").val("");
 					var id = evt.target.id;
 					if (id === "") {
 						id = evt.target.parentNode.id;

@@ -1,5 +1,8 @@
 <div data-role="content">
-	<ul id="fileList" data-role="listview" data-filter="true">
+	<form class="ui-filterable">
+		<input id="filterFiles" data-type="search">
+	</form>
+	<ul id="fileList" data-role="listview" data-filter="true" data-input="#filterFiles">
 	</ul>
 </div>
 <div data-id="thefooter "data-role="footer" data-position="fixed" class="ui-bar">
