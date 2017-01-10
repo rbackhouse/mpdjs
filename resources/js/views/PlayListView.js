@@ -23,8 +23,9 @@ define([
 		'../uiconfig',
 		'./BaseView',
 		'../mpd/MPDClient',
+		'../util/MessagePopup',
 		'text!templates/PlayList.html'], 
-function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template){
+function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessagePopup, template){
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
@@ -396,30 +397,31 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, template
 			if (name === "") {
 				name = evt.target.parentNode.id;
 			}
-			console.log("name ["+name+"]");
 			if (name.indexOf("del-") != -1) {
 				name = name.substring("del-".length);
-				if (config.isDirect()) {
-					MPDClient.deletePlayList(name, function() {
-						$.mobile.loading("hide");
-						this.loadPlayLists();
-					}.bind(this));
-				} else {
-					$.ajax({
-						url: config.getBaseUrl()+"/music/playlist/delete/"+name,
-						type: "PUT",
-						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-						dataType: "text",
-						success: function(data, textStatus, jqXHR) {
+				MessagePopup.create("Delete Playlist", "Are you sure you want to delete the Playlist ?", undefined, function() {
+					if (config.isDirect()) {
+						MPDClient.deletePlayList(name, function() {
 							$.mobile.loading("hide");
 							this.loadPlayLists();
-						}.bind(this),
-						error: function(jqXHR, textStatus, errorThrown) {
-							$.mobile.loading("hide");
-							console.log("delete playlist failed :"+errorThrown);
-						}
-					});
-				}				
+						}.bind(this));
+					} else {
+						$.ajax({
+							url: config.getBaseUrl()+"/music/playlist/delete/"+name,
+							type: "PUT",
+							contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+							dataType: "text",
+							success: function(data, textStatus, jqXHR) {
+								$.mobile.loading("hide");
+								this.loadPlayLists();
+							}.bind(this),
+							error: function(jqXHR, textStatus, errorThrown) {
+								$.mobile.loading("hide");
+								console.log("delete playlist failed :"+errorThrown);
+							}
+						});
+					}
+				}.bind(this), true);
 			} else {
 				if (config.isDirect()) {
 					MPDClient.loadPlayList(name, function() {
