@@ -689,7 +689,7 @@ MPDConnection.prototype = {
 	},
 	loadPlayList: function(name, cb, errorcb) {
 		this.queue.push({
-			cmd: "load "+name,
+			cmd: "load \""+name+"\"",
 			cb: cb,
 			errorcb: errorcb,
 			response: "",
@@ -701,7 +701,7 @@ MPDConnection.prototype = {
 			function(songs) {
 				var cmd = "command_list_begin\n";
 				songs.forEach(function(song) {
-					cmd += "playlistadd "+name+" \""+song.file+"\"\n";
+					cmd += "playlistadd \""+name+"\" \""+song.file+"\"\n";
 				})
 				cmd += "command_list_end";
 				this.queue.push({
@@ -719,7 +719,7 @@ MPDConnection.prototype = {
 	},
 	deletePlayList: function(name, cb, errorcb) {
 		this.queue.push({
-			cmd: "rm "+name,
+			cmd: "rm \""+name+"\"",
 			cb: cb,
 			errorcb: errorcb,
 			response: "",
