@@ -67,7 +67,7 @@ function(
 	            window.history.back();
 	            return false;
 	        });
-	        this.firstPage = true;			
+	        this.firstMsg = true;
 	        this.on("route:addsong", function(song) {
 				$.mobile.loading("show", { textVisible: false });
 				if (config.isDirect()) {
@@ -146,7 +146,7 @@ function(
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 					var albumslist = new AlbumList({artist: artist, index: 0, filterValue: "all"});
-					$.mobile.loading("show", { textVisible: false });
+					this.showLoadingMsg("Loading Albums");
 					albumslist.fetch({
 						success: function(collection, response, options) {
 							$.mobile.loading("hide");
@@ -166,7 +166,7 @@ function(
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 					var artistlist = new ArtistList();
-					$.mobile.loading("show", { textVisible: false });
+					this.showLoadingMsg("Loading Artists");
 					artistlist.fetch({
 						success: function(collection, response, options) {
 							$.mobile.loading("hide");
@@ -229,7 +229,7 @@ function(
 					this.currentView.unbind();
 				}
 				var playlist = new PlayList();
-				$.mobile.loading("show", { textVisible: false });
+				this.showLoadingMsg("Fetching Current Playlist");
 				playlist.fetch({
 					success: function(collection, response, options) {
 		        		$.mobile.loading("hide");
@@ -276,7 +276,9 @@ function(
 					this.changePage(new ConnectionListView({}));
 					cb(false);
 	        	} else {
+	        		$.mobile.loading("show", { text: "Connecting to "+config.getConnection().host+":"+config.getConnection().port, textVisible: true });
 					MPDClient.connect(function(error) {
+						$.mobile.loading("hide");
 						if (error) {
 							MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnection().host+":"+config.getConnection().port+" Error: "+error);
 			        		Backbone.history.navigate("connections", {replace: true});
@@ -290,6 +292,14 @@ function(
 	    	} else {
 	    		cb(true);
 	    	}
+	    },
+	    showLoadingMsg: function(text) {
+	    	var opts = {
+	    		text: text,
+	    		textVisible: this.firstMsg
+	    	}
+	        $.mobile.loading("show", opts);
+	    	this.firstMsg = false;
 	    },
 		routes: {
 			'playlist': 'playlist',
