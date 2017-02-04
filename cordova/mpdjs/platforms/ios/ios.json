@@ -37,7 +37,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<preference name=\"AndroidPersistentFileLocation\" value=\"Internal\" />",
+                            "xml": "<feature name=\"ZeroConf\"><param name=\"ios-package\" value=\"ZeroConf\" /></feature>",
                             "count": 1
                         },
                         {
@@ -63,6 +63,15 @@
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
         "org.potpie.mpdjs.mmwormhole": {
+            "PACKAGE_NAME": "org.potpie.mpdjs"
+        },
+        "cordova-plugin-add-swift-support": {
+            "PACKAGE_NAME": "org.potpie.mpdjs"
+        },
+        "cordova-plugin-zeroconf": {
+            "PACKAGE_NAME": "org.potpie.mpdjs"
+        },
+        "cordova-plugin-compat": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
         "cordova-plugin-file": {
@@ -117,6 +126,14 @@
             "pluginId": "org.potpie.mpdjs.mmwormhole",
             "clobbers": [
                 "window.MMWormhole"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-zeroconf/www/zeroconf.js",
+            "id": "cordova-plugin-zeroconf.ZeroConf",
+            "pluginId": "cordova-plugin-zeroconf",
+            "clobbers": [
+                "cordova.plugins.zeroconf"
             ]
         },
         {
@@ -264,6 +281,12 @@
             ]
         },
         {
+            "file": "plugins/cordova-plugin-file/www/browser/isChrome.js",
+            "id": "cordova-plugin-file.isChrome",
+            "pluginId": "cordova-plugin-file",
+            "runs": true
+        },
+        {
             "file": "plugins/cordova-plugin-file/www/ios/FileSystem.js",
             "id": "cordova-plugin-file.iosFileSystem",
             "pluginId": "cordova-plugin-file",
@@ -293,6 +316,9 @@
         "cordova-plugin-statusbar": "2.0.0",
         "org.potpie.mpdjs.socketconnection": "1.0.0",
         "org.potpie.mpdjs.mmwormhole": "1.0.0",
-        "cordova-plugin-file": "3.0.0"
+        "cordova-plugin-add-swift-support": "1.6.2",
+        "cordova-plugin-zeroconf": "1.2.1",
+        "cordova-plugin-compat": "1.1.0",
+        "cordova-plugin-file": "4.3.1"
     }
 }
