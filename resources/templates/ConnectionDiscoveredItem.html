@@ -1,0 +1,16 @@
+<li data-icon="audio">
+	<a id='<%= index %>' >
+		<p>
+			<%= discovered.name %>
+		</p>
+		<p>
+			<%= discovered.host %>
+		<% if (selectedIndex === index) { %>
+			<img style="float: right;" src="css/images/icons-png/check-black.png"/>
+		<% } %>
+		</p>
+		<p>
+			<%= discovered.port %>
+		</p>
+	</a>
+</li> 

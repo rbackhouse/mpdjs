@@ -1,8 +1,12 @@
 define(function() {
 	var connections = [];
+	var discoveredList = [];
 	var randomPlaylistConfig = {};
-	var selectedIndex = 0;
+	var selectedIndex = -1;
+	var discoveredIndex = -1;
 	var isDirect = false;
+	var discoverListeners = [];
+	
 	if (window.cordova) {
 		var connectionsStr = localStorage["mpdjs.connections"];
 		if (connectionsStr) {
@@ -16,6 +20,42 @@ define(function() {
 			selectedIndex = connectionsData.selectedIndex;
 		}
 		isDirect = true;
+		require(['deviceReady!'], function() {		
+			var zeroconf = cordova.plugins.zeroconf;
+			zeroconf.watch('_mpd._tcp.', 'local.', function(result) {
+				var hostname = result.service.hostname;
+				if (hostname.charAt(hostname.length -1) === '.') {
+					hostname = hostname.substring(0, hostname.length - 1);
+				}
+				if (result.action == 'added') {
+					var connection = {
+						host: hostname,
+						port: result.service.port,
+						streamingport: "",
+						name: result.service.name
+					}
+					var add = true;
+					discoveredList.forEach(function(discovered) {
+						if (discovered.host === hostname && discovered.port === result.service.port) {
+							add = false;
+						}
+					});
+					if (add) {
+						discoveredList.push(connection);
+						discoverListeners.forEach(function(listener) {
+							listener();
+						});
+					}
+				} else {
+					for (var i = discoverListeners.length - 1; i >= 0; i--) {
+						if (discoverListeners[i].host === hostname && discoverListeners[i].port === result.service.port) {
+							discoverListeners.splice(i, 1);
+							listener();
+						}
+					}
+				}    
+			});
+		});	
 	} else {
 		connections[0] = {
 			host: ".",
@@ -51,14 +91,20 @@ define(function() {
 		getConnection: function() {
 			return connections[selectedIndex];
 		},
+		getDiscovered: function() {
+			return discoveredList[discoveredIndex];
+		},
 		promptForConnection: function() {
-			return window.cordova && connections.length === 0 ? true : false;
+			return window.cordova && connections.length === 0 && discoveredList.length === 0 ? true : false;
 		},
 		isDirect: function() {
 			return isDirect;
 		},
 		getConnections: function() {
 			return connections;
+		},
+		getDiscoveredList: function() {
+			return discoveredList;
 		},
 		addConnection: function(host, port, streamingport, pwd) {
 			var connection = {
@@ -87,6 +133,21 @@ define(function() {
 			selectedIndex = index;
 			var connectionsStr = JSON.stringify({ connections: connections, selectedIndex: selectedIndex });
 			localStorage["mpdjs.connections"] = connectionsStr;
+		},
+		getDiscoveredIndex: function() {
+			return discoveredIndex;
+		},
+		setDiscoveredIndex: function(index) {
+			discoveredIndex = index;
+		},
+		getConnectionConfig: function() {
+			if (selectedIndex !== -1) {
+				return connections[selectedIndex];
+			} else if (discoveredIndex  !== -1) {
+				return discoveredList[discoveredIndex];
+			} else {
+				return undefined;
+			}
 		},
 		getRandomPlaylistConfig: function() {
 			return randomPlaylistConfig;
@@ -124,6 +185,15 @@ define(function() {
 				this.setSongToPlaylist(songToPlaylist);
 			}
 			return songToPlaylist === "true" ? true : false;
+		},
+		addDiscoverListener: function(listener) {
+			discoverListeners.push(listener);
+		},
+		removeDiscoverListener: function(listener) {
+			var index = discoverListeners.indexOf(listener);
+			if (index > -1) {
+				discoverListeners.splice(index, 1);
+			}
 		}
 	}
 });

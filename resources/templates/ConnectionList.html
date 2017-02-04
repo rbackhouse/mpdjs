@@ -2,20 +2,46 @@
 	<div data-role="controlgroup" data-type="horizontal" data-mini="true">
 		<button id="add" class="ui-btn ui-btn-inline ui-icon-plus ui-corner-all ui-btn-icon-left ui-mini">Add</button>
 		<input id="connect" <% if (isConnected) { %>data-icon="minus" value="Disconnect"<% } else { %>data-icon="check" value="Connect"<% } %> type="button" data-mini="true">
-	</div>	
-	<ul id="connectionList" data-role="listview" data-inset="true">
-	<% _.each(connections, function(connection, index) { %>
-		<li>
-			<a id='<%= index %>'>
-				<p id='<%= index %>'>
-					<%= connection.host %> : <%= connection.port %> <% if (connection.streamingport != "") { %> : <%= connection.streamingport %> <% } %>
-					<% if (selectedIndex === index) { %>
+	</div>
+	<div data-role="collapsible" data-collapsed="false" data-inset="true"> 
+		<h3>Connections</h3>
+		<ul id="connectionList" data-role="listview" data-inset="true">
+		<% _.each(connections, function(connection, index) { %>
+			<li>
+				<a id='<%= index %>'>
+					<p id='<%= index %>'>
+						<%= connection.host %> : <%= connection.port %> <% if (connection.streamingport != "") { %> : <%= connection.streamingport %> <% } %>
+						<% if (selectedIndex === index) { %>
+							<img style="float: right;" src="css/images/icons-png/check-black.png"/>
+						<% } %>
+					</p>
+				</a>
+				<a id='delete-<%= index %>' class="ui-btn ui-btn-icon-notext ui-icon-minusIcon"></a>
+			</li> 
+		<% }); %>
+		</ul>
+	</div>
+	<div data-role="collapsible" data-collapsed="false" data-inset="true"> 
+		<h3>Discovered</h3>
+		<ul id="discoveredList" data-role="listview" data-inset="true">
+		<% _.each(discoveredList, function(discovered, index) { %>
+			<li data-icon="audio">
+				<a id='<%= index %>'>
+					<p>
+						<%= discovered.name %>
+					</p>
+					<p>
+						<%= discovered.host %>
+					<% if (discoveredIndex === index) { %>
 						<img style="float: right;" src="css/images/icons-png/check-black.png"/>
 					<% } %>
-				</p>
-			</a>
-			<a id='delete-<%= index %>' class="ui-btn ui-btn-icon-notext ui-icon-minusIcon"></a>
-		</li> 
-	<% }); %>
-	</ul>
+					</p>
+					<p>
+						<%= discovered.port %>
+					</p>
+				</a>	
+			</li> 
+		<% }); %>
+		</ul>
+	</div>
 </div>

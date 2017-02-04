@@ -38,7 +38,11 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 				options.header.backLink = true;
 			}
 			this.headerTemplate = _.template( headerTemplate ) ( {header: options.header } );
-			this.menuTemplate = _.template( menuTemplate) ( {menuItems: routes.getMenuItems()} );
+			var menuItems = routes.getMenuItems();
+			if (window.cordova && MPDClient.isConnected() == false) {
+				menuItems = [routes.getConnectionsMenuItem()];
+			}
+			this.menuTemplate = _.template( menuTemplate) ( {menuItems: menuItems} );
 		},
 		updateMenu: function() {
 			$("#mpdjsmenu li").remove();

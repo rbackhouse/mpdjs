@@ -42,34 +42,36 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 	}
 	
 	function createConnection(cb) {
-		connection = new MPDConnector(config.getConnection().host, config.getConnection().port, config.getConnection().pwd);
-		connection.connect(function(error) {
-			if (error) {
-				cb(error);
-				return;
-			}
-			if (config.getConnection().streamingport !== "") {
-				streamurl = "http://"+config.getConnection().host+":"+config.getConnection().streamingport;
-				createAudio();
-			}
-			if (intervalId) {
-				clearInterval(intervalId);
-				intervalId = undefined;
-			}
-			intervalId = setInterval(function() {
-				if (active && connection) {
-					connection.getStatus(function(status) {
-						statusListeners.forEach(function(listener) {
-							listener(status);
-						});
-					});
+		connection = new MPDConnector(config.getConnectionConfig().host, config.getConnectionConfig().port);
+		if (connection) {	
+			connection.connect(function(error) {
+				if (error) {
+					cb(error);
+					return;
 				}
-			}, 1000);
-			if (config.getConnection().pwd) {
-				connection.login(config.getConnection().pwd);
-			}
-			cb();
-		});
+				if (config.getConnectionConfig().streamingport !== "") {
+					streamurl = "http://"+config.getConnectionConfig().host+":"+config.getConnectionConfig().streamingport;
+					createAudio();
+				}
+				if (intervalId) {
+					clearInterval(intervalId);
+					intervalId = undefined;
+				}
+				intervalId = setInterval(function() {
+					if (active && connection) {
+						connection.getStatus(function(status) {
+							statusListeners.forEach(function(listener) {
+								listener(status);
+							});
+						});
+					}
+				}, 1000);
+				if (config.getConnectionConfig().pwd) {
+					connection.login(config.getConnectionConfig().pwd);
+				}
+				cb();
+			});
+		}
 	}
 	
 	function createAudio() {
@@ -184,7 +186,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 				return;
 			}
 			
-			var fileName = config.getConnection().host+"_"+config.getConnection().port+"_artists.json";
+			var fileName = config.getConnectionConfig().host+"_"+config.getConnectionConfig().port+"_artists.json";
 			FS.readFile(
 				fileName, 
 				filterArtists, 
@@ -247,7 +249,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 					filterAlbums(this.albums);
 					return;
 				}
-				var fileName = config.getConnection().host+"_"+config.getConnection().port+"_albums.json";
+				var fileName = config.getConnectionConfig().host+"_"+config.getConnectionConfig().port+"_albums.json";
 				FS.readFile(fileName, 
 					filterAlbums,
 					function(err) {
@@ -386,8 +388,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		clearCache: function() {
 			this.artists = undefined;
 			this.albums = undefined;
-			var artistsFileName = config.getConnection().host+"_"+config.getConnection().port+"_artists.json";
-			var albumsFileName = config.getConnection().host+"_"+config.getConnection().port+"_albums.json";
+			var artistsFileName = config.getConnectionConfig().host+"_"+config.getConnectionConfig().port+"_artists.json";
+			var albumsFileName = config.getConnectionConfig().host+"_"+config.getConnectionConfig().port+"_albums.json";
 
 			FS.deleteFile(artistsFileName, function() {
 				console.log(artistsFileName+" deleted");

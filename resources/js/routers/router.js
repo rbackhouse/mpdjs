@@ -247,6 +247,9 @@ function(
 			}.bind(this));
 		},
 	    changePage:function (page, dontCheck) {
+	    	if (this.currentPage && this.currentPage.cleanup) {
+	    		this.currentPage.cleanup();
+	    	}
 	    	this.currentPage = page;
 	    	function cp() {
 				$(page.el).attr('data-role', 'page');
@@ -271,16 +274,16 @@ function(
 	    },
 	    connectIfRequired: function(cb) {
 	        if (config.isDirect() && !MPDClient.isConnected()) {
-	        	if (config.getConnections().length < 1) {
+	        	if (config.getSelectedIndex() === -1 && config.getDiscoveredIndex() === -1) {
 	        		Backbone.history.navigate("connections", {replace: true});
 					this.changePage(new ConnectionListView({}));
 					cb(false);
 	        	} else {
-	        		$.mobile.loading("show", { text: "Connecting to "+config.getConnection().host+":"+config.getConnection().port, textVisible: true });
+	        		$.mobile.loading("show", { text: "Connecting to "+config.getConnectionConfig().host+":"+config.getConnectionConfig().port, textVisible: true });
 					MPDClient.connect(function(error) {
 						$.mobile.loading("hide");
 						if (error) {
-							MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnection().host+":"+config.getConnection().port+" Error: "+error);
+							MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnectionConfig().host+":"+config.getConnectionConfig().port+" Error: "+error);
 			        		Backbone.history.navigate("connections", {replace: true});
 							this.changePage(new ConnectionListView({}));
 							cb(false);

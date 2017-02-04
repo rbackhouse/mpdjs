@@ -33,10 +33,9 @@ var WRITTEN = 1;
 var READING = 2;
 var COMPLETE = 3;
 
-MPDConnection = function(host, port, pwd) {
+MPDConnection = function(host, port) {
 	this.host = host;
 	this.port = port;
-	this.pwd = pwd;
 	this.queue = [];
 	this.albumsForArtist = {};
 	this.isConnected = false;
