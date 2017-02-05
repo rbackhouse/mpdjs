@@ -116,6 +116,28 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		audio.addEventListener('volumechange', eventListener, false);
 	}
 	
+	config.addDiscoverListener(function(evt) {
+		if (evt.removed && connection) {
+			if (evt.removed.host === connection.host && evt.removed.port === connection.port) {
+				disconnect();
+				config.setDiscoveredIndex(-1);
+			}
+		}
+	});
+	
+	function disconnect() {
+		connection.disconnect();
+		connection = undefined;
+		if (audio) {
+			audio = undefined;
+			streamurl = undefined;
+		}
+		if (intervalId) {
+			clearInterval(intervalId);
+			intervalId = undefined;
+		}
+	}
+	
 	return {
 		isConnected: function() {
 			return connection === undefined ? false : true;
@@ -135,16 +157,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		},
 		disconnect: function() {
 			if (connection) {
-				connection.disconnect();
-				connection = undefined;
-				if (audio) {
-					audio = undefined;
-					streamurl = undefined;
-				}
-				if (intervalId) {
-					clearInterval(intervalId);
-					intervalId = undefined;
-				}
+				disconnect();	
 			}
 		},
 		getAllArtists: function(index, filter, cb, errcb) {

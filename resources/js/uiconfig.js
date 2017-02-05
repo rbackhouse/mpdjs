@@ -42,15 +42,19 @@ define(function() {
 					});
 					if (add) {
 						discoveredList.push(connection);
+						var added = {added: connection};
 						discoverListeners.forEach(function(listener) {
-							listener();
+							listener(added);
 						});
 					}
-				} else {
-					for (var i = discoverListeners.length - 1; i >= 0; i--) {
-						if (discoverListeners[i].host === hostname && discoverListeners[i].port === result.service.port) {
-							discoverListeners.splice(i, 1);
-							listener();
+				} else if (result.action == 'removed') {
+					for (var i = discoveredList.length - 1; i >= 0; i--) {
+						if (discoveredList[i].name === result.service.name) {
+							var conns = discoveredList.splice(i, 1);
+							var removed = {removed: conns[0]};
+							discoverListeners.forEach(function(listener) {
+								listener(removed);
+							});
 						}
 					}
 				}    

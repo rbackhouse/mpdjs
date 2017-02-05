@@ -222,9 +222,9 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				MPDClient.connect(function(error) {
 					$.mobile.loading("hide");
 					if (error) {
+						MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnectionConfig().host+":"+config.getConnectionConfig().port+" Error: "+error);
 						config.setDiscoveredIndex(-1);
 						this.loadLists();
-						MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnectionConfig().host+":"+config.getConnectionConfig().port+" Error: "+error);
 					} else {
 						$("#connect").val("Disconnect");
 						$("#connect").button('option', {icon : "minus" });
