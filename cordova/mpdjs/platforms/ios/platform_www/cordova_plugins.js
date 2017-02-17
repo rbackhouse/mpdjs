@@ -49,14 +49,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-zeroconf/www/zeroconf.js",
-        "id": "cordova-plugin-zeroconf.ZeroConf",
-        "pluginId": "cordova-plugin-zeroconf",
-        "clobbers": [
-            "cordova.plugins.zeroconf"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "id": "cordova-plugin-file.DirectoryEntry",
         "pluginId": "cordova-plugin-file",
@@ -228,6 +220,14 @@ module.exports = [
             "cordova"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/org.potpie.mpdjs.bonjourlistener/www/BonjourListener.js",
+        "id": "org.potpie.mpdjs.bonjourlistener.BonjourListener",
+        "pluginId": "org.potpie.mpdjs.bonjourlistener",
+        "clobbers": [
+            "window.BonjourListener"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -238,10 +238,9 @@ module.exports.metadata =
     "cordova-plugin-statusbar": "2.0.0",
     "org.potpie.mpdjs.socketconnection": "1.0.0",
     "org.potpie.mpdjs.mmwormhole": "1.0.0",
-    "cordova-plugin-add-swift-support": "1.6.2",
-    "cordova-plugin-zeroconf": "1.2.1",
     "cordova-plugin-compat": "1.1.0",
-    "cordova-plugin-file": "4.3.1"
+    "cordova-plugin-file": "4.3.1",
+    "org.potpie.mpdjs.bonjourlistener": "1.0.0"
 }
 // BOTTOM OF METADATA
 });

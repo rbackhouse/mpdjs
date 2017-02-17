@@ -51,14 +51,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-zeroconf": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-zeroconf"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-add-swift-support": {
         "source": {
             "type": "registry",
@@ -81,6 +73,14 @@
             "id": "cordova-plugin-compat"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "org.potpie.mpdjs.bonjourlistener": {
+        "source": {
+            "type": "local",
+            "path": "../BonjourPlugin"
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

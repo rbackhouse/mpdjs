@@ -20,23 +20,20 @@ define(function() {
 			selectedIndex = connectionsData.selectedIndex;
 		}
 		isDirect = true;
-		require(['deviceReady!'], function() {		
-			var zeroconf = cordova.plugins.zeroconf;
-			zeroconf.watch('_mpd._tcp.', 'local.', function(result) {
-				var hostname = result.service.hostname;
-				if (hostname.charAt(hostname.length -1) === '.') {
-					hostname = hostname.substring(0, hostname.length - 1);
-				}
-				if (result.action == 'added') {
+		require(['deviceReady!'], function() {
+			BonjourListener.listen('_mpd._tcp.', 'local.', function(result) {
+				console.log(JSON.stringify(result));
+				
+				if (result.type === 'add' && result.ipAddress) {
 					var connection = {
-						host: hostname,
-						port: result.service.port,
+						host: result.ipAddress,
+						port: result.port,
 						streamingport: "",
-						name: result.service.name
+						name: result.name
 					}
 					var add = true;
 					discoveredList.forEach(function(discovered) {
-						if (discovered.host === hostname && discovered.port === result.service.port) {
+						if (discovered.host === result.ipAddress && discovered.port === result.port) {
 							add = false;
 						}
 					});
@@ -47,9 +44,9 @@ define(function() {
 							listener(added);
 						});
 					}
-				} else if (result.action == 'removed') {
+				} else if (result.type === 'remove') {
 					for (var i = discoveredList.length - 1; i >= 0; i--) {
-						if (discoveredList[i].name === result.service.name) {
+						if (discoveredList[i].name === result.name) {
 							var conns = discoveredList.splice(i, 1);
 							var removed = {removed: conns[0]};
 							discoverListeners.forEach(function(listener) {
@@ -57,7 +54,7 @@ define(function() {
 							});
 						}
 					}
-				}    
+				}
 			});
 		});	
 	} else {
@@ -177,7 +174,7 @@ define(function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "1.9";
+			return "2.0";
 		},
 		setSongToPlaylist: function(songToPlaylist) {
 			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;

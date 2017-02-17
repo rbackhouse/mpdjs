@@ -74,17 +74,14 @@
         "org.potpie.mpdjs.mmwormhole": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
-        "cordova-plugin-zeroconf": {
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         },
-        "cordova-plugin-file": {
+        "org.potpie.mpdjs.bonjourlistener": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         }
     },
     "dependent_plugins": {
-        "cordova-plugin-add-swift-support": {
-            "PACKAGE_NAME": "org.potpie.mpdjs"
-        },
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "org.potpie.mpdjs"
         }
