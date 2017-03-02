@@ -1,7 +1,7 @@
 /*
 * The MIT License (MIT)
 * 
-* Copyright (c) 2014 Richard Backhouse
+* Copyright (c) 2017 Richard Backhouse
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -14,29 +14,28 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(function() {
-	var menuItems = [
-        {href: "playlist", label: "Playlist"},
-        {href: "artists", label: "Artists"},
-        {href: "albums", label: "Albums"},
-        {href: "search", label: "Song Search"},
-        {href: "files", label: "Files"},
-        {href: "outputs", label: "Outputs"},
-        {href: "settings", label: "Settings"}
-	];
-	
-	var connectionsMenuItem = {href: "connections", label: "Connections"};
-	
-	if (window.cordova) {
-		menuItems.push(connectionsMenuItem);
-	}	
-	
-	return {
-		getMenuItems: function() {
-			return menuItems;
+define(['backbone', './Output', '../uiconfig', '../mpd/MPDClient', '../util/MessagePopup'], function(Backbone, Output, config, MPDClient, MessagePopup) {
+	var OutputList = Backbone.Collection.extend({
+		model: Output,
+		url: function() {
+			return config.getBaseUrl()+"/music/outputs";
 		},
-		getConnectionsMenuItem: function() {
-			return connectionsMenuItem;
+		fetch: function(options) {
+			if (config.isDirect()) {
+				MPDClient.getOutputs(
+				function(outputs) {
+					this.set(outputs, options);
+			        options.success(this, outputs, options);
+        			this.trigger('sync', this, outputs, options);
+				}.bind(this),
+				function(err) {
+					options.error(undefined, {status: err}, options);
+					MessagePopup.create("Get Outputs Failed", "Error : "+err);
+				});								
+			} else {
+				this.constructor.__super__.fetch.apply(this, [options]);
+			}
 		}
-	}
+	});
+	return OutputList;
 });

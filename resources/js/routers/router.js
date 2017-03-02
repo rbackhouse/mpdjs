@@ -23,6 +23,7 @@ define([
 	'models/AlbumList',
 	'models/SongList',
 	'models/PlayList',
+	'models/OutputList',
 	'views/ArtistListView',
 	'views/AlbumListView',
 	'views/SongListView',
@@ -31,6 +32,7 @@ define([
 	'views/ConnectionListView',
 	'views/SettingsView',
 	'views/FileListView',
+	'views/OutputListView',
 	'uiconfig',
 	'mpd/MPDClient',
 	'util/MessagePopup',
@@ -45,6 +47,7 @@ function(
 	AlbumList, 
 	SongList, 
 	PlayList, 
+	OutputList,
 	ArtistListView, 
 	AlbumListView, 
 	SongListView, 
@@ -53,6 +56,7 @@ function(
 	ConnectionListView, 
 	SettingsView, 
 	FileListView,
+	OutputListView,
 	config, 
 	MPDClient, 
 	MessagePopup
@@ -200,6 +204,26 @@ function(
 					this.changePage(new FileListView({}));
 	        	}.bind(this));
 			});
+			this.on("route:outputs", function() {
+	        	this.connectIfRequired(function(proceed) {
+	        		if (!proceed) return;
+					var outputlist = new OutputList();
+					this.showLoadingMsg("Loading Outputs");
+					outputlist.fetch({
+						success: function(collection, response, options) {
+							$.mobile.loading("hide");
+							this.changePage(new OutputListView({outputs: collection}));
+						}.bind(this),
+						error: function(collection, xhr, options) {
+							$.mobile.loading("hide");
+							if (config.isDirect()) {
+								Backbone.history.navigate("connections", {replace: true});
+								this.changePage(new ConnectionListView({}));
+							}
+						}.bind(this)
+					});
+	        	}.bind(this));
+			});
 			Backbone.history.start();
 			
 			var checkScroll = function(evt) {
@@ -317,6 +341,7 @@ function(
 			'connections': 'connections',
 			'settings': 'settings',
 			'files': 'files',
+			'outputs': 'outputs',
 			'': config.getStartPage()
 		}
 	});

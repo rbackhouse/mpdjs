@@ -1,7 +1,7 @@
 /*
 * The MIT License (MIT)
 * 
-* Copyright (c) 2014 Richard Backhouse
+* Copyright (c) 2017 Richard Backhouse
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -14,29 +14,14 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
-define(function() {
-	var menuItems = [
-        {href: "playlist", label: "Playlist"},
-        {href: "artists", label: "Artists"},
-        {href: "albums", label: "Albums"},
-        {href: "search", label: "Song Search"},
-        {href: "files", label: "Files"},
-        {href: "outputs", label: "Outputs"},
-        {href: "settings", label: "Settings"}
-	];
-	
-	var connectionsMenuItem = {href: "connections", label: "Connections"};
-	
-	if (window.cordova) {
-		menuItems.push(connectionsMenuItem);
-	}	
-	
-	return {
-		getMenuItems: function() {
-			return menuItems;
-		},
-		getConnectionsMenuItem: function() {
-			return connectionsMenuItem;
+define(['backbone'], function(Backbone) {
+	var Output = Backbone.Model.extend({
+		defaults: {
+			id: null,
+			name: null,
+			enabled: false
 		}
-	}
+	});
+	
+	return Output;
 });

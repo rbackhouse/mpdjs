@@ -1,0 +1,12 @@
+<li data-icon="audio">
+	<a id='<%= output.get("id") %>'>
+		<p style="white-space:normal">
+			<%= output.get("name") %>
+			<% if (output.get("enabled") === true) { %>
+				<img style="float: right;" src="css/images/icons-png/check-black.png"/>
+			<% } else { %>
+				<img style="float: right;" src="css/images/icons-png/delete-black.png"/>
+			<% } %>
+		</p>
+	</a>
+</li> 

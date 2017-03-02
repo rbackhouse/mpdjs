@@ -437,6 +437,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 			if (!connection) {
 				errorHandler("notconnected");
 			}
+			connection.deletePlayList(name);
 			connection.savePlayList(name, cb, errorcb);			
 		},
 		deletePlayList: function(name, cb, errorcb) {
@@ -444,6 +445,24 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 				errorHandler("notconnected");
 			}
 			connection.deletePlayList(name, cb, errorcb);			
-		}						
+		},
+		getOutputs: function(cb, errorcb) {
+			if (!connection) {
+				errorHandler("notconnected");
+			}
+			connection.getOutputs(cb, errorcb);			
+		},
+		enableOutput: function(id, cb, errorcb) {
+			if (!connection) {
+				errorHandler("notconnected");
+			}
+			connection.enableOutput(id, cb, errorcb);			
+		},
+		disableOutput: function(id, cb, errorcb) {
+			if (!connection) {
+				errorHandler("notconnected");
+			}
+			connection.disableOutput(id, cb, errorcb);			
+		}
 	};
 });

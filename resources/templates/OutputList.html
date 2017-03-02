@@ -1,0 +1,18 @@
+<div data-role="content">
+	<ul id="outputList" data-role="listview" data-inset="true">
+	<% _.each(outputs, function(output) { %>
+		<li data-icon="audio">
+			<a id='<%= output.id %>'>
+				<p style="white-space:normal">
+					<%= output.name %>
+					<% if (output.enabled === true) { %>
+						<img style="float: right;" src="css/images/icons-png/check-black.png"/>
+					<% } else { %>
+						<img style="float: right;" src="css/images/icons-png/delete-black.png"/>
+					<% } %>
+				</p>
+			</a>
+		</li> 
+	<% }); %>
+	</ul>
+</div>
