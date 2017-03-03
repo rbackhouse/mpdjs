@@ -30,11 +30,21 @@ var PLAYLIST_PREFIX = "playlist: ";
 var OUTPUTID_PREFIX = "outputid: "
 var OUTPUTNAME_PREFIX = "outputname: "
 var OUTPUTENABLED_PREFIX = "outputenabled: "
+var SUFFIX_PREFIX = "suffix: "
 
 var INITIAL = 0;
 var WRITTEN = 1;
 var READING = 2;
 var COMPLETE = 3;
+
+function endsWith(subjectString, searchString, position) {
+	if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+		position = subjectString.length;
+    }
+    position -= searchString.length;
+    var lastIndex = subjectString.lastIndexOf(searchString, position);
+    return lastIndex !== -1 && lastIndex === position;
+};
 
 MPDConnection = function(host, port) {
 	this.host = host;
@@ -91,6 +101,7 @@ MPDConnection.prototype = {
 			var lastLine = lines[lines.length-1];
 			if (lastLine.match(/^OK MPD/)) {
 				console.log("MPD connection is ready");
+				this._loadFileSuffixes();
 			} else if (lastLine.match(/^OK$/)) {
 				if (this.queue.length > 0) {
 					var task = this.queue.shift();
@@ -559,6 +570,22 @@ MPDConnection.prototype = {
 			state: INITIAL
 		});
 	},
+	addDirectoryToPlayList: function(dir, cb, errorcb) {
+		this.listFiles(dir, function(filelist) {
+			var cmd = "command_list_begin\n";
+			filelist.files.forEach(function(fileEntry) {
+				cmd += "add \""+dir+fileEntry.file+"\"\n";
+			});
+			cmd += "command_list_end";
+			this.queue.push({
+				cmd: cmd,
+				cb: cb,
+				errorcb: errorcb,
+				response: "",
+				state: INITIAL
+			});
+		}.bind(this));
+	},
 	clearPlayList: function() {
 		this.queue.push({
 			cmd: "clear",
@@ -646,8 +673,12 @@ MPDConnection.prototype = {
 				var line = lines[i];
 				if (line.indexOf(FILE_PREFIX) === 0) {
 					var file = line.substring(FILE_PREFIX.length);
-					var b64file = btoa(encodeURIComponent(file));
-					files.push({file: file, b64file: b64file});
+					this.fileSuffixes.forEach(function(suffix) {
+						if (endsWith(file, suffix)) {
+							var b64file = btoa(encodeURIComponent(file));
+							files.push({file: file, b64file: b64file});
+						}
+					});	
 				} else if (line.indexOf(DIR_PREFIX) === 0) {
 					var dir = line.substring(DIR_PREFIX.length);
 					var b64dir = btoa(encodeURIComponent(dir));
@@ -770,6 +801,25 @@ MPDConnection.prototype = {
 			cmd: "disableoutput "+id,
 			cb: cb,
 			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	},
+	_loadFileSuffixes: function() {
+		this.fileSuffixes = [];
+		var processor = function(data) {
+			var lines = this._lineSplit(data);
+			lines.forEach(function(line) {
+				if (line.indexOf(SUFFIX_PREFIX) === 0) {
+					this.fileSuffixes.push(line.substring(SUFFIX_PREFIX.length));
+				}
+			}.bind(this));
+			console.log(this.fileSuffixes);
+		}.bind(this);
+			
+		this.queue.push({
+			cmd: "decoders",
+			process: processor,
 			response: "",
 			state: INITIAL
 		});

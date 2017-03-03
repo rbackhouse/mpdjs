@@ -46,7 +46,6 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 								path += "/";
 							});
 							path += atob(file);
-							console.log(path);
 							$.mobile.loading("show", { textVisible: false });
 							if (config.isDirect()) {
 								MPDClient.addSongToPlayList(decodeURIComponent(path), 
@@ -70,7 +69,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 									},
 									error: function(jqXHR, textStatus, errorThrown) {
 										$.mobile.loading("hide");
-										console.log("addsong failed :"+errorThrown);
+										MessagePopup.create("Add Song Failed", "Error : "+errorThrown);
 									}
 								});
 							}	
@@ -82,7 +81,41 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 						this.dirs.pop();
 						this.load();	
 					}				
-				}				
+				},
+				"click #adddir" : function(evt) {
+					var path = "";
+					this.dirs.forEach(function(dir) {
+						path += atob(dir);
+						path += "/";
+					});
+					$.mobile.loading("show", { textVisible: false });
+					if (config.isDirect()) {
+						MPDClient.addDirectoryToPlayList(decodeURIComponent(path), 
+							function() {
+								$.mobile.loading("hide");
+							},
+							function(err) {
+								$.mobile.loading("hide");
+								MessagePopup.create("Add Directory Failed", "Error : "+err);
+							}
+						);
+					} else {
+						path = btoa(path);
+						$.ajax({
+							url: config.getBaseUrl()+"/music/playlist/directory/"+path,
+							type: "PUT",
+							contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+							dataType: "text",
+							success: function(data, textStatus, jqXHR) {
+								$.mobile.loading("hide");
+							},
+							error: function(jqXHR, textStatus, errorThrown) {
+								$.mobile.loading("hide");
+								MessagePopup.create("Add Song Failed", "Error : "+decodeURIComponent(errorThrown));
+							}
+						});
+					}	
+				}
 		    });	
 		},
 		initialize: function(options) {

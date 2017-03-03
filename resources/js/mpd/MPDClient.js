@@ -301,6 +301,9 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		addAlbumToPlayList: function(album, artist, cb) {
 			connection.addAlbumToPlayList(album, artist, cb);
 		},
+		addDirectoryToPlayList: function(dir, cb, errorcb) {
+			connection.addDirectoryToPlayList(dir, cb, errorcb);
+		},
 		randomPlayList: function(cb) {
 			connection.clearPlayList();
 			

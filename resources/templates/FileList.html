@@ -1,8 +1,11 @@
 <div data-role="content">
-	<form class="ui-filterable">
-		<input id="filterFiles" data-type="search">
-	</form>
-	<ul id="fileList" data-role="listview" data-filter="true" data-input="#filterFiles">
+	<table class="ui-filterable">
+       	<tr>
+        	<td style="width: 100%;"><form class="ui-filterable"><input id="filterFiles" data-type="search" placeholder="Find files..."></form></td>
+        	<td nowrap><a id="adddir" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a></span></td>
+		</tr>
+   	</table>
+	<ul id="fileList" data-role="listview" data-filter="true" data-input="#filterFiles" data-input="#filterFiles">
 	</ul>
 </div>
 <div data-id="thefooter "data-role="footer" data-position="fixed" class="ui-bar">
