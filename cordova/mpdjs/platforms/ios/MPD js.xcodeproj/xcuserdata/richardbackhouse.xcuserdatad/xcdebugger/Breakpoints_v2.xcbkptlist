@@ -46,9 +46,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
-            endingLineNumber = "127"
-            landmarkName = "@implementation BonjourListener"
-            landmarkType = "3">
+            endingLineNumber = "127">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

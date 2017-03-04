@@ -129,7 +129,9 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 		},	
 		render: function() {
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
-			this.load();
+			setTimeout(function() {
+				this.load();
+			}.bind(this), 500);
 		},
 		load: function(uri) {
 			var path = "";
