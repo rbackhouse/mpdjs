@@ -183,7 +183,7 @@ MPDConnection.prototype = {
 			var artists = [];
 			for (var i = 0; i < lines.length; i++) {
 				var name = lines[i].substring(ARTIST_PREFIX.length);
-				if (name.trim().length > 0) {
+				if (name && name.trim().length > 0) {
 					if (filter) {
 						if (name.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
 							artists.push({name: name});
@@ -223,12 +223,12 @@ MPDConnection.prototype = {
 				line = lines[i];
 				if (line.indexOf(ARTIST_PREFIX) === 0) {
 					var artist = lines[i].substring(ARTIST_PREFIX.length);
-					if (name.trim().length > 0 && album) {
+					if (artist && artist.trim().length > 0 && album) {
 						album.artist = artist;
 					}
 				} else if (line.indexOf(ALBUM_PREFIX) === 0) {
 					var name = lines[i].substring(ALBUM_PREFIX.length);
-					if (name.trim().length > 0) {
+					if (name && name.trim().length > 0) {
 						album = {name: name};
 						if (filter) {
 							if (name.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
@@ -343,7 +343,7 @@ MPDConnection.prototype = {
 			var albums = [];
 			for (var i = 0; i < lines.length; i++) {
 				var name = lines[i].substring(ALBUM_PREFIX.length);
-				if (name.trim().length > 0) {
+				if (name && name.trim().length > 0) {
 					albums.push({name: name, artist: artist});
 				}
 			}
