@@ -47,32 +47,53 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 							});
 							path += atob(file);
 							$.mobile.loading("show", { textVisible: false });
-							if (config.isDirect()) {
-								MPDClient.addSongToPlayList(decodeURIComponent(path), 
-									function() {
+							if (path.indexOf('.cue', path.length - '.cue'.length) !== -1) {
+								if (config.isDirect()) {
+									MPDClient.loadPlayList(decodeURI(path), function() {
 										$.mobile.loading("hide");
-									},
-									function(err) {
-										$.mobile.loading("hide");
-										MessagePopup.create("Add Song Failed", "Error : "+err);
-									}
-								);
+									}.bind(this));
+								} else {
+									$.ajax({
+										url: config.getBaseUrl()+"/music/playlist/loadCue/"+path,
+										type: "PUT",
+										contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+										dataType: "text",
+										success: function(data, textStatus, jqXHR) {
+											$.mobile.loading("hide");
+										}.bind(this),
+										error: function(jqXHR, textStatus, errorThrown) {
+											$.mobile.loading("hide");
+										}
+									});
+								}
 							} else {
-								path = btoa(path);
-								$.ajax({
-									url: config.getBaseUrl()+"/music/playlist/song/"+path,
-									type: "PUT",
-									contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-									dataType: "text",
-									success: function(data, textStatus, jqXHR) {
-										$.mobile.loading("hide");
-									},
-									error: function(jqXHR, textStatus, errorThrown) {
-										$.mobile.loading("hide");
-										MessagePopup.create("Add Song Failed", "Error : "+errorThrown);
-									}
-								});
-							}	
+								if (config.isDirect()) {
+									MPDClient.addSongToPlayList(decodeURIComponent(path), 
+										function() {
+											$.mobile.loading("hide");
+										},
+										function(err) {
+											$.mobile.loading("hide");
+											MessagePopup.create("Add Song Failed", "Error : "+err);
+										}
+									);
+								} else {
+									path = btoa(path);
+									$.ajax({
+										url: config.getBaseUrl()+"/music/playlist/song/"+path,
+										type: "PUT",
+										contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+										dataType: "text",
+										success: function(data, textStatus, jqXHR) {
+											$.mobile.loading("hide");
+										},
+										error: function(jqXHR, textStatus, errorThrown) {
+											$.mobile.loading("hide");
+											MessagePopup.create("Add Song Failed", "Error : "+errorThrown);
+										}
+									});
+								}	
+							}
 						}
 					}					
 				},
