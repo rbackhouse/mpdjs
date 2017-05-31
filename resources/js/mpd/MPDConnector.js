@@ -574,7 +574,9 @@ MPDConnection.prototype = {
 		this.listFiles(dir, function(filelist) {
 			var cmd = "command_list_begin\n";
 			filelist.files.forEach(function(fileEntry) {
-				cmd += "add \""+dir+fileEntry.file+"\"\n";
+				if (fileEntry.file.indexOf('.cue', fileEntry.file.length - '.cue'.length) === -1) {
+					cmd += "add \""+dir+fileEntry.file+"\"\n";
+				}	
 			});
 			cmd += "command_list_end";
 			this.queue.push({
