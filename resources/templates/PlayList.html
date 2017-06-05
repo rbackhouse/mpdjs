@@ -1,8 +1,14 @@
 <div data-role="content">
-	<div class="ui-body ui-body-e" id="currentlyPlaying">Playing []</div>					 
+	<div data-role="collapsible" data-collapsed="false" data-inset="true" id="currentlyPlaying"> 
+		<h3>Currently Playing</h3>
+		<div style="font-style: italic;" id="currentlyPlayingArtist"></div>					 
+		<div style="font-style: italic;" id="currentlyPlayingAlbum"></div>					 
+		<div style="font-style: italic;" id="currentlyPlayingTitle"></div>					 
+		<div style="font-style: italic;" id="currentlyPlayingTime"></div>					 
 	<div class="ui-field-contain">
 		<label for="volume" class="ui-hidden-accessible">Volume:</label>
 		<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
+	</div>
 	</div>
 	<div data-role="collapsible" data-collapsed="false" data-inset="true"> 
 		<h3>Queue</h3>

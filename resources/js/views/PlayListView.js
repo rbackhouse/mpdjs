@@ -386,10 +386,15 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				var minutes = Math.floor(time / 60);
 				var seconds = time - minutes * 60;
 				seconds = (seconds < 10 ? '0' : '') + seconds;
-				var playingText = "Playing ["+status.currentsong.title+"] "+minutes+":"+seconds;
-				$("#currentlyPlaying").text(playingText);
+				$("#currentlyPlayingArtist").text(status.currentsong.artist);
+				$("#currentlyPlayingAlbum").text(status.currentsong.album);
+				$("#currentlyPlayingTitle").text(status.currentsong.title);
+				$("#currentlyPlayingTime").text(minutes+":"+seconds);
 			} else {
-				$("#currentlyPlaying").text("Playing []");
+				$("#currentlyPlayingArtist").text("");
+				$("#currentlyPlayingAlbum").text("");
+				$("#currentlyPlayingTitle").text("");
+				$("#currentlyPlayingTime").text("");
 			}
 		},
 		loadPlayList: function(evt) {
