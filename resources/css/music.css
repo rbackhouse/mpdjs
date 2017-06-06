@@ -45,3 +45,10 @@
 .ui-header {
     height: 47px;
 }
+.error { 
+	float: left; 
+	color: red; 
+	padding-top: .5em; 
+	vertical-align: top; 
+	font-weight:bold
+}

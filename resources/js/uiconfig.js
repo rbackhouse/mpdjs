@@ -146,8 +146,12 @@ define(function() {
 				return connections[selectedIndex];
 			} else if (discoveredIndex  !== -1) {
 				return discoveredList[discoveredIndex];
-			} else {
-				return undefined;
+			} else if (connections.length > 0) {
+				this.setSelectedIndex(0);
+				return connections[0];
+			} else if (discoveredList.length > 0) {
+				this.setDiscoveredIndex(0);
+				return discoveredList[0];
 			}
 		},
 		getRandomPlaylistConfig: function() {
@@ -174,7 +178,7 @@ define(function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "2.1";
+			return "2.2";
 		},
 		setSongToPlaylist: function(songToPlaylist) {
 			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;

@@ -156,6 +156,12 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				autocapitalize: "off"
 			}).appendTo($popUp);
 			
+			$("<span/>", {
+				id : "errmsg"
+			}).appendTo($popUp);
+			
+			$("#errmsg").addClass("error");
+			$("<br/>", {}).appendTo($popUp);
 			/*
 			$("<p/>", {
 				text : "Streaming Port:"
@@ -174,13 +180,21 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				inline : true,
 				icon : "check"
 			}).bind("click", function() {
-				$popUp.popup("close");
 				var host = $("#host").val();
 				var port = $("#port").val();
 				var pwd = $("#pwd").val();
 				if (pwd === "") {
 					pwd = undefined;
 				}
+				if (host === "") {
+					$("#errmsg").text("Enter a Host value");
+					return;
+				}	
+				if (port === "") {
+					$("#errmsg").text("Enter a Port value");
+					return;
+				}
+				$popUp.popup("close");
 				//var streamingport = $("#streamingport").val();
 				var streamingport = "";
 				var dup = false;
@@ -217,14 +231,17 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				$("#connect").button('option', {icon : "check" });
 				$("#connect").button("refresh");
 				this.updateMenu();
-			} else {
-	        	$.mobile.loading("show", { textVisible: false });
+				config.setSelectedIndex(-1);
+				config.setDiscoveredIndex(-1);
+				this.loadLists();
+			} else if (config.getConnectionConfig()) {
+				$.mobile.loading("show", { textVisible: false });
 				MPDClient.connect(function(error) {
 					$.mobile.loading("hide");
 					if (error) {
 						MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnectionConfig().host+":"+config.getConnectionConfig().port+" Error: "+error);
+						config.setSelectedIndex(-1);
 						config.setDiscoveredIndex(-1);
-						this.loadLists();
 					} else {
 						$("#connect").val("Disconnect");
 						$("#connect").button('option', {icon : "minus" });
@@ -232,6 +249,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 						MessagePopup.create("Connected", "Connected to "+config.getConnectionConfig().host+":"+config.getConnectionConfig().port);
 						this.updateMenu();
 					}
+					this.loadLists();
 				}.bind(this));
 			}
 		},
