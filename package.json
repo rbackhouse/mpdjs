@@ -1,6 +1,6 @@
 {
   "name": "mpdjs",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Music Player Daemon client written in javascript",
   "repository": "git@github.com:rbackhouse/mpdjs.git",
   "author": "Richard Backhouse <richardabackhouse@gmail.com>",
