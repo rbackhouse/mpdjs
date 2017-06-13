@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch38" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="7701"/>
+        <deployment identifier="watchOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="12029"/>
     </dependencies>
     <scenes>
         <!--MPD js-->
@@ -33,7 +37,7 @@
                                     </connections>
                                 </button>
                             </items>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </group>
                         <separator alignment="left" id="Z4P-kK-ipz"/>
                         <slider width="1" height="23.5" alignment="center" value="50" maximum="100" steps="10" id="als-Bp-N3L">
@@ -58,43 +62,6 @@
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="347"/>
-        </scene>
-        <!--Glance Interface Controller-->
-        <scene sceneID="BOz-TT-tkC">
-            <objects>
-                <glanceController spacing="0.0" id="0uZ-2p-rRc" customClass="GlanceController" customModule="MPD_js_WatchKit_App" customModuleProvider="target">
-                    <items>
-                        <group alignment="left" id="t8f-Gd-c4y">
-                            <items>
-                                <label width="1" height="1" alignment="left" text="MPD js" id="Jwy-xR-mdw">
-                                    <color key="textColor" red="1" green="0.12661642966846676" blue="0.14754697811891426" alpha="1" colorSpace="calibratedRGB"/>
-                                    <fontDescription key="font" style="UICTFontTextStyleCaption1"/>
-                                </label>
-                            </items>
-                        </group>
-                        <group alignment="left" layout="vertical" id="uCw-4Q-Ouw">
-                            <items>
-                                <label alignment="left" text="Playing :" id="83i-9S-pVx" userLabel="NowPlaying">
-                                    <color key="textColor" red="0.057171852563241199" green="0.8747328969515995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <fontDescription key="font" style="UICTFontTextStyleCaption1"/>
-                                </label>
-                                <label width="135.5" height="18" alignment="left" numberOfLines="4" id="LfV-UK-g7d" userLabel="Artist"/>
-                                <label width="1" height="18" alignment="left" id="TbY-T6-IpW" userLabel="Album"/>
-                                <label width="1" height="18" alignment="left" id="hQG-Gi-MDa" userLabel="Title"/>
-                                <label width="1" height="18" alignment="left" id="tu1-VZ-Q1D" userLabel="Time"/>
-                            </items>
-                        </group>
-                    </items>
-                    <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="14"/>
-                    <connections>
-                        <outlet property="albumLabel" destination="TbY-T6-IpW" id="R6g-tl-VrZ"/>
-                        <outlet property="artistLabel" destination="LfV-UK-g7d" id="qw8-3l-amG"/>
-                        <outlet property="timeLabel" destination="tu1-VZ-Q1D" id="amX-O7-o3t"/>
-                        <outlet property="titleLabel" destination="hQG-Gi-MDa" id="vvN-l7-dOf"/>
-                    </connections>
-                </glanceController>
-            </objects>
-            <point key="canvasLocation" x="235" y="672"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
