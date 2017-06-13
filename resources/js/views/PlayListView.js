@@ -365,11 +365,11 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			this.state = status.state;
 			this.volume = status.volume;
 			if (status.state === "play") {
-				$("#playPause").val('Pause');
+				//$("#playPause").val('Pause');
 				$("#playPause").button('option', {icon : "pauseIcon" });
 				$("#playPause").button("refresh");
 			} else {
-				$("#playPause").val('Play');
+				//$("#playPause").val('Play');
 				$("#playPause").button('option', {icon : "playIcon" });
 				$("#playPause").button("refresh");
 			}

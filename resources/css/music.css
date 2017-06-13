@@ -1,26 +1,26 @@
 .ui-icon-fastForwardIcon:after {
-	background-image: url('../images/fastForward16.png');
-	background-size: 16px 16px;
+	background-image: url('../images/fastForward.png');
+	background-size: 20px 20px;
 }
 
 .ui-icon-pauseIcon:after {
-	background-image: url('../images/pause16.png');
-	background-size: 16px 16px;
+	background-image: url('../images/pause.png');
+	background-size: 20px 20px;
 }
 
 .ui-icon-playIcon:after {
-	background-image: url('../images/play16.png');
-	background-size: 16px 16px;
+	background-image: url('../images/play.png');
+	background-size: 20px 20px;
 }
 
 .ui-icon-stopIcon:after {
-	background-image: url('../images/stop16.png');
-	background-size: 16px 16px;
+	background-image: url('../images/stop.png');
+	background-size: 20px 20px;
 }
 
 .ui-icon-rewindIcon:after {
-	background-image: url('../images/rewind16.png');
-	background-size: 16px 16px;
+	background-image: url('../images/rewind.png');
+	background-size: 20px 20px;
 }
 
 .ui-icon-minusIcon:after {
