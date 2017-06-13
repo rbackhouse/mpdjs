@@ -812,8 +812,9 @@ MPDConnection.prototype = {
 		var processor = function(data) {
 			var lines = this._lineSplit(data);
 			lines.forEach(function(line) {
-				if (line.indexOf(SUFFIX_PREFIX) === 0) {
-					this.fileSuffixes.push(line.substring(SUFFIX_PREFIX.length));
+				var suffix = line.substring(SUFFIX_PREFIX.length);
+				if (line.indexOf(SUFFIX_PREFIX) === 0 && this.fileSuffixes.indexOf(suffix) === -1) {
+					this.fileSuffixes.push(suffix);
 				}
 			}.bind(this));
 			console.log(this.fileSuffixes);
