@@ -86,15 +86,11 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			$("#playingList li").remove();
 			if (this.editing) {
 				this.editing = undefined;
-				$("#editButton").val("Edit");
-				$("#editButton").button("refresh");
 				this.playlist.each(function(song) {
 					$("#playingList").append('<li><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></li>');	
 				});
 			} else {
 				this.editing = true;
-				$("#editButton").val("Done");
-				$("#editButton").button("refresh");
 				this.playlist.each(function(song) {
 					$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'"><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></a></li>');	
 				});
@@ -365,11 +361,9 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			this.state = status.state;
 			this.volume = status.volume;
 			if (status.state === "play") {
-				//$("#playPause").val('Pause');
 				$("#playPause").button('option', {icon : "pauseIcon" });
 				$("#playPause").button("refresh");
 			} else {
-				//$("#playPause").val('Play');
 				$("#playPause").button('option', {icon : "playIcon" });
 				$("#playPause").button("refresh");
 			}
@@ -389,11 +383,15 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				$("#currentlyPlayingArtist").text(status.currentsong.artist);
 				$("#currentlyPlayingAlbum").text(status.currentsong.album);
 				$("#currentlyPlayingTitle").text(status.currentsong.title);
-				$("#currentlyPlayingTime").text(minutes+":"+seconds);
+				$("#currentlyPlayingTrack").text("Track: "+(parseInt(status.song)+1));
+				$("#currentlyPlayingTime").text('Time: '+minutes+":"+seconds);
+				$("#currentlyPlaying").attr("style", "display:block");
 			} else {
+				$("#currentlyPlaying").attr("style", "display:none");
 				$("#currentlyPlayingArtist").text("");
 				$("#currentlyPlayingAlbum").text("");
 				$("#currentlyPlayingTitle").text("");
+				$("#currentlyPlayingTrack").text("");
 				$("#currentlyPlayingTime").text("");
 			}
 		},
