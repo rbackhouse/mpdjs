@@ -75,7 +75,8 @@ function($, Backbone, _, BaseView, config, MPDClient, template, itemTemplate){
 		initialize: function(options) {
 			this.outputs = options.outputs;
 			options.header = {
-				title: "Outputs"
+				title: "Outputs",
+				backLink: false
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template ) ( { outputs: options.outputs.toJSON() } );

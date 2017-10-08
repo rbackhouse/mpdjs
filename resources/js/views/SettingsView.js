@@ -53,7 +53,8 @@ function($, Backbone, _, BaseView, MPDClient, config, template) {
 		},
 		initialize: function(options) {
 			options.header = {
-				title: "Settings"
+				title: "Settings",
+				backLink: false
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template ) ( 

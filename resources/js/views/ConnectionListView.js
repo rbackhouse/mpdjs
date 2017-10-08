@@ -89,7 +89,8 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 		initialize: function() {
 			var options = {};
 			options.header = {
-				title: "Connections"
+				title: "Connections",
+				backLink: false
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template ) ( { 

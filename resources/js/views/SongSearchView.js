@@ -30,7 +30,8 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 		initialize: function(options) {
 			this.songSearchList = new SongSearchList({});
 			options.header = {
-				title: "Song Search"
+				title: "Song Search",
+				backLink: false
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template) ( {total: 0} );

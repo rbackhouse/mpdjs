@@ -97,12 +97,6 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 						}
 					}					
 				},
-				"click #updir" : function(evt) {
-					if (this.dirs.length > 0) {
-						this.dirs.pop();
-						this.load();	
-					}				
-				},
 				"click #adddir" : function(evt) {
 					var path = "";
 					this.dirs.forEach(function(dir) {
@@ -142,12 +136,19 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 		initialize: function(options) {
 			options.header = {
 				title: "Files",
-				backLink: false
+				backLink: true,
+				hideBacklink: true
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.template = _.template( template ) ( {} );
 			this.dirs = [];
 		},	
+		backlinkHandler: function() {
+			if (this.dirs.length > 0) {
+				this.dirs.pop();
+				this.load();	
+			}				
+		},
 		render: function() {
 			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
 			setTimeout(function() {
@@ -155,6 +156,11 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 			}.bind(this), 500);
 		},
 		load: function(uri) {
+			if (!uri && this.dirs.length === 0) {
+				$("#back").css("display", "none");
+			} else {
+				$("#back").css("display", "block");				
+			}
 			var path = "";
 			this.dirs.forEach(function(dir) {
 				path += atob(dir);
@@ -168,6 +174,11 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 				MPDClient.listFiles(path, 
 					function(files) {
 						$.mobile.loading("hide");
+						if (files.files.length > 0) {
+							$("#adddir").css("display", "block");				
+						} else {
+							$("#adddir").css("display", "none");
+						}
 						$("#fileList li").remove();
 						files.dirs.forEach(function(dir) {
 							$("#fileList").append('<li><a id="dir_'+dir.b64dir+'"><p style="white-space:normal">'+dir.dir+'</p></a></li>');								
@@ -191,6 +202,11 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 					headers: { "cache-control": "no-cache" },
 					success: function(files, textStatus, jqXHR) {
 						$.mobile.loading("hide");
+						if (files.files.length > 0) {
+							$("#adddir").css("display", "block");				
+						} else {
+							$("#adddir").css("display", "none");
+						}
 						$("#fileList li").remove();
 						files.dirs.forEach(function(dir) {
 							$("#fileList").append('<li><a id="dir_'+dir.b64dir+'"><p style="white-space:normal">'+dir.dir+'</p></a></li>');								

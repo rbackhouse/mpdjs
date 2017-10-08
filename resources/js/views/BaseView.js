@@ -26,11 +26,18 @@ define([
 function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 	var View = Backbone.View.extend({
 		events: {
+			"click #menuh1" : function() {
+				$( "#menuPanel" ).popup("open", {transition: "flow"}).trigger("create");
+			},
 			"click #menu" : function() {
 				$( "#menuPanel" ).popup("open", {transition: "flow"}).trigger("create");
 			},
 			"click #back" : function() {
-				window.history.back();
+				if (this.backlinkHandler) {
+					this.backlinkHandler();
+				} else {
+					window.history.back();
+				}	
 			}
 		},
 		initialize: function(options) {

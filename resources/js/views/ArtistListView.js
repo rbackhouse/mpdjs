@@ -28,7 +28,8 @@ function($, Backbone, _, BaseView, template){
 		},
 		initialize: function(options) {
 			options.header = {
-				title: "Artists"
+				title: "Artists",
+				backLink: false
 			};
 			this.artists = options.artists;
 			this.constructor.__super__.initialize.apply(this, [options]);

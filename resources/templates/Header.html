@@ -1,9 +1,9 @@
 <div data-role="header" data-position="fixed">
     <a id="menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-btn-b ui-corner-all">Menu</a>
-    <h1>
+    <h1 id="menuh1">
         <%= header.title %>
     </h1>
     <% if (header.backLink === true) { %>
-	    <a id="back" class="ui-btn ui-icon-back ui-btn-icon-notext ui-btn-b ui-corner-all">Back</a>
+	    <a id="back" <% if (header.hideBacklink) { %> style="display:none" <% } %> class="ui-btn ui-icon-back ui-btn-icon-notext ui-btn-b ui-corner-all">Back</a>
     <% } %>
 </div>

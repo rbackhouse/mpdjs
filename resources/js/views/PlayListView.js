@@ -62,7 +62,8 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 		},
 		initialize: function(options) {
 			options.header = {
-				title: "Play List"
+				title: "Play List",
+				backLink: false
 			};
 			this.volumeSet = false;
 			this.constructor.__super__.initialize.apply(this, [options]);

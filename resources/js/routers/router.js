@@ -35,8 +35,7 @@ define([
 	'views/OutputListView',
 	'uiconfig',
 	'mpd/MPDClient',
-	'util/MessagePopup',
-	'applewatch/AppleWatchUtil'
+	'util/MessagePopup'
 	], 
 function(
 	$, 
@@ -67,10 +66,33 @@ function(
 	}
 	var Router = Backbone.Router.extend({
 		initialize: function() {
+			this.links = ["playlist", "artists", "albums", "search", "files", "outputs", "settings"];
+			if (config.isDirect()) {
+				this.links.push("connections");
+			}
+			this.currentLink = this.links.length-1;
 			$('.back').on('click', function(event) {
 	            window.history.back();
 	            return false;
 	        });
+	        $(document).on( "swipeleft", ".ui-page", function( event ) {
+	        	if (config.isDirect() && !MPDClient.isConnected()) {
+	        		return;
+	        	}
+				if (++this.currentLink > (this.links.length-1)) {
+					this.currentLink = 0;
+				}
+				Backbone.history.navigate(this.links[this.currentLink], {trigger: true});
+			}.bind(this));
+	        $(document).on( "swiperight", ".ui-page", function( event ) {
+	        	if (config.isDirect() && !MPDClient.isConnected()) {
+	        		return;
+	        	}
+				if (--this.currentLink < 0) {
+					this.currentLink = this.links.length-1;
+				}
+				Backbone.history.navigate(this.links[this.currentLink], {trigger: true});
+			}.bind(this));
 	        this.firstMsg = true;
 	        this.on("route:addsong", function(song) {
 				$.mobile.loading("show", { textVisible: false });
@@ -154,7 +176,7 @@ function(
 					albumslist.fetch({
 						success: function(collection, response, options) {
 							$.mobile.loading("hide");
-							this.changePage(new AlbumListView({albums: collection}));
+							this.changePage(new AlbumListView({albums: collection, backlink: (artist !== null ? true : false)}));
 						}.bind(this),
 						error: function(collection, xhr, options) {
 							$.mobile.loading("hide");
