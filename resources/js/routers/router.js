@@ -143,6 +143,7 @@ function(
 	        	}
 	        });
 	        this.on("route:playlist", function() {
+	        	this.currentLink = 0;
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 		        	this.fetchPlayList();
@@ -169,6 +170,7 @@ function(
 	        	}.bind(this));
 			});
 			this.on("route:albums", function(artist) {
+				this.currentLink = 2;
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 					var albumslist = new AlbumList({artist: artist, index: 0, filterValue: "all"});
@@ -189,6 +191,7 @@ function(
 	        	}.bind(this));
 			});
 			this.on("route:artists", function() {
+				this.currentLink = 1;
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 					var artistlist = new ArtistList();
@@ -209,24 +212,29 @@ function(
 	        	}.bind(this));
 			});
 			this.on("route:search", function() {
+				this.currentLink = 3;
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 					this.changePage(new SongSearchView({}));
 	        	}.bind(this));
 			});
 			this.on("route:connections", function() {
+				this.currentLink = 7;
 				this.changePage(new ConnectionListView({}));
 			});
 			this.on("route:settings", function() {
+				this.currentLink = 6;
 				this.changePage(new SettingsView({}));
 			});
 			this.on("route:files", function() {
+				this.currentLink = 4;
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 					this.changePage(new FileListView({}));
 	        	}.bind(this));
 			});
 			this.on("route:outputs", function() {
+				this.currentLink = 5;
 	        	this.connectIfRequired(function(proceed) {
 	        		if (!proceed) return;
 					var outputlist = new OutputList();
