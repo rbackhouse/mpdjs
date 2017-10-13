@@ -37,20 +37,10 @@ var WRITTEN = 1;
 var READING = 2;
 var COMPLETE = 3;
 
-function endsWith(subjectString, searchString, position) {
-	if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
-		position = subjectString.length;
-    }
-    position -= searchString.length;
-    var lastIndex = subjectString.lastIndexOf(searchString, position);
-    return lastIndex !== -1 && lastIndex === position;
-};
-
 MPDConnection = function(host, port) {
 	this.host = host;
 	this.port = port;
 	this.queue = [];
-	this.albumsForArtist = {};
 	this.isConnected = false;
 };
 
@@ -385,12 +375,7 @@ MPDConnection.prototype = {
 					songs.push(song);
 					var file = line.substring(FILE_PREFIX.length);
 					song.file = file;
-					try {
-						var b64file = btoa(encodeURIComponent(file));
-						song.b64file = b64file;
-					} catch(err) {
-						console.log(err);
-					}
+					song.b64file = toBase64(file);
 				}
 			}				
 			return songs;
@@ -434,12 +419,7 @@ MPDConnection.prototype = {
 					songs.push(song);
 					var file = line.substring(FILE_PREFIX.length);
 					song.file = file;
-					try {
-						var b64file = btoa(encodeURIComponent(file));
-						song.b64file = b64file;
-					} catch(err) {
-						console.log(err);
-					}
+					song.b64file = toBase64(file);
 				}
 			}				
 			return songs;
@@ -533,8 +513,8 @@ MPDConnection.prototype = {
 			state: INITIAL
 		});
 	},
-	addAlbumToPlayList: function(albumName, artist, cb) {
-		this.getSongsForAlbum(albumName, artist, function(songs) {
+	addAlbumToPlayList: function(albumName, artistName, cb) {
+		this.getSongsForAlbum(albumName, artistName, function(songs) {
 			var cmd = "command_list_begin\n";
 			for (var i = 0; i < songs.length; i++) {
 				cmd += "add \""+songs[i].file+"\"\n";
@@ -576,7 +556,7 @@ MPDConnection.prototype = {
 			filelist.files.forEach(function(fileEntry) {
 				if (fileEntry.file.indexOf('.cue', fileEntry.file.length - '.cue'.length) === -1) {
 					cmd += "add \""+dir+fileEntry.file+"\"\n";
-				}	
+				}
 			});
 			cmd += "command_list_end";
 			this.queue.push({
@@ -608,6 +588,27 @@ MPDConnection.prototype = {
 		this.queue.push({
 			cmd: "update ",
 			cb: cb,
+			response: "",
+			state: INITIAL
+		});
+	},
+	login: function(password) {
+		this.queue.push({
+			cmd: "password "+password,
+			response: "",
+			state: INITIAL
+		});
+	},
+	runCommand: function(cmd, cb, errorcb) {
+		var processor = function(data) {
+			var lines = this._lineSplit(data);
+			return lines;
+		}.bind(this);
+		this.queue.push({
+			cmd: cmd,
+			process: processor,
+			cb: cb,
+			errorcb: errorcb,
 			response: "",
 			state: INITIAL
 		});
@@ -646,22 +647,19 @@ MPDConnection.prototype = {
 			return songs;
 		}.bind(this);
 		var cmd = "search ";
-		cmd += type;
-		cmd += " \"";
-		cmd += typevalue;
-		cmd += "\"";
+		if (type) {
+			cmd += type;
+			cmd += " \"";
+			cmd += typevalue;
+			cmd += "\"";
+		} else {
+			cmd += "title \"\"";
+		}
 		this.queue.push({
 			cmd: cmd,
 			process: processor,
 			cb: callback,
 			errorcb: errorcb,
-			response: "",
-			state: INITIAL
-		});
-	},
-	login: function(password) {
-		this.queue.push({
-			cmd: "password "+password,
 			response: "",
 			state: INITIAL
 		});
@@ -677,13 +675,13 @@ MPDConnection.prototype = {
 					var file = line.substring(FILE_PREFIX.length);
 					this.fileSuffixes.forEach(function(suffix) {
 						if (endsWith(file, suffix)) {
-							var b64file = btoa(encodeURIComponent(file));
+							var b64file = toBase64(file);
 							files.push({file: file, b64file: b64file});
 						}
 					});	
 				} else if (line.indexOf(DIR_PREFIX) === 0) {
 					var dir = line.substring(DIR_PREFIX.length);
-					var b64dir = btoa(encodeURIComponent(dir));
+					var b64dir = toBase64(dir);
 					dirs.push({dir: dir, b64dir: b64dir});
 				}				
 			}
@@ -691,7 +689,7 @@ MPDConnection.prototype = {
 		}.bind(this);
 		var cmd = "listfiles";
 		if (uri && uri !== "") {
-			cmd += " \""+decodeURIComponent(uri) + "\"";
+			cmd += " \""+decode(uri) + "\"";
 		}
 		this.queue.push({
 			cmd: cmd,
@@ -817,7 +815,6 @@ MPDConnection.prototype = {
 					this.fileSuffixes.push(suffix);
 				}
 			}.bind(this));
-			console.log(this.fileSuffixes);
 		}.bind(this);
 			
 		this.queue.push({
@@ -859,6 +856,28 @@ MPDConnection.prototype = {
 		seconds = (seconds < 10 ? '0' : '') + seconds;
 		return minutes+":"+seconds; 
 	}
+};
+
+function endsWith(subjectString, searchString, position) {
+	if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+		position = subjectString.length;
+    }
+    position -= searchString.length;
+    var lastIndex = subjectString.lastIndexOf(searchString, position);
+    return lastIndex !== -1 && lastIndex === position;
+};
+
+function toBase64(value) {
+	try {
+		return btoa(encodeURIComponent(value));
+	} catch(err) {
+		console.log(err);
+		return "";
+	}
+};
+
+function decode(uri) {
+	return decodeURIComponent(uri);
 };
 
 return MPDConnection;
