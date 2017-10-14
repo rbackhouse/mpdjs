@@ -5,6 +5,7 @@
 		underscore: '../lib/underscore/underscore-1.8.3',
 		backbone: '../lib/backbone/backbone-1.2.0',
 		text: '../lib/requirejs/text',
+		MPDConnectionBase: '../../../../lib/basempdconnector',
 		templates: '../templates'
 	},
     name: "app",
