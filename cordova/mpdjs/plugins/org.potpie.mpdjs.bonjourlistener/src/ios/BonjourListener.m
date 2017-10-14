@@ -16,6 +16,7 @@
  */
 
 #import "BonjourListener.h"
+#import <arpa/inet.h>
 
 @implementation BonjourListener
 
@@ -23,6 +24,7 @@
     self.services = [[NSMutableArray alloc] init];
 	self.serviceBrowser = [[NSNetServiceBrowser alloc] init];
 	[self.serviceBrowser setDelegate:self];
+    [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)listen:(CDVInvokedUrlCommand*)command {
@@ -43,13 +45,23 @@
 }
  
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)aNetService moreComing:(BOOL)moreComing {
+    
     [aNetService setDelegate:self];
-    [aNetService resolveWithTimeout:0.0];
+    [aNetService resolveWithTimeout:5.0];
     [self.services addObject:aNetService];
+    [aNetService scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+    if (self.listenerCommand != nil) {
+        NSMutableDictionary *jsonObj = [NSMutableDictionary dictionaryWithCapacity:2];
+        [jsonObj setObject:@"discover" forKey:@"type"];
+        [jsonObj setObject:[aNetService name] forKey:@"name"];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary : jsonObj];
+        [pluginResult setKeepCallbackAsBool:true];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.listenerCommand.callbackId];
+    }
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)aNetService moreComing:(BOOL)moreComing {
-    [self.services removeObject:aNetService];
     if (self.listenerCommand != nil) {
         NSMutableDictionary *jsonObj = [NSMutableDictionary dictionaryWithCapacity:2];
         [jsonObj setObject:@"remove" forKey:@"type"];
@@ -62,20 +74,51 @@
 
 - (void)netServiceDidResolveAddress:(NSNetService *)aNetService {
     if (self.listenerCommand != nil) {
-        NSMutableDictionary *jsonObj = [NSMutableDictionary dictionaryWithCapacity:4];
+        NSMutableDictionary *jsonObj = [NSMutableDictionary dictionaryWithCapacity:5];
         [jsonObj setObject:@"add" forKey:@"type"];
         [jsonObj setObject:[aNetService name] forKey:@"name"];
         [jsonObj setObject:[aNetService hostName] forKey:@"hostname"];
         [jsonObj setObject:[NSNumber numberWithInteger:aNetService.port] forKey:@"port"];
+        NSString * ipAddress = [self findIPAddress:[aNetService addresses]];
+        if (ipAddress != nil) {
+            [jsonObj setObject:ipAddress forKey:@"ipAddress"];
+        }
+        [self.services removeObject:aNetService];
+        [aNetService removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [aNetService stop];
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary : jsonObj];
         [pluginResult setKeepCallbackAsBool:true];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.listenerCommand.callbackId];
     }
-    
 }
 
 - (void)netService:(NSNetService *)netService didNotResolve:(NSDictionary *)errorDict {
     
+}
+
+- (NSString*)findIPAddress:(NSArray<NSData *> *)addresses {
+    char addressBuffer[INET6_ADDRSTRLEN];
+    
+    for (NSData *data in addresses) {
+        memset(addressBuffer, 0, INET6_ADDRSTRLEN);
+        
+        typedef union {
+            struct sockaddr sa;
+            struct sockaddr_in ipv4;
+            struct sockaddr_in6 ipv6;
+        } ip_socket_address;
+        
+        ip_socket_address *socketAddress = (ip_socket_address *)[data bytes];
+        
+        if (socketAddress && (socketAddress->sa.sa_family == AF_INET || socketAddress->sa.sa_family == AF_INET6)) {
+            const char *addressStr = inet_ntop(socketAddress->sa.sa_family,
+                                               (socketAddress->sa.sa_family == AF_INET ? (void *)&(socketAddress->ipv4.sin_addr) : (void *)&(socketAddress->ipv6.sin6_addr)),
+                                               addressBuffer,
+                                               sizeof(addressBuffer));
+            return [NSString stringWithUTF8String:addressStr];
+        }
+    }
+    return nil;
 }
 
 @end

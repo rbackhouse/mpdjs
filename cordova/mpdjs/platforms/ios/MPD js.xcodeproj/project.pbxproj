@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		1610BDD6187D4531AEE6A564 /* MMWormholeSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F52E769AD8A4F9C9AE7B8DD /* MMWormholeSession.m */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
@@ -54,7 +53,6 @@
 		A1249B0F382C44F3A93BCE60 /* SocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 14DEA77E637C46B7BF5D4F1B /* SocketConnection.m */; };
 		A1643830689D45AB9DAF706C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A54DBFB8C9C24F2BBEAF2CA6 /* Foundation.framework */; };
 		A56F3A0ADDB9471C9B27E41F /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = B335F005A5D54E28A691CB85 /* CDVStatusBar.m */; };
-		B16B31622E1B4E9BA2D7F0C5 /* BonjourListener.m in Sources */ = {isa = PBXBuildFile; fileRef = E6711D289793475BA1F936EC /* BonjourListener.m */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		E83C32A3BC9942AA84959F40 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 385221A4EB584A1A865B3882 /* WatchConnectivity.framework */; };
 		EECE2A9CCFF64826893D2807 /* MMWormholeSessionFileTransiting.m in Sources */ = {isa = PBXBuildFile; fileRef = AE9910D378DF44ED976A1790 /* MMWormholeSessionFileTransiting.m */; };
@@ -62,6 +60,7 @@
 		F6443A9B1F767BD6007702CE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6443A9A1F767BD6007702CE /* Images.xcassets */; };
 		F6E2EDF1011D4C7083C2671C /* MMWormholeSessionFileTransiting.h in Sources */ = {isa = PBXBuildFile; fileRef = 55A80DCBE6A2463D836063C1 /* MMWormholeSessionFileTransiting.h */; };
 		FEC3001D595A4C9A9C59C0F4 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 73E85CE151E648219B3830BB /* CDVDevice.m */; };
+		93EF7FCAD40142768AA0F928 /* BonjourListener.m in Sources */ = {isa = PBXBuildFile; fileRef = ECF99CEAA2194A1B992F8388 /* BonjourListener.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,9 +174,7 @@
 		DCDAB9F346524370B8C73F33 /* MMWormholeSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMWormholeSession.h; path = org.potpie.mpdjs.mmwormhole/MMWormholeSession.h; sourceTree = "<group>"; };
 		E22D0C68A4F54C4C80CA840E /* MMWormholeSessionContextTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeSessionContextTransiting.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeSessionContextTransiting.m; sourceTree = "<group>"; };
 		E2A114E8B96848F4B37CF524 /* CDVStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVStatusBar.m; path = org.apache.cordova.statusbar/CDVStatusBar.m; sourceTree = "<group>"; };
-		E3CFCA504CAF4EB3A9157A10 /* BonjourListener.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = BonjourListener.h; path = org.potpie.mpdjs.bonjourlistener/BonjourListener.h; sourceTree = "<group>"; };
 		E429F20B4FFC4170818A918F /* MMWormholeCoordinatedFileTransiting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MMWormholeCoordinatedFileTransiting.m; path = org.potpie.mpdjs.mmwormhole/MMWormholeCoordinatedFileTransiting.m; sourceTree = "<group>"; };
-		E6711D289793475BA1F936EC /* BonjourListener.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = BonjourListener.m; path = org.potpie.mpdjs.bonjourlistener/BonjourListener.m; sourceTree = "<group>"; };
 		EB6E5A48195B49558CE8DB78 /* CDVFile.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVFile.m; path = "cordova-plugin-file/CDVFile.m"; sourceTree = "<group>"; };
 		EB87FDF21871DA7A0020F90C /* merges */ = {isa = PBXFileReference; lastKnownFileType = folder; name = merges; path = ../../merges; sourceTree = "<group>"; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
@@ -189,6 +186,8 @@
 		FDFD24684D294CA3A5A9993A /* SocketConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketConnection.h; path = org.potpie.mpdjs.socketconnection/SocketConnection.h; sourceTree = "<group>"; };
 		FEF66F8C25E44D6BAAAFD46F /* CDVAssetLibraryFilesystem.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVAssetLibraryFilesystem.m; path = "cordova-plugin-file/CDVAssetLibraryFilesystem.m"; sourceTree = "<group>"; };
 		FF8B03A8C5AC4ED2B3287035 /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVStatusBar.h; path = com.phonegap.plugin.statusbar/CDVStatusBar.h; sourceTree = "<group>"; };
+		ECF99CEAA2194A1B992F8388 /* BonjourListener.m */ = {isa = PBXFileReference; name = "BonjourListener.m"; path = "org.potpie.mpdjs.bonjourlistener/BonjourListener.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		85F84D55EDC2434A8F657887 /* BonjourListener.h */ = {isa = PBXFileReference; name = "BonjourListener.h"; path = "org.potpie.mpdjs.bonjourlistener/BonjourListener.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -390,8 +389,8 @@
 				20996A8808E142D2908D3F50 /* CDVFile.h */,
 				ABBC30E6EEA4458B99F88F0B /* CDVLocalFilesystem.h */,
 				7E08B9D1661C444A954376AF /* CDVAssetLibraryFilesystem.h */,
-				E6711D289793475BA1F936EC /* BonjourListener.m */,
-				E3CFCA504CAF4EB3A9157A10 /* BonjourListener.h */,
+				ECF99CEAA2194A1B992F8388 /* BonjourListener.m */,
+				85F84D55EDC2434A8F657887 /* BonjourListener.h */,
 			);
 			name = Plugins;
 			path = "MPD js/Plugins";
@@ -488,7 +487,7 @@
 			attributes = {
 				LastSwiftMigration = 700;
 				LastSwiftUpdateCheck = 710;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 900;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = P9NAZG5MLK;
@@ -625,7 +624,7 @@
 				86C0ABB51BCA46A69813C22A /* CDVFile.m in Sources */,
 				3246C5AE06A346D3A3F4D2CA /* CDVLocalFilesystem.m in Sources */,
 				57A2FA1BE67D4874A0F95B8A /* CDVAssetLibraryFilesystem.m in Sources */,
-				B16B31622E1B4E9BA2D7F0C5 /* BonjourListener.m in Sources */,
+				93EF7FCAD40142768AA0F928 /* BonjourListener.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
