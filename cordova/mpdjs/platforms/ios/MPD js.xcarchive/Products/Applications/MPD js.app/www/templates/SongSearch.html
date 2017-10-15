@@ -1,0 +1,10 @@
+<div data-role="content">
+	<table class="ui-filterable">
+       	<tr>
+        	<td style="width: 100%;"><form id="songsearchFilterForm"><input data-theme="g" id="songsearchFilter" data-type="search" placeholder="Find songs..."></form></td>
+        	<td nowrap>Total : <span id="total"><%= total %></span></td>
+		</tr>
+   	</table>
+	<ul id="songSearchList" data-role="listview" data-filter="true" data-input="#songsearchFilter">
+	</ul>
+</div>

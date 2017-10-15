@@ -8,14 +8,26 @@
     <string>${PRODUCT_NAME}</string>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
-    <key>CFBundleIconFile</key>
-    <string>icon.png</string>
     <key>CFBundleIconName</key>
     <string>AppIcon</string>
     <key>CFBundleIcons</key>
-    <dict/>
-    <key>CFBundleIcons~ipad</key>
-    <dict/>
+    <dict>
+      <key>CFBundlePrimaryIcon</key>
+      <dict>
+        <key>CFBundleIconFiles</key>
+        <array>
+          <string>icon-40</string>
+          <string>icon-small</string>
+          <string>icon-60</string>
+          <string>icon.png</string>
+          <string>icon@2x</string>
+          <string>icon-72</string>
+          <string>icon-72@2x</string>
+        </array>
+        <key>UIPrerenderedIcon</key>
+        <false/>
+      </dict>
+    </dict>
     <key>CFBundleIdentifier</key>
     <string>org.potpie.mpdjs</string>
     <key>CFBundleInfoDictionaryVersion</key>
@@ -25,11 +37,11 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.2.5</string>
+    <string>0.2.6</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>0.2.5</string>
+    <string>0.2.6</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -37,11 +49,24 @@
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
+    <key>NSMainNibFile</key>
+    <string/>
     <key>NSMainNibFile~ipad</key>
     <string/>
-    <key>UILaunchStoryboardName</key>
-    <string>MainViewController</string>
     <key>UIRequiresFullScreen</key>
     <true/>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationLandscapeLeft</string>
+      <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationLandscapeLeft</string>
+      <string>UIInterfaceOrientationPortraitUpsideDown</string>
+      <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
   </dict>
 </plist>

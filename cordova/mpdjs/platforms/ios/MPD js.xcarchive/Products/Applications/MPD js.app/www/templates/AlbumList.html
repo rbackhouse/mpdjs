@@ -1,0 +1,13 @@
+<div data-role="content">
+	<table class="ui-filterable">
+       	<tr>
+        	<td style="width: 100%;"><form id="albumlistFilterForm"><input data-theme="g" id="albumlistFilter" data-type="search" placeholder="Find albums..."></form></td>
+        	<td nowrap>Total : <span id="total"><%= total %></span></td>
+		</tr>
+   	</table>
+	<ul id="albumList" data-role="listview" data-filter="true" data-input="#albumlistFilter" data-autodividers="true">
+	<% _.each(albums, function(album) { %>
+		<li data-icon="arrow-r"><a href="#songs/<%= encodeURIComponent(album.name) %>/<%= encodeURIComponent(album.artist) %>"><p style="white-space:normal"><%= album.name %> (<%= album.artist %>)</p></a></li> 
+	<% }); %>
+	</ul>
+</div>

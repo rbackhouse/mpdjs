@@ -1,4 +1,5 @@
-cordova.define("org.potpie.mpdjs.mmwormhole.MMWormhole", function(require, exports, module) { /*
+cordova.define("org.potpie.mpdjs.mmwormhole.MMWormhole", function(require, exports, module) {
+/*
 * The MIT License (MIT)
 * 
 * Copyright (c) 2015 Richard Backhouse

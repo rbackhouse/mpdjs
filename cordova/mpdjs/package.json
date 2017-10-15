@@ -1,0 +1,13 @@
+{
+  "name": "org.potpie.mpdjs",
+  "version": "0.2.5",
+  "displayName": "MPD js",
+  "cordova": {
+    "platforms": [
+      "ios"
+    ]
+  },
+  "dependencies": {
+    "cordova-ios": "^4.4.0"
+  }
+}

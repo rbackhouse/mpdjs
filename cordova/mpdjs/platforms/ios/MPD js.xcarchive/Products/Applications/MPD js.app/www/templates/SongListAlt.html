@@ -1,0 +1,8 @@
+<a id="addAllButtonAlt" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a> 
+<div data-role="content">
+	<ul id="songList" data-role="listview">
+	<% _.each(songs, function(song) { %>
+		<li data-icon="plus"><a id='song_<%= song.b64file %>'><p style="white-space:normal"><%= song.track %>: <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></a></li> 
+	<% }); %>
+	</ul>
+</div>

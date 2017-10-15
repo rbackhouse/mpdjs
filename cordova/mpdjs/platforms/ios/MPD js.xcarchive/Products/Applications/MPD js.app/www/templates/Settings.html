@@ -1,0 +1,32 @@
+<div data-role="content">
+	<div data-role="collapsible" data-collapsed="true" data-inset="false"> 
+		<h3>Version</h3> 
+		<span>MPDjs Version:<%=version%></span>
+	</div>	
+	<div data-role="collapsible" data-collapsed="true" data-inset="false"> 
+		<h3>Update And Cache</h3> 
+		<input id="update" value="Update DB" type="button" data-mini="true">
+		<input id="clearCache" value="Clear Cache" type="button" data-mini="true">
+	</div>	
+	<div data-role="collapsible" data-collapsed="true" data-inset="false"> 
+		<h3>Random Playlist</h3> 
+		<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>
+	</div>	
+	<div data-role="collapsible" data-collapsed="true" data-inset="false"> 
+		<h3>Start Page</h3>
+		<select id="startPage">
+			<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>
+			<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>
+			<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>
+			<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>
+			<% if (window.cordova) { %>
+				<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>
+			<% } %>	
+		</select>
+	</div>
+	<div data-role="collapsible" data-collapsed="true" data-inset="false"> 
+		<h3>Playlist Page Load</h3> 
+		<label><input id="isSongToPlaylist" type="checkbox" <% if (isSongToPlaylist) { %> checked <% } %>>Load Playlist Page on Song Add</label>
+	</div>	
+	
+</div>
