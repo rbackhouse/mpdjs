@@ -23,6 +23,7 @@ var zazlConfig = {
 		underscore: '../lib/underscore/underscore-1.8.3',
 		backbone: '../lib/backbone/backbone-1.2.0',
 		text: '../lib/requirejs/text',
+		MPDConnectionBase: '../basempdconnector',
 		templates: '../templates'
 	}
 };
