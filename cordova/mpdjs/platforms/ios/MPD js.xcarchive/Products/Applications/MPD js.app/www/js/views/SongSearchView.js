@@ -20,15 +20,54 @@ define([
 		'underscore', 
 		'./BaseView',
 		'../models/SongSearchList',
+		'../uiconfig',
+		'../mpd/MPDClient',
 		'text!templates/SongSearch.html'], 
-function($, Backbone, _, BaseView, SongSearchList, template){
+function($, Backbone, _, BaseView, SongSearchList, config, MPDClient, template){
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
+				"click #openType" : function() {
+					$("#"+this.searchType).prop( "checked", true ).checkboxradio( "refresh" );
+					$( "#searchType" ).popup("open", {transition: "flow"}).trigger("create");
+				},
+				"change input[name='searchType']" : function(event) {
+					this.searchType = event.target.id;
+				},
+				"click #songSearchList li" : function(evt) {
+					var id = evt.target.id;
+					if (id === "") {
+						id = evt.target.parentNode.id;
+					}
+					if (id !== "") {
+						var song = id.substring(5);
+						$.mobile.loading("show", { textVisible: false });
+						if (config.isDirect()) {
+							MPDClient.addSongToPlayList(decodeURIComponent(atob(song)), function() {
+								$.mobile.loading("hide");
+							});
+						} else {
+							$.ajax({
+								url: config.getBaseUrl()+"/music/playlist/song/"+song,
+								type: "PUT",
+								contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+								dataType: "text",
+								success: function(data, textStatus, jqXHR) {
+									$.mobile.loading("hide");
+								},
+								error: function(jqXHR, textStatus, errorThrown) {
+									$.mobile.loading("hide");
+									console.log("addsong failed :"+errorThrown);
+								}
+							});
+						}
+					}					
+				}				
 		    });	
 		},
 		initialize: function(options) {
 			this.songSearchList = new SongSearchList({});
+			this.searchType = "title";
 			options.header = {
 				title: "Song Search",
 				backLink: false
@@ -42,6 +81,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 		            var value = $input.val();
 		            if (value && value.length > 2) {
 						this.songSearchList.searchValue = value;
+						this.songSearchList.searchType = this.searchType;
 			            this.load();
 		            } else {
 						this.songSearchList.searchValue = undefined;
@@ -69,7 +109,11 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 					$.mobile.loading("hide");
 					$("#songSearchList li").remove();
 					collection.each(function(song) {
-						$("#songSearchList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
+						if (config.isSongToPlaylist()) {
+							$("#songSearchList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
+						} else {
+							$("#songSearchList").append("<li data-icon=\"plus\"><a id='song_"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
+						}	
 					});
 					$("#songSearchList").listview('refresh');
 					$("#total").text(collection.length);

@@ -28318,7 +28318,7 @@ define('uiconfig',[],function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "2.3";
+			return "2.5";
 		},
 		setSongToPlaylist: function(songToPlaylist) {
 			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;
@@ -28629,7 +28629,7 @@ class MPDConnectionBase {
 		});
 	}
 	
-	getSongs(songFilter, cb, errorcb) {
+	getSongs(songFilter, type, cb, errorcb) {
 		var processor = function(data) {
 			var lines = MPDConnectionBase._lineSplit(data);
 			var songs = [];
@@ -28660,8 +28660,11 @@ class MPDConnectionBase {
 			}				
 			return songs;
 		}.bind(this);
+		if (!type) {
+			type = "title";
+		}
 		this.queue.push({
-			cmd: "search title \""+songFilter.replace(/"/g, "\\\"")+"\"",
+			cmd: "search "+type+" \""+songFilter.replace(/"/g, "\\\"")+"\"",
 			process: processor,
 			cb: cb,
 			errorcb: errorcb,
@@ -29800,11 +29803,11 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 			}
 			connection.getPlayListInfo(cb, errcb);
 		},
-		searchSongs: function(searchValue, cb, errcb) {
+		searchSongs: function(searchValue, searchType, cb, errcb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
-			connection.getSongs(searchValue, cb, errcb);
+			connection.getSongs(searchValue, searchType,cb, errcb);
 		},
 		addSongToPlayList: function(song, cb, errcb) {
 			connection.addSongToPlayList(song, cb, errcb);
@@ -31812,11 +31815,14 @@ define('models/SongSearchList',['backbone', './Song', '../uiconfig', '../mpd/MPD
 			if (this.searchValue && this.searchValue !== "") {
 				url += encodeURIComponent(this.searchValue);
 			}
+			if (this.searchType && this.searchType !== "") {
+				url += "/"+encodeURIComponent(this.searchType);
+			}
 			return url;
 		},
 		fetch: function(options) {
 			if (config.isDirect()) {
-				MPDClient.searchSongs(this.searchValue, function(songs) {
+				MPDClient.searchSongs(this.searchValue, this.searchType, function(songs) {
 					this.set(songs, options);
 			        options.success(this, songs, options);
         			this.trigger('sync', this, songs, options);
@@ -31834,7 +31840,7 @@ define('models/SongSearchList',['backbone', './Song', '../uiconfig', '../mpd/MPD
 });
 
 
-define('text!templates/SongSearch.html',[],function () { return '<div data-role="content">\n\t<table class="ui-filterable">\n       \t<tr>\n        \t<td style="width: 100%;"><form id="songsearchFilterForm"><input data-theme="g" id="songsearchFilter" data-type="search" placeholder="Find songs..."></form></td>\n        \t<td nowrap>Total : <span id="total"><%= total %></span></td>\n\t\t</tr>\n   \t</table>\n\t<ul id="songSearchList" data-role="listview" data-filter="true" data-input="#songsearchFilter">\n\t</ul>\n</div>\n';});
+define('text!templates/SongSearch.html',[],function () { return '<div data-role="content">\n\t<table class="ui-filterable">\n       \t<tr>\n\t\t\t<td><button id="openType" class="ui-btn ui-btn-b ui-btn-inline ui-corner-all ui-icon-gear ui-btn-icon-notext">Type</button></td>\n        \t<td style="width: 100%;"><form id="songsearchFilterForm"><input data-theme="g" id="songsearchFilter" data-type="search" placeholder="Find songs..."></form></td>\n        \t<td nowrap>Total : <span id="total"><%= total %></span></td>\n\t\t</tr>\n   \t</table>\n\t<ul id="songSearchList" data-role="listview" data-filter="true" data-input="#songsearchFilter">\n\t</ul>\n</div>\n<div data-role="popup" id="searchType" data-theme="a" class="ui-content">\n\t<form>\n\t\t<fieldset data-role="controlgroup" data-iconpos="right">\n\t\t<legend><b>Select Search Tag</b></legend>\n\t\t<input type="radio" value="title" id="title" name="searchType">\n\t\t<label for="title">Title</label>\n\t\t<input type="radio" value="artist" id="artist" name="searchType">\n\t\t<label for="artist">Artist</label>\n\t\t<input type="radio" value="albumartist" id="albumartist" name="searchType">\n\t\t<label for="albumartist">Album Artist</label>\n\t\t<input type="radio" value="album" id="album" name="searchType">\n\t\t<label for="album">Album</label>\n\t\t<input type="radio" value="composer" id="composer" name="searchType">\n\t\t<label for="composer">Composer</label>\n\t\t<input type="radio" value="performer" id="performer" name="searchType">\n\t\t<label for="performer">Performer</label>\n\t\t<input type="radio" value="file" id="file" name="searchType">\n\t\t<label for="file">File</label>\n\t\t<input type="radio" value="genre" id="genre" name="searchType">\n\t\t<label for="genre">Genre</label>\n\t\t</fieldset>\n\t</form>\n</div>\n';});
 
 /*
 * The MIT License (MIT)
@@ -31858,15 +31864,54 @@ define('views/SongSearchView',[
 		'underscore', 
 		'./BaseView',
 		'../models/SongSearchList',
+		'../uiconfig',
+		'../mpd/MPDClient',
 		'text!templates/SongSearch.html'], 
-function($, Backbone, _, BaseView, SongSearchList, template){
+function($, Backbone, _, BaseView, SongSearchList, config, MPDClient, template){
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
+				"click #openType" : function() {
+					$("#"+this.searchType).prop( "checked", true ).checkboxradio( "refresh" );
+					$( "#searchType" ).popup("open", {transition: "flow"}).trigger("create");
+				},
+				"change input[name='searchType']" : function(event) {
+					this.searchType = event.target.id;
+				},
+				"click #songSearchList li" : function(evt) {
+					var id = evt.target.id;
+					if (id === "") {
+						id = evt.target.parentNode.id;
+					}
+					if (id !== "") {
+						var song = id.substring(5);
+						$.mobile.loading("show", { textVisible: false });
+						if (config.isDirect()) {
+							MPDClient.addSongToPlayList(decodeURIComponent(atob(song)), function() {
+								$.mobile.loading("hide");
+							});
+						} else {
+							$.ajax({
+								url: config.getBaseUrl()+"/music/playlist/song/"+song,
+								type: "PUT",
+								contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+								dataType: "text",
+								success: function(data, textStatus, jqXHR) {
+									$.mobile.loading("hide");
+								},
+								error: function(jqXHR, textStatus, errorThrown) {
+									$.mobile.loading("hide");
+									console.log("addsong failed :"+errorThrown);
+								}
+							});
+						}
+					}					
+				}				
 		    });	
 		},
 		initialize: function(options) {
 			this.songSearchList = new SongSearchList({});
+			this.searchType = "title";
 			options.header = {
 				title: "Song Search",
 				backLink: false
@@ -31880,6 +31925,7 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 		            var value = $input.val();
 		            if (value && value.length > 2) {
 						this.songSearchList.searchValue = value;
+						this.songSearchList.searchType = this.searchType;
 			            this.load();
 		            } else {
 						this.songSearchList.searchValue = undefined;
@@ -31907,7 +31953,11 @@ function($, Backbone, _, BaseView, SongSearchList, template){
 					$.mobile.loading("hide");
 					$("#songSearchList li").remove();
 					collection.each(function(song) {
-						$("#songSearchList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
+						if (config.isSongToPlaylist()) {
+							$("#songSearchList").append("<li data-icon=\"plus\"><a href='#playlist/song/"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
+						} else {
+							$("#songSearchList").append("<li data-icon=\"plus\"><a id='song_"+song.get("b64file")+"'><p style=\"white-space:normal\">"+song.get("title")+" : " + song.get("artist") + " : "+song.get("album")+"</p></a></li>");
+						}	
 					});
 					$("#songSearchList").listview('refresh');
 					$("#total").text(collection.length);

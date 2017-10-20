@@ -289,11 +289,11 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 			}
 			connection.getPlayListInfo(cb, errcb);
 		},
-		searchSongs: function(searchValue, cb, errcb) {
+		searchSongs: function(searchValue, searchType, cb, errcb) {
 			if (!connection) {
 				errorHandler("notconnected");
 			}
-			connection.getSongs(searchValue, cb, errcb);
+			connection.getSongs(searchValue, searchType,cb, errcb);
 		},
 		addSongToPlayList: function(song, cb, errcb) {
 			connection.addSongToPlayList(song, cb, errcb);

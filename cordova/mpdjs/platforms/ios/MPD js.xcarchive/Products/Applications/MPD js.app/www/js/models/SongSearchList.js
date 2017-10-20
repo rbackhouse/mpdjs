@@ -24,11 +24,14 @@ define(['backbone', './Song', '../uiconfig', '../mpd/MPDClient', '../util/Messag
 			if (this.searchValue && this.searchValue !== "") {
 				url += encodeURIComponent(this.searchValue);
 			}
+			if (this.searchType && this.searchType !== "") {
+				url += "/"+encodeURIComponent(this.searchType);
+			}
 			return url;
 		},
 		fetch: function(options) {
 			if (config.isDirect()) {
-				MPDClient.searchSongs(this.searchValue, function(songs) {
+				MPDClient.searchSongs(this.searchValue, this.searchType, function(songs) {
 					this.set(songs, options);
 			        options.success(this, songs, options);
         			this.trigger('sync', this, songs, options);
