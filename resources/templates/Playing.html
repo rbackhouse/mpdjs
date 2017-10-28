@@ -1,0 +1,23 @@
+<div data-role="popup" id="playingPanel" data-theme="a" class="ui-content">
+	<h3>Currently Playing</h3>
+	<div id="currentlyPlayingAlt" style="width: 100%;">
+		<div style="font-style: italic; width: 250px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="currentlyPlayingArtist"></div>					 
+		<div style="font-style: italic; width: 250px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="currentlyPlayingAlbum"></div>					 
+		<div style="font-style: italic; width: 250px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="currentlyPlayingTitle"></div>					 
+		<div>
+			<span style="font-style: italic;" id="currentlyPlayingTrack"></span>&nbsp;
+			<span style="font-style: italic;" id="currentlyPlayingTime"></span>
+		</div>			
+	</div>
+	<form class="full-width-slider">
+		<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>
+	</form>
+	<div data-role="navbar">
+		<ul>
+			<li><input id="previous" data-iconpos="bottom" data-icon="rewindIcon" data-inline="true" data-mini="true" value="" type="button"></li>
+			<li><input id="stop" data-iconpos="bottom" data-icon="stopIcon" data-inline="true" data-mini="true" value="" type="button"></li>
+			<li><input id="playPause" data-iconpos="bottom" data-icon="playIcon" data-inline="true" data-mini="true" value="" type="button"></li>
+			<li><input id="next" data-iconpos="bottom" data-icon="fastForwardIcon" data-inline="true" data-mini="true" value="" type="button"></li>
+		</ul>
+	</div>
+</div>

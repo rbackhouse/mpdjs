@@ -94,7 +94,7 @@ function($, Backbone, _, BaseView, config, MPDClient, template, templateAlt){
 			}
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		}
 	});
 	

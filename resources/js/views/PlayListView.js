@@ -29,25 +29,6 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
-				"click #back" : function() {
-					window.history.back();
-				},
-				"click #previous" : function() {
-					this.sendControlCmd("previous");
-				},
-				"click #next" : function() {
-					this.sendControlCmd("next");
-				},
-				"click #playPause" : function() {
-					if (this.state === "play") {
-						this.sendControlCmd("pause");
-					} else {
-						this.sendControlCmd("play");
-					}
-				},
-				"click #stop" : function() {
-					this.sendControlCmd("stop");
-				},
 				"click #update" : function() {
 					this.sendControlCmd("update");
 				},
@@ -56,8 +37,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"click #clearButton" : "clearPlayList",
 				"click #playLists li" : "loadPlayList",
 				"click #saveButton" : "savePlayList",
-				"click #playingList li" : "removeSong",
-				"change #volume" : "changeVolume"
+				"click #playingList li" : "removeSong"
 		    });	
 		},
 		initialize: function(options) {
@@ -76,7 +56,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				this.statusListener = statusListener;
 				MPDClient.addStatusListener(statusListener);
 			} else {
-				this._openWebSocket();
+				this.openWebSocket();
 			}
 		},
 		render: function(){
@@ -303,99 +283,6 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				}
 			});
 		},
-		changeVolume: function() {
-			var vol = $("#volume").val();
-			if (vol !== this.volume && this.state === "play") {
-				$.mobile.loading("show", { textVisible: false });
-				if (config.isDirect()) {
-					MPDClient.changeVolume(vol, function() {
-						$.mobile.loading("hide");
-					}.bind(this));
-				} else {
-					$.ajax({
-						url: config.getBaseUrl()+"/music/volume/"+vol,
-						type: "POST",
-						headers: { "cache-control": "no-cache" },
-						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-						dataType: "text",
-						success: function(data, textStatus, jqXHR) {
-							$.mobile.loading("hide");
-						}.bind(this),
-						error: function(jqXHR, textStatus, errorThrown) {
-							$.mobile.loading("hide");
-							console.log("change volume error: "+textStatus);
-						}
-					});
-				}
-        	}
-		},
-		sendControlCmd: function(type) {
-			$.mobile.loading("show", { textVisible: false });
-			if (config.isDirect()) {
-				MPDClient.sendControlCmd(type, function() {
-					$.mobile.loading("hide");
-				}.bind(this));
-			} else {
-				$.ajax({
-					url: config.getBaseUrl()+"/music/"+type,
-					type: "POST",
-					headers: { "cache-control": "no-cache" },
-					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-					dataType: "text",
-					success: function(data, textStatus, jqXHR) {
-						$.mobile.loading("hide");
-					}.bind(this),
-					error: function(jqXHR, textStatus, errorThrown) {
-						$.mobile.loading("hide");
-						console.log("control cmd error: "+textStatus);
-					}
-				});
-			}
-		},
-		showStatus: function(data) {
-			var status; 
-			if (config.isDirect()) {
-				status = data;
-			} else {
-				status = JSON.parse(data);
-			}
-			this.state = status.state;
-			this.volume = status.volume;
-			if (status.state === "play") {
-				$("#playPause").button('option', {icon : "pauseIcon" });
-				$("#playPause").button("refresh");
-			} else {
-				$("#playPause").button('option', {icon : "playIcon" });
-				$("#playPause").button("refresh");
-			}
-			if (status.currentsong && (status.state === "play" || status.state === "pause")) {
-				if (!this.volumeSet) {
-					var volume = parseInt(status.volume);
-					if (volume > -1) {
-						$("#volume").val(status.volume);
-						$("#volume").slider('refresh');
-						this.volumeSet = true;
-					}
-				}
-				var time = Math.floor(parseInt(status.time));
-				var minutes = Math.floor(time / 60);
-				var seconds = time - minutes * 60;
-				seconds = (seconds < 10 ? '0' : '') + seconds;
-				$("#currentlyPlayingArtist").text(status.currentsong.artist);
-				$("#currentlyPlayingAlbum").text(status.currentsong.album);
-				$("#currentlyPlayingTitle").text(status.currentsong.title);
-				$("#currentlyPlayingTrack").text("Track: "+(parseInt(status.song)+1));
-				$("#currentlyPlayingTime").text('Time: '+minutes+":"+seconds);
-				$("#currentlyPlaying").attr("style", "display:block");
-			} else {
-				$("#currentlyPlaying").attr("style", "display:none");
-				$("#currentlyPlayingArtist").text("");
-				$("#currentlyPlayingAlbum").text("");
-				$("#currentlyPlayingTitle").text("");
-				$("#currentlyPlayingTrack").text("");
-				$("#currentlyPlayingTime").text("");
-			}
-		},
 		loadPlayList: function(evt) {
 			var name = evt.target.id;
 			if (name === "") {
@@ -547,23 +434,6 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 					}
 				});
 			}
-		},
-		_openWebSocket: function() {
-			if (window.WebSocket) {
-				this.ws = new WebSocket(config.getWSUrl());
-			} else if (window.MozWebSocket) {
-				this.ws = new MozWebSocket(config.getWSUrl());
-			} else {
-				alert("No WebSocket Support !!!");
-			}
-		    this.ws.onmessage = function(event) {
-		    	this.showStatus(event.data);
-      		}.bind(this);
-      		this.ws.onerror = function (error) {
-  				console.log('WebSocket Error ' + error);
-  				this.ws.close();
-  				this._openWebSocket();
-			}.bind(this);
 		},
 		close: function() {
 			if (config.isDirect()) {

@@ -19,11 +19,14 @@ define([
 		'backbone',
 		'underscore',
 		'../routers/routes',
+		'../uiconfig', 
 		'../mpd/MPDClient',
 		'text!templates/Menu.html',
-		'text!templates/Header.html'
+		'text!templates/Header.html',
+		'text!templates/Playing.html',
+		'text!templates/Footer.html'
 		], 
-function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
+function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate, playingTemplate, footerTemplate){
 	var View = Backbone.View.extend({
 		events: {
 			"click #menuh1" : function() {
@@ -38,7 +41,27 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 				} else {
 					window.history.back();
 				}	
-			}
+			},
+			"click #playing" : function() {
+				this.openPlayingPopup();
+			},
+			"click #previous" : function() {
+				this.sendControlCmd("previous");
+			},
+			"click #next" : function() {
+				this.sendControlCmd("next");
+			},
+			"click #playPause" : function() {
+				if (this.state === "play") {
+					this.sendControlCmd("pause");
+				} else {
+					this.sendControlCmd("play");
+				}
+			},
+			"click #stop" : function() {
+				this.sendControlCmd("stop");
+			},
+			"change #volume" : "changeVolume"
 		},
 		initialize: function(options) {
 			if (options.header.backLink === undefined) {
@@ -49,7 +72,9 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 			if (window.cordova && MPDClient.isConnected() == false) {
 				menuItems = [routes.getConnectionsMenuItem()];
 			}
-			this.menuTemplate = _.template( menuTemplate) ( {menuItems: menuItems} );
+			this.menuTemplate = _.template(menuTemplate) ( {menuItems: menuItems} );
+			this.playingTemplate = _.template(playingTemplate) ( {} );
+			this.footerTemplate = _.template(footerTemplate) ( {} );
 		},
 		updateMenu: function() {
 			$("#mpdjsmenu li").remove();
@@ -61,6 +86,139 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 				});
 			}
 			$("#mpdjsmenu").listview('refresh');
+		},
+		openPlayingPopup: function() {
+			if (config.isDirect()) {
+				var statusListener = function(status) {
+					this.showStatus(status);
+				}.bind(this);
+				this.statusListener = statusListener;
+				MPDClient.addStatusListener(statusListener);
+			} else {
+				this.openWebSocket();
+			}
+			$( "#playingPanel" ).popup("open", {
+				transition: "flow"
+			}).trigger("create");
+			$( "#playingPanel" ).on( "popupafterclose", function(event, ui) {
+				if (config.isDirect()) {
+					MPDClient.removeStatusListener(this.statusListener);				
+				} else {
+					this.ws.close();
+				}
+			}.bind(this));
+			$( "#playingPanel" ).popup( "option", "positionTo", "window" );
+		},
+		openWebSocket: function() {
+			if (window.WebSocket) {
+				this.ws = new WebSocket(config.getWSUrl());
+			} else if (window.MozWebSocket) {
+				this.ws = new MozWebSocket(config.getWSUrl());
+			} else {
+				alert("No WebSocket Support !!!");
+			}
+		    this.ws.onmessage = function(event) {
+		    	this.showStatus(event.data);
+      		}.bind(this);
+      		this.ws.onerror = function (error) {
+  				console.log('WebSocket Error ' + error);
+  				this.ws.close();
+  				this._openWebSocket();
+			}.bind(this);
+		},
+		sendControlCmd: function(type) {
+			console.log(type);
+			$.mobile.loading("show", { textVisible: false });
+			if (config.isDirect()) {
+				MPDClient.sendControlCmd(type, function() {
+					$.mobile.loading("hide");
+				}.bind(this));
+			} else {
+				$.ajax({
+					url: config.getBaseUrl()+"/music/"+type,
+					type: "POST",
+					headers: { "cache-control": "no-cache" },
+					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+					dataType: "text",
+					success: function(data, textStatus, jqXHR) {
+						$.mobile.loading("hide");
+					}.bind(this),
+					error: function(jqXHR, textStatus, errorThrown) {
+						$.mobile.loading("hide");
+						console.log("control cmd error: "+textStatus);
+					}
+				});
+			}
+		},
+		showStatus: function(data) {
+			var status; 
+			if (config.isDirect()) {
+				status = data;
+			} else {
+				status = JSON.parse(data);
+			}
+			this.state = status.state;
+			this.volume = status.volume;
+			if (status.state === "play") {
+				$("#playPause").button('option', {icon : "pauseIcon" });
+				$("#playPause").button("refresh");
+			} else {
+				$("#playPause").button('option', {icon : "playIcon" });
+				$("#playPause").button("refresh");
+			}
+			if (status.currentsong && (status.state === "play" || status.state === "pause")) {
+				if (!this.volumeSet) {
+					var volume = parseInt(status.volume);
+					if (volume > -1) {
+						$("#volume").val(status.volume);
+						$("#volume").slider('refresh');
+						this.volumeSet = true;
+					}
+				}
+				var time = Math.floor(parseInt(status.time));
+				var minutes = Math.floor(time / 60);
+				var seconds = time - minutes * 60;
+				seconds = (seconds < 10 ? '0' : '') + seconds;
+				$("#currentlyPlayingArtist").text(status.currentsong.artist);
+				$("#currentlyPlayingAlbum").text(status.currentsong.album);
+				$("#currentlyPlayingTitle").text(status.currentsong.title);
+				$("#currentlyPlayingTrack").text("Track: "+(parseInt(status.song)+1));
+				$("#currentlyPlayingTime").text('Time: '+minutes+":"+seconds);
+				$("#currentlyPlaying").attr("style", "display:block");
+			} else {
+				$("#currentlyPlaying").attr("style", "display:none");
+				$("#currentlyPlayingArtist").text("");
+				$("#currentlyPlayingAlbum").text("");
+				$("#currentlyPlayingTitle").text("");
+				$("#currentlyPlayingTrack").text("");
+				$("#currentlyPlayingTime").text("");
+			}
+		},
+		changeVolume: function() {
+			var vol = $("#volume").val();
+			if (vol !== this.volume && this.state === "play") {
+				$.mobile.loading("show", { textVisible: false });
+				if (config.isDirect()) {
+					MPDClient.changeVolume(vol, function() {
+						$.mobile.loading("hide");
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/volume/"+vol,
+						type: "POST",
+						headers: { "cache-control": "no-cache" },
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("change volume error: "+textStatus);
+						}
+					});
+				}
+        	}
 		}
 	});
 	

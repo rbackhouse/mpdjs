@@ -100,7 +100,7 @@ function($, Backbone, _, BaseView, SongSearchList, config, MPDClient, template){
 			}.bind(this));
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		load: function() {
 			$.mobile.loading("show", { textVisible: false });
