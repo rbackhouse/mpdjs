@@ -30815,6 +30815,12 @@ define('text!templates/Menu.html',[],function () { return '<div data-role="popup
 
 define('text!templates/Header.html',[],function () { return '<div data-role="header" data-position="fixed">\n    <a id="menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-btn-b ui-corner-all">Menu</a>\n    <h1 id="menuh1">\n        <%= header.title %>\n    </h1>\n    <% if (header.backLink === true) { %>\n\t    <a id="back" <% if (header.hideBacklink) { %> style="display:none" <% } %> class="ui-btn ui-icon-back ui-btn-icon-notext ui-btn-b ui-corner-all">Back</a>\n    <% } %>\n</div>\n';});
 
+
+define('text!templates/Playing.html',[],function () { return '<div data-role="popup" id="playingPanel" data-theme="a" class="ui-content">\n\t<h3>Currently Playing</h3>\n\t<div id="currentlyPlayingAlt" style="width: 100%;">\n\t\t<div style="font-style: italic; width: 250px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="currentlyPlayingArtist"></div>\t\t\t\t\t \n\t\t<div style="font-style: italic; width: 250px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="currentlyPlayingAlbum"></div>\t\t\t\t\t \n\t\t<div style="font-style: italic; width: 250px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="currentlyPlayingTitle"></div>\t\t\t\t\t \n\t\t<div>\n\t\t\t<span style="font-style: italic;" id="currentlyPlayingTrack"></span>&nbsp;\n\t\t\t<span style="font-style: italic;" id="currentlyPlayingTime"></span>\n\t\t</div>\t\t\t\n\t</div>\n\t<form class="full-width-slider">\n\t\t<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>\n\t</form>\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t<li><input id="previous" data-iconpos="bottom" data-icon="rewindIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="stop" data-iconpos="bottom" data-icon="stopIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="playPause" data-iconpos="bottom" data-icon="playIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="next" data-iconpos="bottom" data-icon="fastForwardIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t</ul>\n\t</div>\n</div>';});
+
+
+define('text!templates/Footer.html',[],function () { return '<div data-id="thefooter "data-role="footer" data-position="fixed">\n\t<span style="padding-left: 10px;"></span>\n    <a id="playing" class="ui-btn ui-btn-icon-notext ui-icon-audio ui-btn-b ui-corner-all">Playing</a></li>\n</div>\n';});
+
 /*
 * The MIT License (MIT)
 * 
@@ -30836,11 +30842,14 @@ define('views/BaseView',[
 		'backbone',
 		'underscore',
 		'../routers/routes',
+		'../uiconfig', 
 		'../mpd/MPDClient',
 		'text!templates/Menu.html',
-		'text!templates/Header.html'
+		'text!templates/Header.html',
+		'text!templates/Playing.html',
+		'text!templates/Footer.html'
 		], 
-function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
+function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate, playingTemplate, footerTemplate){
 	var View = Backbone.View.extend({
 		events: {
 			"click #menuh1" : function() {
@@ -30855,7 +30864,27 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 				} else {
 					window.history.back();
 				}	
-			}
+			},
+			"click #playing" : function() {
+				this.openPlayingPopup();
+			},
+			"click #previous" : function() {
+				this.sendControlCmd("previous");
+			},
+			"click #next" : function() {
+				this.sendControlCmd("next");
+			},
+			"click #playPause" : function() {
+				if (this.state === "play") {
+					this.sendControlCmd("pause");
+				} else {
+					this.sendControlCmd("play");
+				}
+			},
+			"click #stop" : function() {
+				this.sendControlCmd("stop");
+			},
+			"change #volume" : "changeVolume"
 		},
 		initialize: function(options) {
 			if (options.header.backLink === undefined) {
@@ -30866,7 +30895,9 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 			if (window.cordova && MPDClient.isConnected() == false) {
 				menuItems = [routes.getConnectionsMenuItem()];
 			}
-			this.menuTemplate = _.template( menuTemplate) ( {menuItems: menuItems} );
+			this.menuTemplate = _.template(menuTemplate) ( {menuItems: menuItems} );
+			this.playingTemplate = _.template(playingTemplate) ( {} );
+			this.footerTemplate = _.template(footerTemplate) ( {} );
 		},
 		updateMenu: function() {
 			$("#mpdjsmenu li").remove();
@@ -30878,6 +30909,139 @@ function($, Backbone, _, routes, MPDClient, menuTemplate, headerTemplate){
 				});
 			}
 			$("#mpdjsmenu").listview('refresh');
+		},
+		openPlayingPopup: function() {
+			if (config.isDirect()) {
+				var statusListener = function(status) {
+					this.showStatus(status);
+				}.bind(this);
+				this.statusListener = statusListener;
+				MPDClient.addStatusListener(statusListener);
+			} else {
+				this.openWebSocket();
+			}
+			$( "#playingPanel" ).popup("open", {
+				transition: "flow"
+			}).trigger("create");
+			$( "#playingPanel" ).on( "popupafterclose", function(event, ui) {
+				if (config.isDirect()) {
+					MPDClient.removeStatusListener(this.statusListener);				
+				} else {
+					this.ws.close();
+				}
+			}.bind(this));
+			$( "#playingPanel" ).popup( "option", "positionTo", "window" );
+		},
+		openWebSocket: function() {
+			if (window.WebSocket) {
+				this.ws = new WebSocket(config.getWSUrl());
+			} else if (window.MozWebSocket) {
+				this.ws = new MozWebSocket(config.getWSUrl());
+			} else {
+				alert("No WebSocket Support !!!");
+			}
+		    this.ws.onmessage = function(event) {
+		    	this.showStatus(event.data);
+      		}.bind(this);
+      		this.ws.onerror = function (error) {
+  				console.log('WebSocket Error ' + error);
+  				this.ws.close();
+  				this._openWebSocket();
+			}.bind(this);
+		},
+		sendControlCmd: function(type) {
+			console.log(type);
+			$.mobile.loading("show", { textVisible: false });
+			if (config.isDirect()) {
+				MPDClient.sendControlCmd(type, function() {
+					$.mobile.loading("hide");
+				}.bind(this));
+			} else {
+				$.ajax({
+					url: config.getBaseUrl()+"/music/"+type,
+					type: "POST",
+					headers: { "cache-control": "no-cache" },
+					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+					dataType: "text",
+					success: function(data, textStatus, jqXHR) {
+						$.mobile.loading("hide");
+					}.bind(this),
+					error: function(jqXHR, textStatus, errorThrown) {
+						$.mobile.loading("hide");
+						console.log("control cmd error: "+textStatus);
+					}
+				});
+			}
+		},
+		showStatus: function(data) {
+			var status; 
+			if (config.isDirect()) {
+				status = data;
+			} else {
+				status = JSON.parse(data);
+			}
+			this.state = status.state;
+			this.volume = status.volume;
+			if (status.state === "play") {
+				$("#playPause").button('option', {icon : "pauseIcon" });
+				$("#playPause").button("refresh");
+			} else {
+				$("#playPause").button('option', {icon : "playIcon" });
+				$("#playPause").button("refresh");
+			}
+			if (status.currentsong && (status.state === "play" || status.state === "pause")) {
+				if (!this.volumeSet) {
+					var volume = parseInt(status.volume);
+					if (volume > -1) {
+						$("#volume").val(status.volume);
+						$("#volume").slider('refresh');
+						this.volumeSet = true;
+					}
+				}
+				var time = Math.floor(parseInt(status.time));
+				var minutes = Math.floor(time / 60);
+				var seconds = time - minutes * 60;
+				seconds = (seconds < 10 ? '0' : '') + seconds;
+				$("#currentlyPlayingArtist").text(status.currentsong.artist);
+				$("#currentlyPlayingAlbum").text(status.currentsong.album);
+				$("#currentlyPlayingTitle").text(status.currentsong.title);
+				$("#currentlyPlayingTrack").text("Track: "+(parseInt(status.song)+1));
+				$("#currentlyPlayingTime").text('Time: '+minutes+":"+seconds);
+				$("#currentlyPlaying").attr("style", "display:block");
+			} else {
+				$("#currentlyPlaying").attr("style", "display:none");
+				$("#currentlyPlayingArtist").text("");
+				$("#currentlyPlayingAlbum").text("");
+				$("#currentlyPlayingTitle").text("");
+				$("#currentlyPlayingTrack").text("");
+				$("#currentlyPlayingTime").text("");
+			}
+		},
+		changeVolume: function() {
+			var vol = $("#volume").val();
+			if (vol !== this.volume && this.state === "play") {
+				$.mobile.loading("show", { textVisible: false });
+				if (config.isDirect()) {
+					MPDClient.changeVolume(vol, function() {
+						$.mobile.loading("hide");
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/volume/"+vol,
+						type: "POST",
+						headers: { "cache-control": "no-cache" },
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("change volume error: "+textStatus);
+						}
+					});
+				}
+        	}
 		}
 	});
 	
@@ -30947,7 +31111,7 @@ function($, Backbone, _, BaseView, template){
 			}.bind(this));
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate);
 		},
 		load: function(loadMore, cb) {
 			$.mobile.loading("show", { textVisible: false });
@@ -31051,7 +31215,7 @@ function($, Backbone, _, BaseView, template){
 			}.bind(this));
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		load: function(loadMore, cb) {
 			if (this.albums.artist) {
@@ -31099,7 +31263,7 @@ function($, Backbone, _, BaseView, template){
 });
 
 
-define('text!templates/SongList.html',[],function () { return '<a href="#playlist/album/<%= encodeURIComponent(album) %>/<%= encodeURIComponent(artist) %>" id="addAllButton" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a> \n<div data-role="content">\n\t<ul id="songList" data-role="listview">\n\t<% _.each(songs, function(song) { %>\n\t\t<li data-icon="plus"><a href=\'#playlist/song/<%= song.b64file %>\'><p style="white-space:normal"><%= song.track %>: <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></a></li> \n\t<% }); %>\n\t</ul>\n</div>\n';});
+define('text!templates/SongList.html',[],function () { return '<div data-role="content">\n\t<table>\n       \t<tr>\n\t\t\t<td><a href="#playlist/album/<%= encodeURIComponent(album) %>/<%= encodeURIComponent(artist) %>" id="addAllButton" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a></td>\n\t\t</tr>\n   \t</table>\n\t<ul id="songList" data-role="listview">\n\t<% _.each(songs, function(song) { %>\n\t\t<li data-icon="plus"><a href=\'#playlist/song/<%= song.b64file %>\'><p style="white-space:normal"><%= song.track %>: <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></a></li> \n\t<% }); %>\n\t</ul>\n</div>\n';});
 
 
 define('text!templates/SongListAlt.html',[],function () { return '<a id="addAllButtonAlt" class="ui-btn ui-btn-inline ui-corner-all ui-mini">Add All</a> \n<div data-role="content">\n\t<ul id="songList" data-role="listview">\n\t<% _.each(songs, function(song) { %>\n\t\t<li data-icon="plus"><a id=\'song_<%= song.b64file %>\'><p style="white-space:normal"><%= song.track %>: <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></a></li> \n\t<% }); %>\n\t</ul>\n</div>\n';});
@@ -31200,7 +31364,7 @@ function($, Backbone, _, BaseView, config, MPDClient, template, templateAlt){
 			}
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		}
 	});
 	
@@ -31241,25 +31405,6 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
-				"click #back" : function() {
-					window.history.back();
-				},
-				"click #previous" : function() {
-					this.sendControlCmd("previous");
-				},
-				"click #next" : function() {
-					this.sendControlCmd("next");
-				},
-				"click #playPause" : function() {
-					if (this.state === "play") {
-						this.sendControlCmd("pause");
-					} else {
-						this.sendControlCmd("play");
-					}
-				},
-				"click #stop" : function() {
-					this.sendControlCmd("stop");
-				},
 				"click #update" : function() {
 					this.sendControlCmd("update");
 				},
@@ -31268,8 +31413,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"click #clearButton" : "clearPlayList",
 				"click #playLists li" : "loadPlayList",
 				"click #saveButton" : "savePlayList",
-				"click #playingList li" : "removeSong",
-				"change #volume" : "changeVolume"
+				"click #playingList li" : "removeSong"
 		    });	
 		},
 		initialize: function(options) {
@@ -31288,7 +31432,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				this.statusListener = statusListener;
 				MPDClient.addStatusListener(statusListener);
 			} else {
-				this._openWebSocket();
+				this.openWebSocket();
 			}
 		},
 		render: function(){
@@ -31515,99 +31659,6 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				}
 			});
 		},
-		changeVolume: function() {
-			var vol = $("#volume").val();
-			if (vol !== this.volume && this.state === "play") {
-				$.mobile.loading("show", { textVisible: false });
-				if (config.isDirect()) {
-					MPDClient.changeVolume(vol, function() {
-						$.mobile.loading("hide");
-					}.bind(this));
-				} else {
-					$.ajax({
-						url: config.getBaseUrl()+"/music/volume/"+vol,
-						type: "POST",
-						headers: { "cache-control": "no-cache" },
-						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-						dataType: "text",
-						success: function(data, textStatus, jqXHR) {
-							$.mobile.loading("hide");
-						}.bind(this),
-						error: function(jqXHR, textStatus, errorThrown) {
-							$.mobile.loading("hide");
-							console.log("change volume error: "+textStatus);
-						}
-					});
-				}
-        	}
-		},
-		sendControlCmd: function(type) {
-			$.mobile.loading("show", { textVisible: false });
-			if (config.isDirect()) {
-				MPDClient.sendControlCmd(type, function() {
-					$.mobile.loading("hide");
-				}.bind(this));
-			} else {
-				$.ajax({
-					url: config.getBaseUrl()+"/music/"+type,
-					type: "POST",
-					headers: { "cache-control": "no-cache" },
-					contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
-					dataType: "text",
-					success: function(data, textStatus, jqXHR) {
-						$.mobile.loading("hide");
-					}.bind(this),
-					error: function(jqXHR, textStatus, errorThrown) {
-						$.mobile.loading("hide");
-						console.log("control cmd error: "+textStatus);
-					}
-				});
-			}
-		},
-		showStatus: function(data) {
-			var status; 
-			if (config.isDirect()) {
-				status = data;
-			} else {
-				status = JSON.parse(data);
-			}
-			this.state = status.state;
-			this.volume = status.volume;
-			if (status.state === "play") {
-				$("#playPause").button('option', {icon : "pauseIcon" });
-				$("#playPause").button("refresh");
-			} else {
-				$("#playPause").button('option', {icon : "playIcon" });
-				$("#playPause").button("refresh");
-			}
-			if (status.currentsong && (status.state === "play" || status.state === "pause")) {
-				if (!this.volumeSet) {
-					var volume = parseInt(status.volume);
-					if (volume > -1) {
-						$("#volume").val(status.volume);
-						$("#volume").slider('refresh');
-						this.volumeSet = true;
-					}
-				}
-				var time = Math.floor(parseInt(status.time));
-				var minutes = Math.floor(time / 60);
-				var seconds = time - minutes * 60;
-				seconds = (seconds < 10 ? '0' : '') + seconds;
-				$("#currentlyPlayingArtist").text(status.currentsong.artist);
-				$("#currentlyPlayingAlbum").text(status.currentsong.album);
-				$("#currentlyPlayingTitle").text(status.currentsong.title);
-				$("#currentlyPlayingTrack").text("Track: "+(parseInt(status.song)+1));
-				$("#currentlyPlayingTime").text('Time: '+minutes+":"+seconds);
-				$("#currentlyPlaying").attr("style", "display:block");
-			} else {
-				$("#currentlyPlaying").attr("style", "display:none");
-				$("#currentlyPlayingArtist").text("");
-				$("#currentlyPlayingAlbum").text("");
-				$("#currentlyPlayingTitle").text("");
-				$("#currentlyPlayingTrack").text("");
-				$("#currentlyPlayingTime").text("");
-			}
-		},
 		loadPlayList: function(evt) {
 			var name = evt.target.id;
 			if (name === "") {
@@ -31759,23 +31810,6 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 					}
 				});
 			}
-		},
-		_openWebSocket: function() {
-			if (window.WebSocket) {
-				this.ws = new WebSocket(config.getWSUrl());
-			} else if (window.MozWebSocket) {
-				this.ws = new MozWebSocket(config.getWSUrl());
-			} else {
-				alert("No WebSocket Support !!!");
-			}
-		    this.ws.onmessage = function(event) {
-		    	this.showStatus(event.data);
-      		}.bind(this);
-      		this.ws.onerror = function (error) {
-  				console.log('WebSocket Error ' + error);
-  				this.ws.close();
-  				this._openWebSocket();
-			}.bind(this);
 		},
 		close: function() {
 			if (config.isDirect()) {
@@ -31944,7 +31978,7 @@ function($, Backbone, _, BaseView, SongSearchList, config, MPDClient, template){
 			}.bind(this));
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		load: function() {
 			$.mobile.loading("show", { textVisible: false });
@@ -32259,7 +32293,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 });
 
 
-define('text!templates/Settings.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Version</h3> \n\t\t<span>MPDjs Version:<%=version%></span>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Update And Cache</h3> \n\t\t<input id="update" value="Update DB" type="button" data-mini="true">\n\t\t<input id="clearCache" value="Clear Cache" type="button" data-mini="true">\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Random Playlist</h3> \n\t\t<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Start Page</h3>\n\t\t<select id="startPage">\n\t\t\t<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>\n\t\t\t<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>\n\t\t\t<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>\n\t\t\t<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>\n\t\t\t<% if (window.cordova) { %>\n\t\t\t\t<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>\n\t\t\t<% } %>\t\n\t\t</select>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Playlist Page Load</h3> \n\t\t<label><input id="isSongToPlaylist" type="checkbox" <% if (isSongToPlaylist) { %> checked <% } %>>Load Playlist Page on Song Add</label>\n\t</div>\t\n\t\n</div>\n';});
+define('text!templates/Settings.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Version</h3> \n\t\t<span>MPDjs Version:<%=version%></span>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Update And Cache</h3> \n\t\t<input id="update" value="Update DB" type="button" data-mini="true">\n\t\t<input id="clearCache" value="Clear Cache" type="button" data-mini="true">\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Random Playlist</h3> \n\t\t<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Start Page</h3>\n\t\t<select id="startPage">\n\t\t\t<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>\n\t\t\t<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>\n\t\t\t<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>\n\t\t\t<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>\n\t\t\t<% if (window.cordova) { %>\n\t\t\t\t<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>\n\t\t\t<% } %>\t\n\t\t</select>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Playlist Page Load</h3> \n\t\t<label><input id="isSongToPlaylist" type="checkbox" <% if (isSongToPlaylist) { %> checked <% } %>>Load Playlist Page on Song Add</label>\n\t</div>\t\n</div>\n';});
 
 /*
 * The MIT License (MIT)
@@ -32330,7 +32364,7 @@ function($, Backbone, _, BaseView, MPDClient, config, template) {
 			);
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		sendControlCmd: function(type) {
 			$.mobile.loading("show", { textVisible: false });
@@ -32515,7 +32549,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 			}				
 		},
 		render: function() {
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 			setTimeout(function() {
 				this.load();
 			}.bind(this), 500);
@@ -32682,7 +32716,7 @@ function($, Backbone, _, BaseView, config, MPDClient, template, itemTemplate){
 			this.template = _.template( template ) ( { outputs: options.outputs.toJSON() } );
 		},
 		render: function() {
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		refresh: function() {
 			$("#outputList li").remove();

@@ -58,7 +58,7 @@ function($, Backbone, _, BaseView, template){
 			}.bind(this));
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		load: function(loadMore, cb) {
 			if (this.albums.artist) {

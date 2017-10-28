@@ -67,7 +67,7 @@ function($, Backbone, _, BaseView, MPDClient, config, template) {
 			);
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		sendControlCmd: function(type) {
 			$.mobile.loading("show", { textVisible: false });

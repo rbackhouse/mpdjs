@@ -150,7 +150,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template){
 			}				
 		},
 		render: function() {
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 			setTimeout(function() {
 				this.load();
 			}.bind(this), 500);

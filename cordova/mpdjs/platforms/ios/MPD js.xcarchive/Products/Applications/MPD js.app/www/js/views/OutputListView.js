@@ -82,7 +82,7 @@ function($, Backbone, _, BaseView, config, MPDClient, template, itemTemplate){
 			this.template = _.template( template ) ( { outputs: options.outputs.toJSON() } );
 		},
 		render: function() {
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.footerTemplate + this.menuTemplate + this.playingTemplate );
 		},
 		refresh: function() {
 			$("#outputList li").remove();
