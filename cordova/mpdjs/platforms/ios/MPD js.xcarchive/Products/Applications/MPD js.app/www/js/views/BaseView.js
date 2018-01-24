@@ -30,9 +30,11 @@ function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate
 	var View = Backbone.View.extend({
 		events: {
 			"click #menuh1" : function() {
+				window.dispatchEvent(new Event('resize'));
 				$( "#menuPanel" ).popup("open", {transition: "flow"}).trigger("create");
 			},
 			"click #menu" : function() {
+				window.dispatchEvent(new Event('resize'));
 				$( "#menuPanel" ).popup("open", {transition: "flow"}).trigger("create");
 			},
 			"click #back" : function() {
@@ -43,6 +45,7 @@ function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate
 				}	
 			},
 			"click #playing" : function() {
+				window.dispatchEvent(new Event('resize'));
 				this.openPlayingPopup();
 			},
 			"click #previous" : function() {
