@@ -102,11 +102,11 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		HJ2ojXoOi8rkGQPiji9QPsmbTp4=
+		LlOGi2amd2Psi3L+7nvA2svTsj8=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		598iI86DHbmHIMi7z8TZDt4tO2I=
+		/bxogru/hGjRf80o/6ZwaWAH1Uc=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -114,11 +114,11 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		mNT5V9D7jNGhlsMIHCNkM/cyijQ=
+		lu0Po2EWKwuInKdrBhLsEAdoEwM=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		R6eOiyRjOwGoEIySykv4F6ZKEBk=
+		j97wvtDGkP5BgFdrEkGgl5wnMPs=
 		</data>
 		<key>LaunchImage-568h@2x.png</key>
 		<data>
@@ -178,7 +178,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		9h0rbe3b7sSfJREVmYUn7gcjPv8=
+		KLeZAO9dOb4n2gycVEJLUOrisAg=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -190,11 +190,11 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		Om+NmHkewpZhGkKTeapJDUl7L/Q=
+		3lAB2+Uah9Nk7KAXL0X61taqnjA=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		kVdjuYDIPe3K4Wy70qdYkVw+M8A=
+		7MxX+P1OGT7HdJabY0+MU1wou3k=
 		</data>
 		<key>www/cordova-js-src/exec.js</key>
 		<data>
@@ -1098,7 +1098,7 @@
 		</data>
 		<key>www/js/app-built.js</key>
 		<data>
-		DuT1UdA8zFfXVL0rLfTRafYWcXY=
+		GoCexqlk4EG0TWFvx6uKXlJ7DhY=
 		</data>
 		<key>www/js/app.js</key>
 		<data>
@@ -1174,7 +1174,7 @@
 		</data>
 		<key>www/js/mpd/MPDClient.js</key>
 		<data>
-		aGbsSb9nqmb2VzyBsWlg7cnhmf0=
+		eFZalfSuQ7azoDTqzUdFcf7DckM=
 		</data>
 		<key>www/js/mpd/MPDConnector.js</key>
 		<data>
@@ -1190,7 +1190,7 @@
 		</data>
 		<key>www/js/uiconfig.js</key>
 		<data>
-		v7AEypED5uTHjk3OVomN8Pc8zbo=
+		cvx63FBJGYJk5KauYqv6QU0DOss=
 		</data>
 		<key>www/js/util/MessagePopup.js</key>
 		<data>
@@ -1210,7 +1210,7 @@
 		</data>
 		<key>www/js/views/ConnectionListView.js</key>
 		<data>
-		PbCtuRhbIhdhnpofaacUc2Ztwvc=
+		CRNubLAI0b2HsYV3mYHQuN8NcE0=
 		</data>
 		<key>www/js/views/FileListView.js</key>
 		<data>
@@ -1218,7 +1218,7 @@
 		</data>
 		<key>www/js/views/OutputListView.js</key>
 		<data>
-		mLtfy3cHde/3xInWyul/XKPmAtc=
+		qtPS4vvdFm9JAccMzOZ0bWyjSrE=
 		</data>
 		<key>www/js/views/PlayListView.js</key>
 		<data>
@@ -1719,22 +1719,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HJ2ojXoOi8rkGQPiji9QPsmbTp4=
+			LlOGi2amd2Psi3L+7nvA2svTsj8=
 			</data>
 			<key>hash2</key>
 			<data>
-			T5TFTny6PT3Y6nb3S8k/HhB4W+9+TQ6KsPby+y13+vg=
+			zHFK+zeVs046M7DASXthyhQa40eWsZk0FRAHrF/QR8I=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			598iI86DHbmHIMi7z8TZDt4tO2I=
+			/bxogru/hGjRf80o/6ZwaWAH1Uc=
 			</data>
 			<key>hash2</key>
 			<data>
-			5sG2QGH8IYdxTYQ/t/Rl3elVIG/in5FO0p0qkfIeWog=
+			MY3SUGHfnFltMSkQwxVD0JV5RHzp1AGq/br73xU5mFs=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1752,11 +1752,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mNT5V9D7jNGhlsMIHCNkM/cyijQ=
+			lu0Po2EWKwuInKdrBhLsEAdoEwM=
 			</data>
 			<key>hash2</key>
 			<data>
-			eYjl791lzl2QzQBmLtBglo2DS+v2dJCdRa5cGhczxVg=
+			vhNOZhwqg5Wy6NgsterxZWGnZ0ctrkC5vq+f/AI03us=
 			</data>
 		</dict>
 		<key>LaunchImage-568h@2x.png</key>
@@ -1917,11 +1917,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			9h0rbe3b7sSfJREVmYUn7gcjPv8=
+			KLeZAO9dOb4n2gycVEJLUOrisAg=
 			</data>
 			<key>hash2</key>
 			<data>
-			L7Na1z/rt1On0tQvAvmKrHJOc/Q4celI8RrM4scy234=
+			FGv7RgKLuM28qNNBqCyY93f2Zhw2MMcdNPDxCuJuYKY=
 			</data>
 		</dict>
 		<key>archived-expanded-entitlements.xcent</key>
@@ -1939,22 +1939,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Om+NmHkewpZhGkKTeapJDUl7L/Q=
+			3lAB2+Uah9Nk7KAXL0X61taqnjA=
 			</data>
 			<key>hash2</key>
 			<data>
-			/5KIRo4PzsvOwzlD79CNfDY7/0XZb8X1QtHbV95N72g=
+			Ds+guLoZfbJCX9aAmgFRnVumHvMpgaQawpiBTKkMjrU=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			kVdjuYDIPe3K4Wy70qdYkVw+M8A=
+			7MxX+P1OGT7HdJabY0+MU1wou3k=
 			</data>
 			<key>hash2</key>
 			<data>
-			/aQwngu0P/YcuDhtOdN9eBM4oU89anOL0vqkT+8KAbo=
+			p0cG3sYJcdsPFzTqg9E8i6mgkwOf/Hks3BxqGaVBTOg=
 			</data>
 		</dict>
 		<key>www/cordova-js-src/exec.js</key>
@@ -4436,11 +4436,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			DuT1UdA8zFfXVL0rLfTRafYWcXY=
+			GoCexqlk4EG0TWFvx6uKXlJ7DhY=
 			</data>
 			<key>hash2</key>
 			<data>
-			rWRCCyaNLxUtnozkalbKM1nVwcCBxJOUeThQDY1/Ovk=
+			ZOq0wMQinNcHjOpkHZWjsU3lViQTs1MguIIzGKBT5mY=
 			</data>
 		</dict>
 		<key>www/js/app.js</key>
@@ -4645,11 +4645,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			aGbsSb9nqmb2VzyBsWlg7cnhmf0=
+			eFZalfSuQ7azoDTqzUdFcf7DckM=
 			</data>
 			<key>hash2</key>
 			<data>
-			y9LImXB/fB5cWGSwmPdNvepM6fkHf1Akr4neLD3Lm4U=
+			VuGybFJRc6wupB613xrZOODfzrFghpj9ntY2bo2p6sg=
 			</data>
 		</dict>
 		<key>www/js/mpd/MPDConnector.js</key>
@@ -4689,11 +4689,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			v7AEypED5uTHjk3OVomN8Pc8zbo=
+			cvx63FBJGYJk5KauYqv6QU0DOss=
 			</data>
 			<key>hash2</key>
 			<data>
-			7ba6qe0eDv9d+OH+dgkPhBuiye9HF6OmJrljVpNRFsE=
+			ZFihjQIrbYKATONpcg8qKyhUK1MNQlCYFBqdiK8iexk=
 			</data>
 		</dict>
 		<key>www/js/util/MessagePopup.js</key>
@@ -4744,11 +4744,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			PbCtuRhbIhdhnpofaacUc2Ztwvc=
+			CRNubLAI0b2HsYV3mYHQuN8NcE0=
 			</data>
 			<key>hash2</key>
 			<data>
-			eDyRA8bzCIBApfGlugaeP12esmZ9cjYFakcBiabGt/4=
+			8kU7nksDjfbf/vok2lReHs069WPtUdtpM02zNlnBKzY=
 			</data>
 		</dict>
 		<key>www/js/views/FileListView.js</key>
@@ -4766,11 +4766,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mLtfy3cHde/3xInWyul/XKPmAtc=
+			qtPS4vvdFm9JAccMzOZ0bWyjSrE=
 			</data>
 			<key>hash2</key>
 			<data>
-			bVJvsmTa2KJDpBSn09J4nqwZwgSQq6aWnY23IHasv3w=
+			XiANwd6+9BvzRSlfh1VdcjwWXaHLd+MqdnFcbmHuZFE=
 			</data>
 		</dict>
 		<key>www/js/views/PlayListView.js</key>

@@ -9,16 +9,16 @@
 		<key>CFBundleIdentifier</key>
 		<string>org.potpie.mpdjs</string>
 		<key>CFBundleShortVersionString</key>
-		<string>0.2.7</string>
+		<string>0.2.8</string>
 		<key>CFBundleVersion</key>
-		<string>0.2.7</string>
+		<string>0.2.8</string>
 		<key>SigningIdentity</key>
 		<string>iPhone Developer: Richard Backhouse (J47RB64UTM)</string>
 	</dict>
 	<key>ArchiveVersion</key>
 	<integer>2</integer>
 	<key>CreationDate</key>
-	<date>2018-01-20T10:00:51Z</date>
+	<date>2018-02-17T12:55:59Z</date>
 	<key>Name</key>
 	<string>MPD js</string>
 	<key>SchemeName</key>

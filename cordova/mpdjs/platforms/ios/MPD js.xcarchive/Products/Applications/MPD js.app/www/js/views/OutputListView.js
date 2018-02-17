@@ -42,13 +42,13 @@ function($, Backbone, _, BaseView, config, MPDClient, template, itemTemplate){
 									$.mobile.loading("hide");
 									output.set("enabled", false);
 									this.refresh();
-								}.bind(this));
+								}.bind(this), function(err) {$.mobile.loading("hide");});
 							} else {
 								MPDClient.enableOutput(id, function() {
 									$.mobile.loading("hide");
 									output.set("enabled", true);
 									this.refresh();
-								}.bind(this));
+								}.bind(this), function(err) {$.mobile.loading("hide");});
 							}	
 						} else {
 							var cmd = enabled ? "disableoutput" : "enableoutput";

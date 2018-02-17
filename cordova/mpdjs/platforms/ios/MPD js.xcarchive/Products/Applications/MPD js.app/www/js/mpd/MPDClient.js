@@ -23,8 +23,11 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 	var audio;
 	var streamurl;
 	
-	function errorHandler(err) {
+	function errorHandler(err, cb) {
 		MessagePopup.create("MPD Error", "Error : "+err);
+		if (cb) {
+			cb(err);
+		}
 	}
 	
 	if (window.cordova) {
@@ -46,7 +49,7 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		if (connection) {	
 			connection.connect(function(error) {
 				if (error) {
-					cb(error);
+					errorHandler(error, cb);
 					return;
 				}
 				if (config.getConnectionConfig().streamingport !== "") {
@@ -162,7 +165,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		},
 		getAllArtists: function(index, filter, cb, errcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", cb);
+				return;
 			}
 			if (filter === "all") {
 				filter = undefined;
@@ -216,7 +220,8 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		},
 		getAlbums: function(artist, index, filter, cb, errcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", cb);
+				return;
 			}
 			if (artist) {
 				connection.getAlbumsForArtist(artist, function(albums) {
@@ -279,32 +284,51 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		},
 		getSongs: function(album, artist, cb, errcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", cb);
+				return;
 			}
 			connection.getSongsForAlbum(album, artist, cb, errcb);
 		},
 		getPlayList: function(cb, errcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", cb);
+				return;
 			}
 			connection.getPlayListInfo(cb, errcb);
 		},
 		searchSongs: function(searchValue, searchType, cb, errcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", cb);
+				return;
 			}
 			connection.getSongs(searchValue, searchType,cb, errcb);
 		},
 		addSongToPlayList: function(song, cb, errcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.addSongToPlayList(song, cb, errcb);
 		},
 		addAlbumToPlayList: function(album, artist, cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.addAlbumToPlayList(album, artist, cb);
 		},
 		addDirectoryToPlayList: function(dir, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.addDirectoryToPlayList(dir, cb, errorcb);
 		},
 		randomPlayList: function(cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.clearPlayList();
 			
 			function createPlaylist(albums) {
@@ -336,24 +360,44 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 			}
 		},
 		randomPlayListByType: function(type, typevalue, cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.clearPlayList();
 			connection.randomPlayList(type, typevalue, function() {
 				cb();
 			});
 		},
 		clearPlayList: function(cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.clearPlayList();
 			cb();
 		},
 		removeSong: function(song, cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.removeSong(song);
 			cb();
 		},
 		changeVolume: function(volume, cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			connection.setVolume(volume);
 			cb();
 		},
 		sendControlCmd: function(type, cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
 			if (type === "play") {
 				connection.play();
 				if (audio) {
@@ -420,50 +464,58 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 		},
 		listFiles: function(uri, cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.listFiles(uri, cb, errorcb);			
 		},
 		listPlayLists: function(cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.listPlayLists(cb, errorcb);			
 		},
 		loadPlayList: function(name, cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.loadPlayList(name, cb, errorcb);			
 		},
 		savePlayList: function(name, cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.deletePlayList(name);
 			connection.savePlayList(name, cb, errorcb);			
 		},
 		deletePlayList: function(name, cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.deletePlayList(name, cb, errorcb);			
 		},
 		getOutputs: function(cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.getOutputs(cb, errorcb);			
 		},
 		enableOutput: function(id, cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.enableOutput(id, cb, errorcb);			
 		},
 		disableOutput: function(id, cb, errorcb) {
 			if (!connection) {
-				errorHandler("notconnected");
+				errorHandler("Connection has been lost", errorcb);
+				return;
 			}
 			connection.disableOutput(id, cb, errorcb);			
 		}
