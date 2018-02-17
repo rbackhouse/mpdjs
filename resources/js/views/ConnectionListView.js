@@ -240,7 +240,6 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				MPDClient.connect(function(error) {
 					$.mobile.loading("hide");
 					if (error) {
-						MessagePopup.create("Connection Failure", "Failed to connect to "+config.getConnectionConfig().host+":"+config.getConnectionConfig().port+" Error: "+error);
 						config.setSelectedIndex(-1);
 						config.setDiscoveredIndex(-1);
 					} else {
