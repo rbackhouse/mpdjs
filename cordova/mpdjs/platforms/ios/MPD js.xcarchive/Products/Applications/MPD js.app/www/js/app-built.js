@@ -28359,6 +28359,7 @@ define('uiconfig',[],function() {
 * DEALINGS IN THE SOFTWARE.
 */
 
+
 (function(factory) {
 	if (typeof define === "function" && define.amd) {
 		define('MPDConnectionBase',[],function() {
