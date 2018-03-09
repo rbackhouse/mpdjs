@@ -24,8 +24,10 @@ define([
 		'./BaseView',
 		'../mpd/MPDClient',
 		'../util/MessagePopup',
-		'text!templates/PlayList.html'], 
-function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessagePopup, template){
+		'text!templates/PlayList.html',
+		'text!templates/PlayingConfig.html'
+		], 
+function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessagePopup, template, configTemplate) {
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
@@ -37,7 +39,12 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"click #clearButton" : "clearPlayList",
 				"click #playLists li" : "loadPlayList",
 				"click #saveButton" : "savePlayList",
-				"click #playingList li" : "removeSong"
+				"click #playingList li" : "removeSong",
+				"click #configButton" : "config",
+				"change #shuffle" : "shuffle",
+				"change #repeat" : "repeat",
+				"change #consume" : "consume",
+				"change #single" : "single"
 		    });	
 		},
 		initialize: function(options) {
@@ -49,6 +56,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.playlist = options.playlist;
 			this.template = _.template( template ) ( { playlist: options.playlist.toJSON() } );
+			this.configTemplate = _.template(configTemplate) ( {} );
 			if (config.isDirect()) {
 				var statusListener = function(status) {
 					this.showStatus(status);
@@ -60,7 +68,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			}
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate + this.configTemplate);
 			this.loadPlayLists();
 		},
 		editPlayList: function() {
@@ -434,6 +442,64 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 					}
 				});
 			}
+		},
+		showStatus: function(data) {
+			BaseView.prototype.showStatus.apply(this, arguments);
+			var status; 
+			if (config.isDirect()) {
+				status = data;
+			} else {
+				status = JSON.parse(data);
+			}
+			
+			if (this.currentSongId && status.songid && this.consume == 1) {
+				if (status.songid !== this.currentSongId) {
+					this.fetchPlayList();
+				}				
+			}
+			this.currentSongId = status.songid;
+		},
+		config: function() {
+			$("#shuffle").prop( "checked", (this.random == 1) ? true : false ).checkboxradio('refresh');
+			$("#repeat").prop( "checked", (this.repeat == 1) ? true : false ).checkboxradio('refresh');
+			$("#consume").prop( "checked", (this.consume == 1) ? true : false ).checkboxradio('refresh');
+			$("#single").prop( "checked", (this.single == 1) ? true : false ).checkboxradio('refresh');
+			var $popUp = $( "#playingConfigPanel" ).popup("open", {
+				transition: "flow"
+			}).trigger("create");
+			$( "#playingConfigPanel" ).popup( "option", "history", false );
+		},
+		shuffle: function() {
+			if (config.isDirect()) {
+				var on = $("#shuffle").is(":checked")
+				MPDClient.shuffle(on, function() {
+				});
+			} else {
+			}			
+		},
+		repeat: function() {
+			if (config.isDirect()) {
+				var on = $("#repeat").is(":checked") 
+				MPDClient.repeat(on, function() {
+				});
+			} else {
+			}			
+		},
+		consume: function() {
+			if (config.isDirect()) {
+				var on = $("#consume").is(":checked") 	
+				MPDClient.consume(on, function() {
+				});
+			} else {
+			}			
+		},
+		single: function() {
+			if (config.isDirect()) {
+				var on = $("#single").is(":checked") 	
+				MPDClient.single(on, function() {
+				});
+			} else {
+			}			
 		},
 		close: function() {
 			if (config.isDirect()) {
