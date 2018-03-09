@@ -470,35 +470,39 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			$( "#playingConfigPanel" ).popup( "option", "history", false );
 		},
 		shuffle: function() {
+			var on = $("#shuffle").is(":checked")
 			if (config.isDirect()) {
-				var on = $("#shuffle").is(":checked")
 				MPDClient.shuffle(on, function() {
 				});
 			} else {
+				this.setPlaybackOption("shuffle", on);
 			}			
 		},
 		repeat: function() {
+			var on = $("#repeat").is(":checked") 
 			if (config.isDirect()) {
-				var on = $("#repeat").is(":checked") 
 				MPDClient.repeat(on, function() {
 				});
 			} else {
+				this.setPlaybackOption("repeat", on);
 			}			
 		},
 		consume: function() {
+			var on = $("#consume").is(":checked") 	
 			if (config.isDirect()) {
-				var on = $("#consume").is(":checked") 	
 				MPDClient.consume(on, function() {
 				});
 			} else {
+				this.setPlaybackOption("consume", on);
 			}			
 		},
 		single: function() {
+			var on = $("#single").is(":checked") 	
 			if (config.isDirect()) {
-				var on = $("#single").is(":checked") 	
 				MPDClient.single(on, function() {
 				});
 			} else {
+				this.setPlaybackOption("single", on);
 			}			
 		},
 		close: function() {
@@ -507,6 +511,19 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			} else {
 				this.ws.close();
 			}
+		},
+		setPlaybackOption: function(cmd, on) {
+			$.ajax({
+				url: config.getBaseUrl()+"/music/"+cmd+"/"+on,
+				type: "POST",
+				contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+				dataType: "text",
+				success: function(data, textStatus, jqXHR) {
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(cmd+" failed :"+errorThrown);
+				}
+			});
 		}
 	});
 	
