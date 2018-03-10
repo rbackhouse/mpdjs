@@ -518,6 +518,34 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 				return;
 			}
 			connection.disableOutput(id, cb, errorcb);			
+		},
+		shuffle: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.shuffle(on, cb, errorcb);			
+		},
+		repeat: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.repeat(on, cb, errorcb);			
+		},
+		consume: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.consume(on, cb, errorcb);			
+		},
+		single: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.single(on, cb, errorcb);			
 		}
 	};
 });

@@ -29071,6 +29071,50 @@ class MPDConnectionBase {
 		});
 	}
 	
+	shuffle(on, cb, errorcb) {
+		var state = (on === true) ? 1 : 0;
+		this.queue.push({
+			cmd: "random "+state,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
+	repeat(on, cb, errorcb) {
+		var state = (on === true) ? 1 : 0;
+		this.queue.push({
+			cmd: "repeat "+state,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
+	consume(on, cb, errorcb) {
+		var state = (on === true) ? 1 : 0;
+		this.queue.push({
+			cmd: "consume "+state,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
+	single(on, cb, errorcb) {
+		var state = (on === true) ? 1 : 0;
+		this.queue.push({
+			cmd: "single "+state,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
 	_loadFileSuffixes() {
 		this.fileSuffixes = ['cue'];
 		var processor = function(data) {
@@ -30033,6 +30077,34 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				return;
 			}
 			connection.disableOutput(id, cb, errorcb);			
+		},
+		shuffle: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.shuffle(on, cb, errorcb);			
+		},
+		repeat: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.repeat(on, cb, errorcb);			
+		},
+		consume: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.consume(on, cb, errorcb);			
+		},
+		single: function(on, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.single(on, cb, errorcb);			
 		}
 	};
 });
@@ -31006,7 +31078,6 @@ function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate
 			}.bind(this);
 		},
 		sendControlCmd: function(type) {
-			console.log(type);
 			$.mobile.loading("show", { textVisible: false });
 			if (config.isDirect()) {
 				MPDClient.sendControlCmd(type, function() {
@@ -31038,6 +31109,10 @@ function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate
 			}
 			this.state = status.state;
 			this.volume = status.volume;
+			this.random = status.random;
+			this.repeat = status.repeat;
+			this.consume = status.consume;
+			this.single = status.single;
 			if (status.state === "play") {
 				$("#playPause").button('option', {icon : "pauseIcon" });
 				$("#playPause").button("refresh");
@@ -31428,7 +31503,10 @@ function($, Backbone, _, BaseView, config, MPDClient, template, templateAlt){
 });
 
 
-define('text!templates/PlayList.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Currently Playing</h3>\n\t\t<div id="currentlyPlaying" style="display:none">\n\t\t\t<div style="font-style: italic;" id="currentlyPlayingArtist"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingAlbum"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingTitle"></div>\t\t\t\t\t \n\t\t\t<div>\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTrack"></span>&nbsp;\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTime"></span>\n\t\t\t</div>\t\t\t\n\t\t</div>\t\t \n\t<div class="ui-field-contain">\n\t\t<label for="volume" class="ui-hidden-accessible">Volume:</label>\n\t\t<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>\n\t</div>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Queue</h3>\n\t\t<div style="padding-bottom: 1px">\n\t\t<div data-role="navbar">\n\t\t\t<ul>\n\t\t\t<li><input id="editButton" data-iconpos="top" data-inline="true" data-icon="edit" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="randomButton" data-iconpos="top" data-inline="true" data-icon="recycle" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="saveButton" data-iconpos="top" data-icon="tag" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="clearButton" data-iconpos="top" data-icon="delete" value="" type="button" data-mini="true"></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t</div>\n\t\t<ol id="playingList" data-role="listview" style="margin-top:0;">\n\t\t<% _.each(playlist, function(song) { %>\n\t\t\t<li><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></li> \n\t\t<% }); %>\n\t\t</ol>\n\t\t<br>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Play Lists</h3>\n\t\t<ul id="playLists" data-role="listview" style="margin-top:0;">\n\t\t</ul>\n\t</div>\t\n</div>\n<div data-id="thefooter "data-role="footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t<li><input id="previous" data-iconpos="bottom" data-icon="rewindIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="stop" data-iconpos="bottom" data-icon="stopIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="playPause" data-iconpos="bottom" data-icon="playIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="next" data-iconpos="bottom" data-icon="fastForwardIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t</ul>\n\t</div>\n</div>\t\t\n';});
+define('text!templates/PlayList.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Currently Playing</h3>\n\t\t<div id="currentlyPlaying" style="display:none">\n\t\t\t<div style="font-style: italic;" id="currentlyPlayingArtist"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingAlbum"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingTitle"></div>\t\t\t\t\t \n\t\t\t<div>\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTrack"></span>&nbsp;\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTime"></span>\n\t\t\t</div>\t\t\t\n\t\t</div>\t\t \n\t<div class="ui-field-contain">\n\t\t<label for="volume" class="ui-hidden-accessible">Volume:</label>\n\t\t<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>\n\t</div>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Queue</h3>\n\t\t<div style="padding-bottom: 1px">\n\t\t<div data-role="navbar">\n\t\t\t<ul>\n\t\t\t<li><input id="editButton" data-iconpos="top" data-inline="true" data-icon="edit" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="randomButton" data-iconpos="top" data-inline="true" data-icon="recycle" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="saveButton" data-iconpos="top" data-icon="tag" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="clearButton" data-iconpos="top" data-icon="delete" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="configButton" data-iconpos="top" data-icon="gear" value="" type="button" data-mini="true"></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t</div>\n\t\t<ol id="playingList" data-role="listview" style="margin-top:0;">\n\t\t<% _.each(playlist, function(song) { %>\n\t\t\t<li><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></li> \n\t\t<% }); %>\n\t\t</ol>\n\t\t<br>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Play Lists</h3>\n\t\t<ul id="playLists" data-role="listview" style="margin-top:0;">\n\t\t</ul>\n\t</div>\t\n</div>\n<div data-id="thefooter "data-role="footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t<li><input id="previous" data-iconpos="bottom" data-icon="rewindIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="stop" data-iconpos="bottom" data-icon="stopIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="playPause" data-iconpos="bottom" data-icon="playIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="next" data-iconpos="bottom" data-icon="fastForwardIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t</ul>\n\t</div>\n</div>\t\t\n';});
+
+
+define('text!templates/PlayingConfig.html',[],function () { return '<div data-role="popup" id="playingConfigPanel" data-theme="a" class="ui-content">\n\t<h3>Playing Configuration</h3>\n\t<label><input id="shuffle" type="checkbox">Shuffle</label>\n\t<label><input id="repeat" type="checkbox">Repeat</label>\n\t<label><input id="consume" type="checkbox">Remove Song After Play</label>\n\t<label><input id="single" type="checkbox">Stop After Song Played</label>\n</div>';});
 
 /*
 * The MIT License (MIT)
@@ -31456,8 +31534,10 @@ define('views/PlayListView',[
 		'./BaseView',
 		'../mpd/MPDClient',
 		'../util/MessagePopup',
-		'text!templates/PlayList.html'], 
-function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessagePopup, template){
+		'text!templates/PlayList.html',
+		'text!templates/PlayingConfig.html'
+		], 
+function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessagePopup, template, configTemplate) {
 	var View = BaseView.extend({
 		events: function() {
 		    return _.extend({}, BaseView.prototype.events, {
@@ -31469,7 +31549,12 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"click #clearButton" : "clearPlayList",
 				"click #playLists li" : "loadPlayList",
 				"click #saveButton" : "savePlayList",
-				"click #playingList li" : "removeSong"
+				"click #playingList li" : "removeSong",
+				"click #configButton" : "config",
+				"change #shuffle" : "shuffle",
+				"change #repeat" : "repeat",
+				"change #consume" : "consume",
+				"change #single" : "single"
 		    });	
 		},
 		initialize: function(options) {
@@ -31481,6 +31566,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			this.constructor.__super__.initialize.apply(this, [options]);
 			this.playlist = options.playlist;
 			this.template = _.template( template ) ( { playlist: options.playlist.toJSON() } );
+			this.configTemplate = _.template(configTemplate) ( {} );
 			if (config.isDirect()) {
 				var statusListener = function(status) {
 					this.showStatus(status);
@@ -31492,7 +31578,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			}
 		},
 		render: function(){
-			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate );
+			$(this.el).html( this.headerTemplate + this.template + this.menuTemplate + this.configTemplate);
 			this.loadPlayLists();
 		},
 		editPlayList: function() {
@@ -31867,12 +31953,87 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				});
 			}
 		},
+		showStatus: function(data) {
+			BaseView.prototype.showStatus.apply(this, arguments);
+			var status; 
+			if (config.isDirect()) {
+				status = data;
+			} else {
+				status = JSON.parse(data);
+			}
+			
+			if (this.currentSongId && status.songid && this.consume == 1) {
+				if (status.songid !== this.currentSongId) {
+					this.fetchPlayList();
+				}				
+			}
+			this.currentSongId = status.songid;
+		},
+		config: function() {
+			$("#shuffle").prop( "checked", (this.random == 1) ? true : false ).checkboxradio('refresh');
+			$("#repeat").prop( "checked", (this.repeat == 1) ? true : false ).checkboxradio('refresh');
+			$("#consume").prop( "checked", (this.consume == 1) ? true : false ).checkboxradio('refresh');
+			$("#single").prop( "checked", (this.single == 1) ? true : false ).checkboxradio('refresh');
+			var $popUp = $( "#playingConfigPanel" ).popup("open", {
+				transition: "flow"
+			}).trigger("create");
+			$( "#playingConfigPanel" ).popup( "option", "history", false );
+		},
+		shuffle: function() {
+			var on = $("#shuffle").is(":checked")
+			if (config.isDirect()) {
+				MPDClient.shuffle(on, function() {
+				});
+			} else {
+				this.setPlaybackOption("shuffle", on);
+			}			
+		},
+		repeat: function() {
+			var on = $("#repeat").is(":checked") 
+			if (config.isDirect()) {
+				MPDClient.repeat(on, function() {
+				});
+			} else {
+				this.setPlaybackOption("repeat", on);
+			}			
+		},
+		consume: function() {
+			var on = $("#consume").is(":checked") 	
+			if (config.isDirect()) {
+				MPDClient.consume(on, function() {
+				});
+			} else {
+				this.setPlaybackOption("consume", on);
+			}			
+		},
+		single: function() {
+			var on = $("#single").is(":checked") 	
+			if (config.isDirect()) {
+				MPDClient.single(on, function() {
+				});
+			} else {
+				this.setPlaybackOption("single", on);
+			}			
+		},
 		close: function() {
 			if (config.isDirect()) {
 				MPDClient.removeStatusListener(this.statusListener);				
 			} else {
 				this.ws.close();
 			}
+		},
+		setPlaybackOption: function(cmd, on) {
+			$.ajax({
+				url: config.getBaseUrl()+"/music/"+cmd+"/"+on,
+				type: "POST",
+				contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+				dataType: "text",
+				success: function(data, textStatus, jqXHR) {
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(cmd+" failed :"+errorThrown);
+				}
+			});
 		}
 	});
 	

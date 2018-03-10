@@ -130,7 +130,6 @@ function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate
 			}.bind(this);
 		},
 		sendControlCmd: function(type) {
-			console.log(type);
 			$.mobile.loading("show", { textVisible: false });
 			if (config.isDirect()) {
 				MPDClient.sendControlCmd(type, function() {
@@ -162,6 +161,10 @@ function($, Backbone, _, routes, config, MPDClient, menuTemplate, headerTemplate
 			}
 			this.state = status.state;
 			this.volume = status.volume;
+			this.random = status.random;
+			this.repeat = status.repeat;
+			this.consume = status.consume;
+			this.single = status.single;
 			if (status.state === "play") {
 				$("#playPause").button('option', {icon : "pauseIcon" });
 				$("#playPause").button("refresh");
