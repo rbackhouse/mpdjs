@@ -39,7 +39,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"click #clearButton" : "clearPlayList",
 				"click #playLists li" : "loadPlayList",
 				"click #saveButton" : "savePlayList",
-				"click #playingList li" : "removeSong",
+				"click #playingList li" : "removeOrJumpTpSong",
 				"click #configButton" : "config",
 				"change #shuffle" : "shuffle",
 				"change #repeat" : "repeat",
@@ -76,7 +76,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			if (this.editing) {
 				this.editing = undefined;
 				this.playlist.each(function(song) {
-					$("#playingList").append('<li><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></li>');	
+					$("#playingList").append('<li data-icon="false"><a href="#playlist" id="'+song.get("id")+'"><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></a></li>');	
 				});
 			} else {
 				this.editing = true;
@@ -242,7 +242,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				});
 			}
 		},
-		removeSong: function(evt) {
+		removeOrJumpTpSong: function(evt) {
 			if (this.editing) {			
 				$.mobile.loading("show", { textVisible: false });
 				if (config.isDirect()) {
@@ -267,6 +267,32 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 						}
 					});
 				}
+			} else if (config.isTapToPlaySong()) {
+				var id = evt.target.id;
+				if (id === "") {
+					id = evt.target.parentNode.id;
+				}
+				$.mobile.loading("show", { textVisible: false });
+				if (config.isDirect()) {
+					MPDClient.playSongId(id, function() {
+						$.mobile.loading("hide");
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/play/"+id,
+						type: "POST",
+						headers: { "cache-control": "no-cache" },
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("control cmd error: "+textStatus);
+						}
+					});
+				}
 			}
 		},
 		fetchPlayList: function() {
@@ -280,7 +306,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 						if (this.editing) {
 							$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'"><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></a></li>');	
 						} else {
-							$("#playingList").append('<li><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></li>');	
+							$("#playingList").append('<li data-icon="false"><a href="#playlist" id="'+song.get("id")+'"><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></a></li>');	
 						}
 					}.bind(this));
 					$("#playingList").listview('refresh');

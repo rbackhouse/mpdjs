@@ -191,6 +191,17 @@ define(function() {
 			}
 			return songToPlaylist === "true" ? true : false;
 		},
+		setTapToPlaySong: function(tapToPlaySong) {
+			localStorage["mpdjs.tapToPlaySong"] = tapToPlaySong;
+		},
+		isTapToPlaySong: function() {
+			var tapToPlaySong = localStorage["mpdjs.tapToPlaySong"];
+			if (!tapToPlaySong) {
+				tapToPlaySong = "true";
+				this.setTapToPlaySong(tapToPlaySong);
+			}
+			return tapToPlaySong === "true" ? true : false;
+		},
 		addDiscoverListener: function(listener) {
 			discoverListeners.push(listener);
 		},

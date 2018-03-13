@@ -48,6 +48,9 @@ function($, Backbone, _, BaseView, MPDClient, config, template) {
 				},
 				"change #isSongToPlaylist" : function() {
 					config.setSongToPlaylist($("#isSongToPlaylist").is(":checked"));
+				},
+				"change #tapToPlaySong" : function() {
+					config.setTapToPlaySong($("#tapToPlaySong").is(":checked"));
 				}
 		    });	
 		},
@@ -62,7 +65,8 @@ function($, Backbone, _, BaseView, MPDClient, config, template) {
 					randomPlaylistConfig: config.getRandomPlaylistConfig(), 
 					startPage: config.getStartPage(),
 					version: config.getVersionNumber(),
-					isSongToPlaylist: config.isSongToPlaylist()
+					isSongToPlaylist: config.isSongToPlaylist(),
+					tapToPlaySong: config.isTapToPlaySong()
 				}
 			);
 		},
