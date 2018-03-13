@@ -102,11 +102,11 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		YjqUptCoM3I5O5fTyMUPbua6h4A=
+		HGxqjO3+P9GSlPDtVBXWVNr8eHM=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		sgKLiekRAsHee+RC/1E3l8wV4tU=
+		blNn5WqdfOFfiLHbxa1zHgkWjV8=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -114,11 +114,11 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		QLBc3GR04vHTSXK2emYp3RdKu/4=
+		XZr9RK/4eIPedxCfX1KBFP5q0QI=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		QnQsgK7Q2y3zBHpTXsTg8l/HmCw=
+		5uO2d1MUbrAlhl0MgXzG9/RyC7o=
 		</data>
 		<key>LaunchImage-568h@2x.png</key>
 		<data>
@@ -178,7 +178,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		1msbkT5iQSNTtK8boU5ufxs6LG8=
+		G3TilKe65b9P/aWHzsPAeN1T4ow=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -190,7 +190,7 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		GkI0MtQIIOhhx4hwnh/H1Q8anzI=
+		E46Vm66E74T9X5FIjGnEFa/oAo0=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -1098,7 +1098,7 @@
 		</data>
 		<key>www/js/app-built.js</key>
 		<data>
-		FCmjbOYYc/F2IAeKO1qPswUL3QI=
+		ujAjo1T0VN3xZfSGvqxy1cnwCMk=
 		</data>
 		<key>www/js/app.js</key>
 		<data>
@@ -1174,7 +1174,7 @@
 		</data>
 		<key>www/js/mpd/MPDClient.js</key>
 		<data>
-		OTwZJfQz54yjUlrGkBaLJ72hL9E=
+		2ePq9VdfByOs3vRyfdAkLEJi/fo=
 		</data>
 		<key>www/js/mpd/MPDConnector.js</key>
 		<data>
@@ -1190,7 +1190,7 @@
 		</data>
 		<key>www/js/uiconfig.js</key>
 		<data>
-		SPqnye1d8+wW/UMNKbOUdk2z0+8=
+		7M4rjWOfo+Uar2o1fp27Mtur8xI=
 		</data>
 		<key>www/js/util/MessagePopup.js</key>
 		<data>
@@ -1222,11 +1222,11 @@
 		</data>
 		<key>www/js/views/PlayListView.js</key>
 		<data>
-		3q7gQHYEy2VkzQLAv2sOHkO3SIs=
+		SNLQdKSMMpH9wq/ce2ReiYWyK8s=
 		</data>
 		<key>www/js/views/SettingsView.js</key>
 		<data>
-		212jD5ycrHgUM7SnJBEBEoLYqXI=
+		1u2BxxB1bYqlAws7eMClzVuYi5M=
 		</data>
 		<key>www/js/views/SongListView.js</key>
 		<data>
@@ -1426,7 +1426,7 @@
 		</data>
 		<key>www/templates/PlayList.html</key>
 		<data>
-		uYSng20VdyBE3G4KY3ARASZ4CG4=
+		2qfCjsEHr4rPrpd4Km8LQG2AtTk=
 		</data>
 		<key>www/templates/Playing.html</key>
 		<data>
@@ -1438,7 +1438,7 @@
 		</data>
 		<key>www/templates/Settings.html</key>
 		<data>
-		GU1gU1OkjiRZd+o0Iy8xDaB+Kng=
+		YUQ8kKcSm31bVVFinGwnswM2XGw=
 		</data>
 		<key>www/templates/SongList.html</key>
 		<data>
@@ -1723,22 +1723,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			YjqUptCoM3I5O5fTyMUPbua6h4A=
+			HGxqjO3+P9GSlPDtVBXWVNr8eHM=
 			</data>
 			<key>hash2</key>
 			<data>
-			XD8vTVxchJb3wOF0qjXd0C9aJ4btolKwkoJpcGz/pUU=
+			waVypuR2bU3bTxVKQDPZyYVrG+QWVU/7uDf6HjX/nIQ=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			sgKLiekRAsHee+RC/1E3l8wV4tU=
+			blNn5WqdfOFfiLHbxa1zHgkWjV8=
 			</data>
 			<key>hash2</key>
 			<data>
-			bKl5BpTc3YVFjdbQuIgYEhl6An7uEvpwPxUQeLrhbbE=
+			5C+SVrii2aKfEIXAr6SPymYRXXdFIdnUnzqNjXYAwzo=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1756,11 +1756,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			QLBc3GR04vHTSXK2emYp3RdKu/4=
+			XZr9RK/4eIPedxCfX1KBFP5q0QI=
 			</data>
 			<key>hash2</key>
 			<data>
-			0DNkTJuimdAV1jMRulxTWBJA+LiVmGvSlxMJza/8p1s=
+			4qnttGYNPdMIQAT3iPy0NHQDO/Cdk13PKAxFLM8n5Cg=
 			</data>
 		</dict>
 		<key>LaunchImage-568h@2x.png</key>
@@ -1921,11 +1921,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1msbkT5iQSNTtK8boU5ufxs6LG8=
+			G3TilKe65b9P/aWHzsPAeN1T4ow=
 			</data>
 			<key>hash2</key>
 			<data>
-			3hSFMthNxlXj3AaK0X2JfwZgGXKCWVGhcoIu3R+MPtE=
+			EhmPxIZS5ZoSLTaKN+ozF5CM0RgJ95YyZZrUSQtEsJk=
 			</data>
 		</dict>
 		<key>archived-expanded-entitlements.xcent</key>
@@ -1943,11 +1943,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			GkI0MtQIIOhhx4hwnh/H1Q8anzI=
+			E46Vm66E74T9X5FIjGnEFa/oAo0=
 			</data>
 			<key>hash2</key>
 			<data>
-			Q6IhFfhzkP8NQ/Duc/9eFR2vNEMoLpt7YEC24OxYOqk=
+			i+VlxBwSHPFnhkEeQYlPo9O05LwWejnZni39AU4AGvE=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
@@ -4440,11 +4440,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FCmjbOYYc/F2IAeKO1qPswUL3QI=
+			ujAjo1T0VN3xZfSGvqxy1cnwCMk=
 			</data>
 			<key>hash2</key>
 			<data>
-			z/LhuGnTL4xjwX26l6dahNO0VJIajQeR+uJHjcIY6fQ=
+			rF1pLpOoNHdXf1PuNL64AO8eWlsxBJUD6cgU8jgHVKk=
 			</data>
 		</dict>
 		<key>www/js/app.js</key>
@@ -4649,11 +4649,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			OTwZJfQz54yjUlrGkBaLJ72hL9E=
+			2ePq9VdfByOs3vRyfdAkLEJi/fo=
 			</data>
 			<key>hash2</key>
 			<data>
-			ttYrp6BiVHW2pFKIU7E0v3jTZ53vHgU63gD/C2DIe64=
+			Y/AeTSrwCc5++KTTpKOfavB8nl+4dPqs0XSbiFx4taU=
 			</data>
 		</dict>
 		<key>www/js/mpd/MPDConnector.js</key>
@@ -4693,11 +4693,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			SPqnye1d8+wW/UMNKbOUdk2z0+8=
+			7M4rjWOfo+Uar2o1fp27Mtur8xI=
 			</data>
 			<key>hash2</key>
 			<data>
-			MdXMBvDOutL2Fbd3pQurCbNnsA489CZArhbFnhb9iVE=
+			JPiT4BG/KWmqqJD113oyzziEVjYK0JIp9RTddwgkB9Y=
 			</data>
 		</dict>
 		<key>www/js/util/MessagePopup.js</key>
@@ -4781,22 +4781,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3q7gQHYEy2VkzQLAv2sOHkO3SIs=
+			SNLQdKSMMpH9wq/ce2ReiYWyK8s=
 			</data>
 			<key>hash2</key>
 			<data>
-			GElBsKd61HpjwvbADQ3g9vBBMIdf316p2DmHn91hUok=
+			GAurw4WecYOLnO4RSNJ8rAdmJhYJB43gwUbRSmpl5yw=
 			</data>
 		</dict>
 		<key>www/js/views/SettingsView.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			212jD5ycrHgUM7SnJBEBEoLYqXI=
+			1u2BxxB1bYqlAws7eMClzVuYi5M=
 			</data>
 			<key>hash2</key>
 			<data>
-			QOkcS7fUBNfpGnjZqAKh5MAWG7hjWTkHEFlRedheFP8=
+			sgQkOZZxlzNGcML7owyZG2vLoyELM7I1xT5V8/Wt+hU=
 			</data>
 		</dict>
 		<key>www/js/views/SongListView.js</key>
@@ -5342,11 +5342,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			uYSng20VdyBE3G4KY3ARASZ4CG4=
+			2qfCjsEHr4rPrpd4Km8LQG2AtTk=
 			</data>
 			<key>hash2</key>
 			<data>
-			/wqv0ZiTaH+iuIKlomCLodvgOH5QzLB76ql3k/hkJx4=
+			9RZycEG67w1ZXRxullSC0NcP+1c7pZ79n5a4fxz0mzE=
 			</data>
 		</dict>
 		<key>www/templates/Playing.html</key>
@@ -5375,11 +5375,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			GU1gU1OkjiRZd+o0Iy8xDaB+Kng=
+			YUQ8kKcSm31bVVFinGwnswM2XGw=
 			</data>
 			<key>hash2</key>
 			<data>
-			IcMKC3HKOfRhY1lTk8VXbMiweRvfPEog+PR30vu+KOc=
+			6ngWNoQPV6zhxWzRHLKy2grqLTwOiAWZa+AeeCQ8CVU=
 			</data>
 		</dict>
 		<key>www/templates/SongList.html</key>

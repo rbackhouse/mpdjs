@@ -28318,7 +28318,7 @@ define('uiconfig',[],function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "2.9";
+			return "3.0";
 		},
 		setSongToPlaylist: function(songToPlaylist) {
 			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;
@@ -28330,6 +28330,17 @@ define('uiconfig',[],function() {
 				this.setSongToPlaylist(songToPlaylist);
 			}
 			return songToPlaylist === "true" ? true : false;
+		},
+		setTapToPlaySong: function(tapToPlaySong) {
+			localStorage["mpdjs.tapToPlaySong"] = tapToPlaySong;
+		},
+		isTapToPlaySong: function() {
+			var tapToPlaySong = localStorage["mpdjs.tapToPlaySong"];
+			if (!tapToPlaySong) {
+				tapToPlaySong = "true";
+				this.setTapToPlaySong(tapToPlaySong);
+			}
+			return tapToPlaySong === "true" ? true : false;
 		},
 		addDiscoverListener: function(listener) {
 			discoverListeners.push(listener);
@@ -28729,9 +28740,15 @@ class MPDConnectionBase {
 		});
 	}
 	
-	play() {
+	play(songid) {
+		var cmd;
+		if (songid) {
+			cmd = "playid "+songid;
+		} else {
+			cmd = "play";
+		}
 		this.queue.push({
-			cmd: "play",
+			cmd: cmd,
 			response: "",
 			state: INITIAL
 		});
@@ -29993,6 +30010,14 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 			} else if (type === "update") {
 				connection.update();
 			}
+			cb();
+		},
+		playSongId: function(songid, cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
+			connection.play(songid);
 			cb();
 		},
 		addStatusListener: function(listener) {
@@ -31503,7 +31528,7 @@ function($, Backbone, _, BaseView, config, MPDClient, template, templateAlt){
 });
 
 
-define('text!templates/PlayList.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Currently Playing</h3>\n\t\t<div id="currentlyPlaying" style="display:none">\n\t\t\t<div style="font-style: italic;" id="currentlyPlayingArtist"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingAlbum"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingTitle"></div>\t\t\t\t\t \n\t\t\t<div>\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTrack"></span>&nbsp;\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTime"></span>\n\t\t\t</div>\t\t\t\n\t\t</div>\t\t \n\t<div class="ui-field-contain">\n\t\t<label for="volume" class="ui-hidden-accessible">Volume:</label>\n\t\t<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>\n\t</div>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Queue</h3>\n\t\t<div style="padding-bottom: 1px">\n\t\t<div data-role="navbar">\n\t\t\t<ul>\n\t\t\t<li><input id="editButton" data-iconpos="top" data-inline="true" data-icon="edit" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="randomButton" data-iconpos="top" data-inline="true" data-icon="recycle" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="saveButton" data-iconpos="top" data-icon="tag" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="clearButton" data-iconpos="top" data-icon="delete" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="configButton" data-iconpos="top" data-icon="gear" value="" type="button" data-mini="true"></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t</div>\n\t\t<ol id="playingList" data-role="listview" style="margin-top:0;">\n\t\t<% _.each(playlist, function(song) { %>\n\t\t\t<li><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></li> \n\t\t<% }); %>\n\t\t</ol>\n\t\t<br>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Play Lists</h3>\n\t\t<ul id="playLists" data-role="listview" style="margin-top:0;">\n\t\t</ul>\n\t</div>\t\n</div>\n<div data-id="thefooter "data-role="footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t<li><input id="previous" data-iconpos="bottom" data-icon="rewindIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="stop" data-iconpos="bottom" data-icon="stopIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="playPause" data-iconpos="bottom" data-icon="playIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="next" data-iconpos="bottom" data-icon="fastForwardIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t</ul>\n\t</div>\n</div>\t\t\n';});
+define('text!templates/PlayList.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Currently Playing</h3>\n\t\t<div id="currentlyPlaying" style="display:none">\n\t\t\t<div style="font-style: italic;" id="currentlyPlayingArtist"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingAlbum"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingTitle"></div>\t\t\t\t\t \n\t\t\t<div>\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTrack"></span>&nbsp;\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTime"></span>\n\t\t\t</div>\t\t\t\n\t\t</div>\t\t \n\t<div class="ui-field-contain">\n\t\t<label for="volume" class="ui-hidden-accessible">Volume:</label>\n\t\t<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>\n\t</div>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Queue</h3>\n\t\t<div style="padding-bottom: 1px">\n\t\t<div data-role="navbar">\n\t\t\t<ul>\n\t\t\t<li><input id="editButton" data-iconpos="top" data-inline="true" data-icon="edit" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="randomButton" data-iconpos="top" data-inline="true" data-icon="recycle" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="saveButton" data-iconpos="top" data-icon="tag" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="clearButton" data-iconpos="top" data-icon="delete" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="configButton" data-iconpos="top" data-icon="gear" value="" type="button" data-mini="true"></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t</div>\n\t\t<ol id="playingList" data-role="listview" style="margin-top:0;">\n\t\t<% _.each(playlist, function(song) { %>\n\t\t\t<li data-icon="false"><a href="#playlist" id="<%= song.id %>"><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></a></li> \n\t\t<% }); %>\n\t\t</ol>\n\t\t<br>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Play Lists</h3>\n\t\t<ul id="playLists" data-role="listview" style="margin-top:0;">\n\t\t</ul>\n\t</div>\t\n</div>\n<div data-id="thefooter "data-role="footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t<li><input id="previous" data-iconpos="bottom" data-icon="rewindIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="stop" data-iconpos="bottom" data-icon="stopIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="playPause" data-iconpos="bottom" data-icon="playIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="next" data-iconpos="bottom" data-icon="fastForwardIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t</ul>\n\t</div>\n</div>\t\t\n';});
 
 
 define('text!templates/PlayingConfig.html',[],function () { return '<div data-role="popup" id="playingConfigPanel" data-theme="a" class="ui-content">\n\t<h3>Playing Configuration</h3>\n\t<label><input id="shuffle" type="checkbox">Shuffle</label>\n\t<label><input id="repeat" type="checkbox">Repeat</label>\n\t<label><input id="consume" type="checkbox">Remove Song After Play</label>\n\t<label><input id="single" type="checkbox">Stop After Song Played</label>\n</div>';});
@@ -31549,7 +31574,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"click #clearButton" : "clearPlayList",
 				"click #playLists li" : "loadPlayList",
 				"click #saveButton" : "savePlayList",
-				"click #playingList li" : "removeSong",
+				"click #playingList li" : "removeOrJumpTpSong",
 				"click #configButton" : "config",
 				"change #shuffle" : "shuffle",
 				"change #repeat" : "repeat",
@@ -31586,7 +31611,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			if (this.editing) {
 				this.editing = undefined;
 				this.playlist.each(function(song) {
-					$("#playingList").append('<li><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></li>');	
+					$("#playingList").append('<li data-icon="false"><a href="#playlist" id="'+song.get("id")+'"><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></a></li>');	
 				});
 			} else {
 				this.editing = true;
@@ -31752,7 +31777,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				});
 			}
 		},
-		removeSong: function(evt) {
+		removeOrJumpTpSong: function(evt) {
 			if (this.editing) {			
 				$.mobile.loading("show", { textVisible: false });
 				if (config.isDirect()) {
@@ -31777,6 +31802,32 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 						}
 					});
 				}
+			} else if (config.isTapToPlaySong()) {
+				var id = evt.target.id;
+				if (id === "") {
+					id = evt.target.parentNode.id;
+				}
+				$.mobile.loading("show", { textVisible: false });
+				if (config.isDirect()) {
+					MPDClient.playSongId(id, function() {
+						$.mobile.loading("hide");
+					}.bind(this));
+				} else {
+					$.ajax({
+						url: config.getBaseUrl()+"/music/play/"+id,
+						type: "POST",
+						headers: { "cache-control": "no-cache" },
+						contentTypeString: "application/x-www-form-urlencoded; charset=utf-8",
+						dataType: "text",
+						success: function(data, textStatus, jqXHR) {
+							$.mobile.loading("hide");
+						}.bind(this),
+						error: function(jqXHR, textStatus, errorThrown) {
+							$.mobile.loading("hide");
+							console.log("control cmd error: "+textStatus);
+						}
+					});
+				}
 			}
 		},
 		fetchPlayList: function() {
@@ -31790,7 +31841,7 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 						if (this.editing) {
 							$("#playingList").append('<li data-icon="minusIcon"><a href="#playlist" id="'+song.get("id")+'"><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></a></li>');	
 						} else {
-							$("#playingList").append('<li><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></li>');	
+							$("#playingList").append('<li data-icon="false"><a href="#playlist" id="'+song.get("id")+'"><p style="white-space:normal">'+song.get("artist")+' : '+song.get("title")+'<span class="ui-li-count">'+song.get("time")+'</span></p></a></li>');	
 						}
 					}.bind(this));
 					$("#playingList").listview('refresh');
@@ -32509,7 +32560,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 });
 
 
-define('text!templates/Settings.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Version</h3> \n\t\t<span>MPDjs Version:<%=version%></span>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Update And Cache</h3> \n\t\t<input id="update" value="Update DB" type="button" data-mini="true">\n\t\t<input id="clearCache" value="Clear Cache" type="button" data-mini="true">\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Random Playlist</h3> \n\t\t<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Start Page</h3>\n\t\t<select id="startPage">\n\t\t\t<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>\n\t\t\t<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>\n\t\t\t<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>\n\t\t\t<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>\n\t\t\t<% if (window.cordova) { %>\n\t\t\t\t<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>\n\t\t\t<% } %>\t\n\t\t</select>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Playlist Page Load</h3> \n\t\t<label><input id="isSongToPlaylist" type="checkbox" <% if (isSongToPlaylist) { %> checked <% } %>>Load Playlist Page on Song Add</label>\n\t</div>\t\n</div>\n';});
+define('text!templates/Settings.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Version</h3> \n\t\t<span>MPDjs Version:<%=version%></span>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Update And Cache</h3> \n\t\t<input id="update" value="Update DB" type="button" data-mini="true">\n\t\t<input id="clearCache" value="Clear Cache" type="button" data-mini="true">\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Random Playlist</h3> \n\t\t<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Start Page</h3>\n\t\t<select id="startPage">\n\t\t\t<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>\n\t\t\t<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>\n\t\t\t<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>\n\t\t\t<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>\n\t\t\t<% if (window.cordova) { %>\n\t\t\t\t<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>\n\t\t\t<% } %>\t\n\t\t</select>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Playlist Page Load</h3> \n\t\t<label><input id="isSongToPlaylist" type="checkbox" <% if (isSongToPlaylist) { %> checked <% } %>>Load Playlist Page on Song Add</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Tap to Play Song</h3> \n\t\t<label><input id="tapToPlaySong" type="checkbox" <% if (tapToPlaySong) { %> checked <% } %>>Tap to Play Song on PlayList Page</label>\n\t</div>\t\n</div>\n';});
 
 /*
 * The MIT License (MIT)
@@ -32561,6 +32612,9 @@ function($, Backbone, _, BaseView, MPDClient, config, template) {
 				},
 				"change #isSongToPlaylist" : function() {
 					config.setSongToPlaylist($("#isSongToPlaylist").is(":checked"));
+				},
+				"change #tapToPlaySong" : function() {
+					config.setTapToPlaySong($("#tapToPlaySong").is(":checked"));
 				}
 		    });	
 		},
@@ -32575,7 +32629,8 @@ function($, Backbone, _, BaseView, MPDClient, config, template) {
 					randomPlaylistConfig: config.getRandomPlaylistConfig(), 
 					startPage: config.getStartPage(),
 					version: config.getVersionNumber(),
-					isSongToPlaylist: config.isSongToPlaylist()
+					isSongToPlaylist: config.isSongToPlaylist(),
+					tapToPlaySong: config.isTapToPlaySong()
 				}
 			);
 		},

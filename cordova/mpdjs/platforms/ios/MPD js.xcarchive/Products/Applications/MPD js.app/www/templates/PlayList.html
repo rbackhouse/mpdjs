@@ -30,7 +30,7 @@
 		</div>
 		<ol id="playingList" data-role="listview" style="margin-top:0;">
 		<% _.each(playlist, function(song) { %>
-			<li><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></li> 
+			<li data-icon="false"><a href="#playlist" id="<%= song.id %>"><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></a></li> 
 		<% }); %>
 		</ol>
 		<br>

@@ -436,6 +436,14 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 			}
 			cb();
 		},
+		playSongId: function(songid, cb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", cb);
+				return;
+			}
+			connection.play(songid);
+			cb();
+		},
 		addStatusListener: function(listener) {
 			statusListeners.push(listener);
 		},

@@ -178,7 +178,7 @@ define(function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "2.9";
+			return "3.0";
 		},
 		setSongToPlaylist: function(songToPlaylist) {
 			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;
@@ -190,6 +190,17 @@ define(function() {
 				this.setSongToPlaylist(songToPlaylist);
 			}
 			return songToPlaylist === "true" ? true : false;
+		},
+		setTapToPlaySong: function(tapToPlaySong) {
+			localStorage["mpdjs.tapToPlaySong"] = tapToPlaySong;
+		},
+		isTapToPlaySong: function() {
+			var tapToPlaySong = localStorage["mpdjs.tapToPlaySong"];
+			if (!tapToPlaySong) {
+				tapToPlaySong = "true";
+				this.setTapToPlaySong(tapToPlaySong);
+			}
+			return tapToPlaySong === "true" ? true : false;
 		},
 		addDiscoverListener: function(listener) {
 			discoverListeners.push(listener);
