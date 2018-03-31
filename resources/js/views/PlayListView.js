@@ -44,7 +44,9 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"change #shuffle" : "shuffle",
 				"change #repeat" : "repeat",
 				"change #consume" : "consume",
-				"change #single" : "single"
+				"change #single" : "single",
+				"change #replaygain" : "replaygain",
+				"change #crossfade" : "crossfade"
 		    });	
 		},
 		initialize: function(options) {
@@ -484,12 +486,19 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				}				
 			}
 			this.currentSongId = status.songid;
+			this.xfade = status.xfade;
+			if (!this.xfade) {
+				this.xfade = 0;
+			}
+			this.replayGainStatus = status.replayGainStatus;
 		},
 		config: function() {
 			$("#shuffle").prop( "checked", (this.random == 1) ? true : false ).checkboxradio('refresh');
 			$("#repeat").prop( "checked", (this.repeat == 1) ? true : false ).checkboxradio('refresh');
 			$("#consume").prop( "checked", (this.consume == 1) ? true : false ).checkboxradio('refresh');
 			$("#single").prop( "checked", (this.single == 1) ? true : false ).checkboxradio('refresh');
+			$("#crossfade").val(this.xfade);
+			$("#replaygain").val(this.replayGainStatus).selectmenu( "refresh" );
 			var $popUp = $( "#playingConfigPanel" ).popup("open", {
 				transition: "flow"
 			}).trigger("create");
@@ -530,6 +539,29 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			} else {
 				this.setPlaybackOption("single", on);
 			}			
+		},
+		replaygain: function() {
+			var mode = $("#replaygain").val();
+			if (config.isDirect()) {
+				MPDClient.replayGainMode(mode, function() {
+						console.log("replaygain set to "+mode);
+				});
+			} else {
+				this.setPlaybackOption("replaygain", mode);
+			}			
+		},
+		crossfade: function() {
+			try {
+				var crossfade = parseInt($("#crossfade").val());
+				if (config.isDirect()) {
+					MPDClient.crossfade(crossfade, function() {
+						console.log("crossfade set to "+crossfade);
+					});
+				} else {
+					this.setPlaybackOption("crossfade", crossfade);
+				}
+			} catch(e) {
+			}	
 		},
 		close: function() {
 			if (config.isDirect()) {
