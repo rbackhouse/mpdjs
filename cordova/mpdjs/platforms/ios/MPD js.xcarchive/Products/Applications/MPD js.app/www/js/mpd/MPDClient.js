@@ -554,6 +554,20 @@ define(['./MPDConnector', '../uiconfig', '../util/MessagePopup', './FS'], functi
 				return;
 			}
 			connection.single(on, cb, errorcb);			
+		},
+		crossfade: function(seconds, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.crossfade(seconds, cb, errorcb);			
+		},
+		replayGainMode: function(mode, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.replayGainMode(mode, cb, errorcb);			
 		}
 	};
 });

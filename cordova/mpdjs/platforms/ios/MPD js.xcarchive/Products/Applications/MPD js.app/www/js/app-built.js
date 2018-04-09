@@ -28391,10 +28391,11 @@ const ID_PREFIX = "Id: ";
 const POS_PREFIX = "Pos: ";
 const DIR_PREFIX = "directory: ";
 const PLAYLIST_PREFIX = "playlist: ";
-const OUTPUTID_PREFIX = "outputid: "
-const OUTPUTNAME_PREFIX = "outputname: "
-const OUTPUTENABLED_PREFIX = "outputenabled: "
-const SUFFIX_PREFIX = "suffix: "
+const OUTPUTID_PREFIX = "outputid: ";
+const OUTPUTNAME_PREFIX = "outputname: ";
+const OUTPUTENABLED_PREFIX = "outputenabled: ";
+const SUFFIX_PREFIX = "suffix: ";
+const REPLAY_GAIN_MODE = "replay_gain_mode: ";
 
 const INITIAL = 0;
 const WRITTEN = 1;
@@ -28499,25 +28500,36 @@ class MPDConnectionBase {
 		var processor = function(data) {
 			var lines = MPDConnectionBase._lineSplit(data);
 			var status = {};
+			var currentsong = {};
 			var line;
 			for (var i = 0; i < lines.length; i++) {
 				line = lines[i];
-				var key = line.substring(0, line.indexOf(':'));
-				var value = line.substring(line.indexOf(':')+2);
-				status[key] = value;
-			}			
+				if (line.indexOf(TITLE_PREFIX) === 0) {
+					currentsong.title = lines[i].substring(TITLE_PREFIX.length);
+				} else if (line.indexOf(ARTIST_PREFIX) === 0) {
+					currentsong.artist = lines[i].substring(ARTIST_PREFIX.length);
+				} else if (line.indexOf(ALBUM_PREFIX) === 0) {
+					currentsong.album = lines[i].substring(ALBUM_PREFIX.length);
+				} else if (line.indexOf(REPLAY_GAIN_MODE) === 0) {
+					status.replayGainStatus = (line.substring(REPLAY_GAIN_MODE.length));
+				} else {		
+					var key = line.substring(0, line.indexOf(':'));
+					var value = line.substring(line.indexOf(':')+2);
+					status[key] = value;
+				}	
+			}
+			status.currentsong = currentsong;
 			return status;
 		}.bind(this);
-		var callback = function(status) {
-			this.getCurrentSong(function(currentsong) {
-				status.currentsong = currentsong;
-				cb(status);
-			});
-		}.bind(this);
+		var cmd = "command_list_begin\n";
+		cmd += "status\n";
+		cmd += "currentsong\n";
+		cmd += "replay_gain_status\n";
+		cmd += "command_list_end";
 		this.queue.push({
-			cmd: "status",
+			cmd: cmd,
 			process: processor,
-			cb: callback,
+			cb: cb,
 			errorcb: errorcb,
 			response: "",
 			state: INITIAL
@@ -28976,6 +28988,29 @@ class MPDConnectionBase {
 		});
 	}
 	
+	albumart(uri, cb, errorcb) {
+		var processor = function(data) {
+			var lines = MPDConnectionBase._lineSplit(data);
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i];
+				console.log(line);
+			}
+			return {};			
+		}.bind(this);
+		var cmd = "albumart";
+		if (uri && uri !== "") {
+			cmd += " \""+this.decode(uri) + "\"";
+		}
+		this.queue.push({
+			cmd: cmd,
+			process: processor,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
 	listPlayLists(cb, errorcb) {
 		var processor = function(data) {
 			var lines = MPDConnectionBase._lineSplit(data);
@@ -29125,6 +29160,26 @@ class MPDConnectionBase {
 		var state = (on === true) ? 1 : 0;
 		this.queue.push({
 			cmd: "single "+state,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
+	crossfade(seconds, cb, errorcb) {
+		this.queue.push({
+			cmd: "crossfade "+seconds,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
+	replayGainMode(mode, cb, errorcb) {
+		this.queue.push({
+			cmd: "replay_gain_mode "+mode,
 			cb: cb,
 			errorcb: errorcb,
 			response: "",
@@ -30130,6 +30185,20 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				return;
 			}
 			connection.single(on, cb, errorcb);			
+		},
+		crossfade: function(seconds, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.crossfade(seconds, cb, errorcb);			
+		},
+		replayGainMode: function(mode, cb, errorcb) {
+			if (!connection) {
+				errorHandler("Connection has been lost", errorcb);
+				return;
+			}
+			connection.replayGainMode(mode, cb, errorcb);			
 		}
 	};
 });
@@ -31531,7 +31600,7 @@ function($, Backbone, _, BaseView, config, MPDClient, template, templateAlt){
 define('text!templates/PlayList.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Currently Playing</h3>\n\t\t<div id="currentlyPlaying" style="display:none">\n\t\t\t<div style="font-style: italic;" id="currentlyPlayingArtist"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingAlbum"></div>\t\t\t\t\t \n\t\t\t<div style="font-style: italic;" id="currentlyPlayingTitle"></div>\t\t\t\t\t \n\t\t\t<div>\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTrack"></span>&nbsp;\n\t\t\t\t<span style="font-style: italic;" id="currentlyPlayingTime"></span>\n\t\t\t</div>\t\t\t\n\t\t</div>\t\t \n\t<div class="ui-field-contain">\n\t\t<label for="volume" class="ui-hidden-accessible">Volume:</label>\n\t\t<input type="range" name="slider" id="volume" value="25" min="0" max="100" data-highlight="true"></input>\n\t</div>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Queue</h3>\n\t\t<div style="padding-bottom: 1px">\n\t\t<div data-role="navbar">\n\t\t\t<ul>\n\t\t\t<li><input id="editButton" data-iconpos="top" data-inline="true" data-icon="edit" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="randomButton" data-iconpos="top" data-inline="true" data-icon="recycle" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="saveButton" data-iconpos="top" data-icon="tag" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="clearButton" data-iconpos="top" data-icon="delete" value="" type="button" data-mini="true"></li>\n\t\t\t<li><input id="configButton" data-iconpos="top" data-icon="gear" value="" type="button" data-mini="true"></li>\n\t\t\t</ul>\n\t\t</div>\n\t\t</div>\n\t\t<ol id="playingList" data-role="listview" style="margin-top:0;">\n\t\t<% _.each(playlist, function(song) { %>\n\t\t\t<li data-icon="false"><a href="#playlist" id="<%= song.id %>"><p style="white-space:normal"><%= song.artist %> : <%= song.title %><span class="ui-li-count"><%= song.time %></span></p></a></li> \n\t\t<% }); %>\n\t\t</ol>\n\t\t<br>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="false" data-inset="true"> \n\t\t<h3>Play Lists</h3>\n\t\t<ul id="playLists" data-role="listview" style="margin-top:0;">\n\t\t</ul>\n\t</div>\t\n</div>\n<div data-id="thefooter "data-role="footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t<li><input id="previous" data-iconpos="bottom" data-icon="rewindIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="stop" data-iconpos="bottom" data-icon="stopIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="playPause" data-iconpos="bottom" data-icon="playIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t\t<li><input id="next" data-iconpos="bottom" data-icon="fastForwardIcon" data-inline="true" data-mini="true" value="" type="button"></li>\n\t\t</ul>\n\t</div>\n</div>\t\t\n';});
 
 
-define('text!templates/PlayingConfig.html',[],function () { return '<div data-role="popup" id="playingConfigPanel" data-theme="a" class="ui-content">\n\t<h3>Playing Configuration</h3>\n\t<label><input id="shuffle" type="checkbox">Shuffle</label>\n\t<label><input id="repeat" type="checkbox">Repeat</label>\n\t<label><input id="consume" type="checkbox">Remove Song After Play</label>\n\t<label><input id="single" type="checkbox">Stop After Song Played</label>\n</div>';});
+define('text!templates/PlayingConfig.html',[],function () { return '<div data-role="popup" id="playingConfigPanel" data-theme="a" class="ui-content">\n\t<h3>Playing Configuration</h3>\n\t<label><input id="shuffle" type="checkbox">Shuffle</label>\n\t<label><input id="repeat" type="checkbox">Repeat</label>\n\t<label><input id="consume" type="checkbox">Remove Song After Play</label>\n\t<label><input id="single" type="checkbox">Stop After Song Played</label>\n\t<label>Cross-fade (Seconds): <input id="crossfade" type="number"></label>\n\t<label for="replaygain">Replay Gain: </label>\n\t<select id="replaygain">\n\t\t<option value="off">Off</option>\n\t\t<option value="track">Track</option>\n\t\t<option value="album">Album</option>\n\t\t<option value="auto">Auto</option>\n\t</select>\n</div>';});
 
 /*
 * The MIT License (MIT)
@@ -31579,7 +31648,9 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				"change #shuffle" : "shuffle",
 				"change #repeat" : "repeat",
 				"change #consume" : "consume",
-				"change #single" : "single"
+				"change #single" : "single",
+				"change #replaygain" : "replaygain",
+				"change #crossfade" : "crossfade"
 		    });	
 		},
 		initialize: function(options) {
@@ -32019,12 +32090,19 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 				}				
 			}
 			this.currentSongId = status.songid;
+			this.xfade = status.xfade;
+			if (!this.xfade) {
+				this.xfade = 0;
+			}
+			this.replayGainStatus = status.replayGainStatus;
 		},
 		config: function() {
 			$("#shuffle").prop( "checked", (this.random == 1) ? true : false ).checkboxradio('refresh');
 			$("#repeat").prop( "checked", (this.repeat == 1) ? true : false ).checkboxradio('refresh');
 			$("#consume").prop( "checked", (this.consume == 1) ? true : false ).checkboxradio('refresh');
 			$("#single").prop( "checked", (this.single == 1) ? true : false ).checkboxradio('refresh');
+			$("#crossfade").val(this.xfade);
+			$("#replaygain").val(this.replayGainStatus).selectmenu( "refresh" );
 			var $popUp = $( "#playingConfigPanel" ).popup("open", {
 				transition: "flow"
 			}).trigger("create");
@@ -32065,6 +32143,29 @@ function($, Backbone, _, PlayList, mobile, config, BaseView, MPDClient, MessageP
 			} else {
 				this.setPlaybackOption("single", on);
 			}			
+		},
+		replaygain: function() {
+			var mode = $("#replaygain").val();
+			if (config.isDirect()) {
+				MPDClient.replayGainMode(mode, function() {
+						console.log("replaygain set to "+mode);
+				});
+			} else {
+				this.setPlaybackOption("replaygain", mode);
+			}			
+		},
+		crossfade: function() {
+			try {
+				var crossfade = parseInt($("#crossfade").val());
+				if (config.isDirect()) {
+					MPDClient.crossfade(crossfade, function() {
+						console.log("crossfade set to "+crossfade);
+					});
+				} else {
+					this.setPlaybackOption("crossfade", crossfade);
+				}
+			} catch(e) {
+			}	
 		},
 		close: function() {
 			if (config.isDirect()) {
@@ -32560,7 +32661,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 });
 
 
-define('text!templates/Settings.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Version</h3> \n\t\t<span>MPDjs Version:<%=version%></span>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Update And Cache</h3> \n\t\t<input id="update" value="Update DB" type="button" data-mini="true">\n\t\t<input id="clearCache" value="Clear Cache" type="button" data-mini="true">\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Random Playlist</h3> \n\t\t<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Start Page</h3>\n\t\t<select id="startPage">\n\t\t\t<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>\n\t\t\t<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>\n\t\t\t<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>\n\t\t\t<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>\n\t\t\t<% if (window.cordova) { %>\n\t\t\t\t<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>\n\t\t\t<% } %>\t\n\t\t</select>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Playlist Page Load</h3> \n\t\t<label><input id="isSongToPlaylist" type="checkbox" <% if (isSongToPlaylist) { %> checked <% } %>>Load Playlist Page on Song Add</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Tap to Play Song</h3> \n\t\t<label><input id="tapToPlaySong" type="checkbox" <% if (tapToPlaySong) { %> checked <% } %>>Tap to Play Song on PlayList Page</label>\n\t</div>\t\n</div>\n';});
+define('text!templates/Settings.html',[],function () { return '<div data-role="content">\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Version</h3> \n\t\t<span>MPDjs Version:<%=version%></span>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Update And Cache</h3> \n\t\t<input id="update" value="Update DB" type="button" data-mini="true">\n\t\t<input id="clearCache" value="Clear Cache" type="button" data-mini="true">\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Random Playlist</h3> \n\t\t<label><input id="randomByType" type="checkbox" <% if (randomPlaylistConfig.enabled) { %> checked <% } %>>Random Playlist by type</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Start Page</h3>\n\t\t<select id="startPage">\n\t\t\t<option value="playlist" <% if (startPage === "playlist") { %> selected="true" <% } %>>Play List</option>\n\t\t\t<option value="artists" <% if (startPage === "artists") { %> selected="true" <% } %>>Artists</option>\n\t\t\t<option value="albums" <% if (startPage === "albums") { %> selected="true" <% } %>>Albums</option>\n\t\t\t<option value="search" <% if (startPage === "search") { %> selected="true" <% } %>>Song Search</option>\n\t\t\t<% if (window.cordova) { %>\n\t\t\t\t<option value="connections" <% if (startPage === "connections") { %> selected="true" <% } %>>Connections</option>\n\t\t\t<% } %>\t\n\t\t</select>\n\t</div>\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Playlist Page Load</h3> \n\t\t<label><input id="isSongToPlaylist" type="checkbox" <% if (isSongToPlaylist) { %> checked <% } %>>Load Playlist Page on Song Add</label>\n\t</div>\t\n\t<div data-role="collapsible" data-collapsed="true" data-inset="false"> \n\t\t<h3>Tap to Play Song</h3> \n\t\t<label><input id="tapToPlaySong" type="checkbox" <% if (tapToPlaySong) { %> checked <% } %>>Tap to Play Song on Playlist Page</label>\n\t</div>\t\n</div>\n';});
 
 /*
 * The MIT License (MIT)

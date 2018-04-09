@@ -102,11 +102,11 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		HGxqjO3+P9GSlPDtVBXWVNr8eHM=
+		nLocrF00pylW58zpXIjz19Vgn0U=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		blNn5WqdfOFfiLHbxa1zHgkWjV8=
+		XLd1enD917XlhnCqav1tO7ozo+w=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -114,7 +114,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		XZr9RK/4eIPedxCfX1KBFP5q0QI=
+		cXPuFqkLpvuyAqwzsX2J+pTpjOk=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -178,7 +178,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		G3TilKe65b9P/aWHzsPAeN1T4ow=
+		tNe4ePktvX6Ne9/zWqoJTT959Lk=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -1098,7 +1098,7 @@
 		</data>
 		<key>www/js/app-built.js</key>
 		<data>
-		ujAjo1T0VN3xZfSGvqxy1cnwCMk=
+		qply+cTn2tY3t3dn+ehh04EqC6U=
 		</data>
 		<key>www/js/app.js</key>
 		<data>
@@ -1174,7 +1174,7 @@
 		</data>
 		<key>www/js/mpd/MPDClient.js</key>
 		<data>
-		2ePq9VdfByOs3vRyfdAkLEJi/fo=
+		LAMrF0Iv9hOgT2ESiE6/r0EAZC4=
 		</data>
 		<key>www/js/mpd/MPDConnector.js</key>
 		<data>
@@ -1222,7 +1222,7 @@
 		</data>
 		<key>www/js/views/PlayListView.js</key>
 		<data>
-		SNLQdKSMMpH9wq/ce2ReiYWyK8s=
+		WoaoulA/o4bU5YB8UQblwOTmNrY=
 		</data>
 		<key>www/js/views/SettingsView.js</key>
 		<data>
@@ -1434,11 +1434,11 @@
 		</data>
 		<key>www/templates/PlayingConfig.html</key>
 		<data>
-		M/peib9P3Hs/TRI2uwIcXKW0sHs=
+		sNkiwD3efG9inDRcP8OBY4JoUnM=
 		</data>
 		<key>www/templates/Settings.html</key>
 		<data>
-		YUQ8kKcSm31bVVFinGwnswM2XGw=
+		jnUgFFOzC8DZNRXsu1bYtiyMIuU=
 		</data>
 		<key>www/templates/SongList.html</key>
 		<data>
@@ -1723,22 +1723,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HGxqjO3+P9GSlPDtVBXWVNr8eHM=
+			nLocrF00pylW58zpXIjz19Vgn0U=
 			</data>
 			<key>hash2</key>
 			<data>
-			waVypuR2bU3bTxVKQDPZyYVrG+QWVU/7uDf6HjX/nIQ=
+			mAcb4/rUg7DfQ+zwIQvjJHPSRaAQ308DB1DdoUWkDqg=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			blNn5WqdfOFfiLHbxa1zHgkWjV8=
+			XLd1enD917XlhnCqav1tO7ozo+w=
 			</data>
 			<key>hash2</key>
 			<data>
-			5C+SVrii2aKfEIXAr6SPymYRXXdFIdnUnzqNjXYAwzo=
+			ZLmiPILi87rcUdX8XkDc/Ir+ktJ/cDD9r12pSFf2ans=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1756,11 +1756,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			XZr9RK/4eIPedxCfX1KBFP5q0QI=
+			cXPuFqkLpvuyAqwzsX2J+pTpjOk=
 			</data>
 			<key>hash2</key>
 			<data>
-			4qnttGYNPdMIQAT3iPy0NHQDO/Cdk13PKAxFLM8n5Cg=
+			LK0ZcjjaT1Yu0rxDMuOJpEbCDCbCntr8WYmQObkzri8=
 			</data>
 		</dict>
 		<key>LaunchImage-568h@2x.png</key>
@@ -1921,11 +1921,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			G3TilKe65b9P/aWHzsPAeN1T4ow=
+			tNe4ePktvX6Ne9/zWqoJTT959Lk=
 			</data>
 			<key>hash2</key>
 			<data>
-			EhmPxIZS5ZoSLTaKN+ozF5CM0RgJ95YyZZrUSQtEsJk=
+			Yb/kd1ZhSzW8Z96v4TbiUF+0IvmAGk5b3wTvtAjgfEg=
 			</data>
 		</dict>
 		<key>archived-expanded-entitlements.xcent</key>
@@ -4440,11 +4440,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ujAjo1T0VN3xZfSGvqxy1cnwCMk=
+			qply+cTn2tY3t3dn+ehh04EqC6U=
 			</data>
 			<key>hash2</key>
 			<data>
-			rF1pLpOoNHdXf1PuNL64AO8eWlsxBJUD6cgU8jgHVKk=
+			KxBn9RFZ6Iuy3IhjGeueSTpu5x3thOMmwYWx9UOHjcU=
 			</data>
 		</dict>
 		<key>www/js/app.js</key>
@@ -4649,11 +4649,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			2ePq9VdfByOs3vRyfdAkLEJi/fo=
+			LAMrF0Iv9hOgT2ESiE6/r0EAZC4=
 			</data>
 			<key>hash2</key>
 			<data>
-			Y/AeTSrwCc5++KTTpKOfavB8nl+4dPqs0XSbiFx4taU=
+			bkcARc5YUyEpVraDNrINLDA5a2LPSLkfTT5j+15P1Ek=
 			</data>
 		</dict>
 		<key>www/js/mpd/MPDConnector.js</key>
@@ -4781,11 +4781,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			SNLQdKSMMpH9wq/ce2ReiYWyK8s=
+			WoaoulA/o4bU5YB8UQblwOTmNrY=
 			</data>
 			<key>hash2</key>
 			<data>
-			GAurw4WecYOLnO4RSNJ8rAdmJhYJB43gwUbRSmpl5yw=
+			w0H1tspVnIPF4MvjT8sFaL7WIFujMNMSd04xFM/AVuw=
 			</data>
 		</dict>
 		<key>www/js/views/SettingsView.js</key>
@@ -5364,22 +5364,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			M/peib9P3Hs/TRI2uwIcXKW0sHs=
+			sNkiwD3efG9inDRcP8OBY4JoUnM=
 			</data>
 			<key>hash2</key>
 			<data>
-			FtVfo+js/cd7LeLWU/GUJZT68AseRn1p6fBVdtVXerM=
+			tHqtITfK5bSohmmOBI6sEJNLnEpGwp+IVOSYRvrx2Rc=
 			</data>
 		</dict>
 		<key>www/templates/Settings.html</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			YUQ8kKcSm31bVVFinGwnswM2XGw=
+			jnUgFFOzC8DZNRXsu1bYtiyMIuU=
 			</data>
 			<key>hash2</key>
 			<data>
-			6ngWNoQPV6zhxWzRHLKy2grqLTwOiAWZa+AeeCQ8CVU=
+			7I6Gn8iITNr2o7qqA6aSh7rAQQEH91CmkmoYO+xR2jM=
 			</data>
 		</dict>
 		<key>www/templates/SongList.html</key>

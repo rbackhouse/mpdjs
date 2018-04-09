@@ -214,14 +214,6 @@ module.exports = [
         ]
     },
     {
-        "id": "org.potpie.mpdjs.mmwormhole.MMWormhole",
-        "file": "plugins/org.potpie.mpdjs.mmwormhole/www/MMWormholePlugin.js",
-        "pluginId": "org.potpie.mpdjs.mmwormhole",
-        "clobbers": [
-            "window.MMWormhole"
-        ]
-    },
-    {
         "id": "org.potpie.mpdjs.socketconnection.SocketConnection",
         "file": "plugins/org.potpie.mpdjs.socketconnection/www/SocketConnection.js",
         "pluginId": "org.potpie.mpdjs.socketconnection",
@@ -239,7 +231,6 @@ module.exports.metadata =
     "cordova-plugin-file": "4.3.1",
     "cordova-plugin-statusbar": "2.0.0",
     "org.potpie.mpdjs.bonjourlistener": "1.0.0",
-    "org.potpie.mpdjs.mmwormhole": "1.0.0",
     "org.potpie.mpdjs.socketconnection": "1.0.0"
 };
 // BOTTOM OF METADATA
