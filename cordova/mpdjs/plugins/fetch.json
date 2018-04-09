@@ -43,14 +43,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "org.potpie.mpdjs.mmwormhole": {
-    "source": {
-      "type": "local",
-      "path": "/Users/rbackhouse/development/musicserver/mpdjs.new/mpdjs/cordova/MMWormholePlugin"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-add-swift-support": {
     "source": {
       "type": "registry",

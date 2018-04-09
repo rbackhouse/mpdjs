@@ -22,9 +22,6 @@
     "org.potpie.mpdjs.bonjourlistener": {
       "PACKAGE_NAME": "org.potpie.mpdjs"
     },
-    "org.potpie.mpdjs.mmwormhole": {
-      "PACKAGE_NAME": "org.potpie.mpdjs"
-    },
     "org.potpie.mpdjs.socketconnection": {
       "PACKAGE_NAME": "org.potpie.mpdjs"
     }
