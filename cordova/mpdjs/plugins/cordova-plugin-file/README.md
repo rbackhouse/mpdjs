@@ -21,9 +21,9 @@ description: Read/write files on the device.
 #         under the License.
 -->
 
-|Android|iOS| Windows 8.1 Store | Windows 8.1 Phone | Windows 10 Store | Travis CI |
-|:-:|:-:|:-:|:-:|:-:|:-:|
-|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android,PLUGIN=cordova-plugin-file)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android,PLUGIN=cordova-plugin-file/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios,PLUGIN=cordova-plugin-file)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios,PLUGIN=cordova-plugin-file/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-8.1-store,PLUGIN=cordova-plugin-file)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-8.1-store,PLUGIN=cordova-plugin-file/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-8.1-phone,PLUGIN=cordova-plugin-file)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-8.1-phone,PLUGIN=cordova-plugin-file/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-file)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-file/)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-file.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-file)|
+|AppVeyor|Travis CI|
+|:-:|:-:|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-file?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-file)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-file.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-file)|
 
 # cordova-plugin-file
 
@@ -66,14 +66,9 @@ Report issues on the [Apache Cordova issue tracker](https://issues.apache.org/ji
 
 ## Supported Platforms
 
-- Amazon Fire OS
 - Android
-- BlackBerry 10
-- Firefox OS
 - iOS
 - OS X
-- Windows Phone 7 and 8*
-- Windows 8*
 - Windows*
 - Browser
 
@@ -171,7 +166,7 @@ the `cordova.file.*` properties map to physical paths on a real device.
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Documents` |                             | documents                 | r/w  |     Yes     |     No    |   Yes   |
 | `<sdcard>/`                                     | externalRootDirectory       | sdcard                    | r/w  |     Yes     |     No    |   No    |
 | &nbsp;&nbsp;&nbsp;`Android/data/<app-id>/`      | externalApplicationStorageDirectory | -                 | r/w  |     Yes     |     No    |   No    |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`cache`     | externalCacheDirectry       | cache-external            | r/w  |     Yes     |     No\*\*|   No    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`cache`     | externalCacheDirectory       | cache-external            | r/w  |     Yes     |     No\*\*|   No    |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`files`     | externalDataDirectory       | files-external            | r/w  |     Yes     |     No    |   No    |
 
 \* The OS may periodically clear this directory, but do not rely on this behavior. Clear
@@ -184,19 +179,6 @@ the `cordova.file.*` properties map to physical paths on a real device.
 
 **Note**: If external storage can't be mounted, the `cordova.file.external*`
 properties are `null`.
-
-### BlackBerry 10 File System Layout
-
-| Device Path                                                  | `cordova.file.*`            | r/w? | persistent? | OS clears | private |
-|:-------------------------------------------------------------|:----------------------------|:----:|:-----------:|:---------:|:-------:|
-| `file:///accounts/1000/appdata/<app id>/`                    | applicationStorageDirectory | r    |     N/A     |     N/A   |   Yes   |
-| &nbsp;&nbsp;&nbsp;`app/native`                               | applicationDirectory        | r    |     N/A     |     N/A   |   Yes   |
-| &nbsp;&nbsp;&nbsp;`data/webviews/webfs/temporary/local__0`   | cacheDirectory              | r/w  |     No      |     Yes   |   Yes   |
-| &nbsp;&nbsp;&nbsp;`data/webviews/webfs/persistent/local__0`  | dataDirectory               | r/w  |     Yes     |     No    |   Yes   |
-| `file:///accounts/1000/removable/sdcard`                     | externalRemovableDirectory  | r/w  |     Yes     |     No    |   No    |
-| `file:///accounts/1000/shared`                               | sharedDirectory             | r/w  |     Yes     |     No    |   No    |
-
-*Note*: When application is deployed to work perimeter, all paths are relative to /accounts/1000-enterprise.
 
 ### OS X File System Layout
 
@@ -328,21 +310,6 @@ unable to access their previously-stored files.
 
 If your application is new, or has never previously stored files in the
 persistent filesystem, then the `Library` setting is generally recommended.
-
-## Firefox OS Quirks
-
-The File System API is not natively supported by Firefox OS and is implemented
-as a shim on top of indexedDB.
-
-* Does not fail when removing non-empty directories
-* Does not support metadata for directories
-* Methods `copyTo` and `moveTo` do not support directories
-
-The following data paths are supported:
-* `applicationDirectory` - Uses `xhr` to get local files that are packaged with the app.
-* `dataDirectory` - For persistent app-specific data files.
-* `cacheDirectory` - Cached files that should survive app restarts (Apps should not rely
-on the OS to delete files in here).
 
 ## Browser Quirks
 
@@ -571,7 +538,7 @@ The File plugin allows you to do things like store files in a temporary or persi
 
 Before you use the File plugin APIs, you can get access to the file system using `requestFileSystem`. When you do this, you can request either persistent or temporary storage. Persistent storage will not be removed unless permission is granted by the user.
 
-When you get file system access using `requestFileSystem`, access is granted for the sandboxed file system only (the sandbox limits access to the app itself), not for general access to any file system location on the device. (To access file system locations outside the sandboxed storage, use other methods such as window.requestLocalFileSystemURL, which support platform-specific locations. For one example of this, see _Append a File_.)
+When you get file system access using `requestFileSystem`, access is granted for the sandboxed file system only (the sandbox limits access to the app itself), not for general access to any file system location on the device. (To access file system locations outside the sandboxed storage, use other methods such as window.resolveLocalFileSystemURL, which support platform-specific locations. For one example of this, see _Append a File_.)
 
 Here is a request for persistent storage.
 

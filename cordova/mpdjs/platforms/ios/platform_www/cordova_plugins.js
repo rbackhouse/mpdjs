@@ -25,6 +25,30 @@ module.exports = [
         ]
     },
     {
+        "id": "cordova-plugin-statusbar.statusbar",
+        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+        "pluginId": "cordova-plugin-statusbar",
+        "clobbers": [
+            "window.StatusBar"
+        ]
+    },
+    {
+        "id": "org.potpie.mpdjs.bonjourlistener.BonjourListener",
+        "file": "plugins/org.potpie.mpdjs.bonjourlistener/www/BonjourListener.js",
+        "pluginId": "org.potpie.mpdjs.bonjourlistener",
+        "clobbers": [
+            "window.BonjourListener"
+        ]
+    },
+    {
+        "id": "org.potpie.mpdjs.socketconnection.SocketConnection",
+        "file": "plugins/org.potpie.mpdjs.socketconnection/www/SocketConnection.js",
+        "pluginId": "org.potpie.mpdjs.socketconnection",
+        "clobbers": [
+            "window.SocketConnection"
+        ]
+    },
+    {
         "id": "cordova-plugin-file.DirectoryEntry",
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "pluginId": "cordova-plugin-file",
@@ -196,42 +220,17 @@ module.exports = [
             "cordova"
         ],
         "runs": true
-    },
-    {
-        "id": "cordova-plugin-statusbar.statusbar",
-        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-        "pluginId": "cordova-plugin-statusbar",
-        "clobbers": [
-            "window.StatusBar"
-        ]
-    },
-    {
-        "id": "org.potpie.mpdjs.bonjourlistener.BonjourListener",
-        "file": "plugins/org.potpie.mpdjs.bonjourlistener/www/BonjourListener.js",
-        "pluginId": "org.potpie.mpdjs.bonjourlistener",
-        "clobbers": [
-            "window.BonjourListener"
-        ]
-    },
-    {
-        "id": "org.potpie.mpdjs.socketconnection.SocketConnection",
-        "file": "plugins/org.potpie.mpdjs.socketconnection/www/SocketConnection.js",
-        "pluginId": "org.potpie.mpdjs.socketconnection",
-        "clobbers": [
-            "window.SocketConnection"
-        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-console": "1.0.2",
     "cordova-plugin-device": "1.1.0",
-    "cordova-plugin-file": "4.3.1",
     "cordova-plugin-statusbar": "2.0.0",
     "org.potpie.mpdjs.bonjourlistener": "1.0.0",
-    "org.potpie.mpdjs.socketconnection": "1.0.0"
+    "org.potpie.mpdjs.socketconnection": "1.0.0",
+    "cordova-plugin-file": "6.0.1"
 };
 // BOTTOM OF METADATA
 });

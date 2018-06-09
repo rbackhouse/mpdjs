@@ -28318,7 +28318,7 @@ define('uiconfig',[],function() {
 			localStorage["mpdjs.startPage"] = startPage;
 		},
 		getVersionNumber: function() {
-			return "3.0";
+			return "3.1";
 		},
 		setSongToPlaylist: function(songToPlaylist) {
 			localStorage["mpdjs.songToPlaylist"] = songToPlaylist;
@@ -29011,6 +29011,44 @@ class MPDConnectionBase {
 		});
 	}
 	
+	listMounts(cb, errorcb) {
+		var processor = function(data) {
+			var lines = MPDConnectionBase._lineSplit(data);
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i];
+				console.log(line);
+			}
+			return {};			
+		}.bind(this);
+		this.queue.push({
+			cmd: "listmounts",
+			process: processor,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
+	listNeighbors(cb, errorcb) {
+		var processor = function(data) {
+			var lines = MPDConnectionBase._lineSplit(data);
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i];
+				console.log(line);
+			}
+			return {};			
+		}.bind(this);
+		this.queue.push({
+			cmd: "listneighbors",
+			process: processor,
+			cb: cb,
+			errorcb: errorcb,
+			response: "",
+			state: INITIAL
+		});
+	}
+	
 	listPlayLists(cb, errorcb) {
 		var processor = function(data) {
 			var lines = MPDConnectionBase._lineSplit(data);
@@ -29631,15 +29669,15 @@ define('mpd/FS',[],function() {
 });
 /*
 * The MIT License (MIT)
-* 
+*
 * Copyright (c) 2014 Richard Backhouse
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
@@ -29651,16 +29689,15 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 	var statusListeners = [];
 	var intervalId;
 	var active = true;
-	var audio;
 	var streamurl;
-	
+
 	function errorHandler(err, cb) {
 		MessagePopup.create("MPD Error", "Error : "+err);
 		if (cb) {
 			cb(err);
 		}
 	}
-	
+
 	if (window.cordova) {
 		require(['deviceReady!'], function() {
 			SocketConnection.setActiveListener(function(status) {
@@ -29674,10 +29711,10 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 			});
 		});
 	}
-	
+
 	function createConnection(cb) {
 		connection = new MPDConnector(config.getConnectionConfig().host, config.getConnectionConfig().port);
-		if (connection) {	
+		if (connection) {
 			connection.connect(function(error) {
 				if (error) {
 					errorHandler(error, cb);
@@ -29685,7 +29722,7 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				}
 				if (config.getConnectionConfig().streamingport !== "") {
 					streamurl = "http://"+config.getConnectionConfig().host+":"+config.getConnectionConfig().streamingport;
-					createAudio();
+					//createAudio();
 				}
 				if (intervalId) {
 					clearInterval(intervalId);
@@ -29707,49 +29744,20 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 			});
 		}
 	}
-	
+
 	function createAudio() {
-		console.log("creating audio tag for "+streamurl);
-		audio = new Audio(streamurl);
-		console.log("can play flac = "+audio.canPlayType("audio/flac; codecs=\"vorbis\""));
-		audio.addEventListener("error", function() {
-			console.log("error playing audio");
-		}, false);
-		audio.addEventListener("canplay", function() {
-			console.log("can play audio");
-		}, false);
-		audio.addEventListener("waiting", function() {
-			console.log("waiting for audio");
-		}, false);
-		audio.addEventListener("playing", function() {
-			console.log("playing audio");
-		}, false);
-		audio.addEventListener("ended", function() {
-			console.log("audio ended");
-		}, false);
-		audio.addEventListener("canplaythrough", function() {
-			console.log("can play through");
-		}, false);
-		var eventListener = function(e) {
-			console.log("media event: "+e.type);
-		}
-		audio.addEventListener('durationchange', eventListener, false);
-		audio.addEventListener('emptied', eventListener, false);
-		audio.addEventListener('error', eventListener, false);
-		audio.addEventListener('loadeddata', eventListener, false);
-		audio.addEventListener('loadedmetadata', eventListener, false);
-		audio.addEventListener('loadstart', eventListener, false);
-		audio.addEventListener('pause', eventListener, false);
-		audio.addEventListener('progress', eventListener, false);
-		audio.addEventListener('ratechange', eventListener, false);
-		audio.addEventListener('readystatechange', eventListener, false);
-		audio.addEventListener('seeked', eventListener, false);
-		audio.addEventListener('seeking', eventListener, false);
-		audio.addEventListener('stalled', eventListener, false);
-		audio.addEventListener('suspend', eventListener, false);
-		audio.addEventListener('volumechange', eventListener, false);
+		console.log("creating Music Streamer for "+streamurl);
+		MusicStreamer.create(streamurl,
+			function(status) {
+                if (status.type === "status") {
+				    console.log("status = ["+status.message+"] for playing "+streamurl);
+                } else {
+                    console.log(status);
+                }
+			}
+		);
 	}
-	
+
 	config.addDiscoverListener(function(evt) {
 		if (evt.removed && connection) {
 			if (evt.removed.host === connection.host && evt.removed.port === connection.port) {
@@ -29758,20 +29766,22 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 			}
 		}
 	});
-	
+
 	function disconnect() {
 		connection.disconnect();
 		connection = undefined;
+        /*
 		if (audio) {
-			audio = undefined;
+			MusicStreamer.destroy();
 			streamurl = undefined;
 		}
+        */
 		if (intervalId) {
 			clearInterval(intervalId);
 			intervalId = undefined;
 		}
 	}
-	
+
 	return {
 		isConnected: function() {
 			return connection === undefined ? false : true;
@@ -29791,7 +29801,7 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 		},
 		disconnect: function() {
 			if (connection) {
-				disconnect();	
+				disconnect();
 			}
 		},
 		getAllArtists: function(index, filter, cb, errcb) {
@@ -29802,7 +29812,7 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 			if (filter === "all") {
 				filter = undefined;
 			}
-			
+
 			var filterArtists = function(artists) {
 				this.artists = artists;
 				if (filter) {
@@ -29817,7 +29827,7 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 					processArtists(artists);
 				}
 			}.bind(this);
-			
+
 			var processArtists = function(artists) {
 				var end = index + 50 > artists.length ? artists.length : index + 50;
 				var subset = artists.slice(index, end);
@@ -29828,16 +29838,16 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				};
 				cb(resp);
 			};
-			
+
 			if (this.artists) {
 				filterArtists(this.artists);
 				return;
 			}
-			
+
 			var fileName = config.getConnectionConfig().host+"_"+config.getConnectionConfig().port+"_artists.json";
 			FS.readFile(
-				fileName, 
-				filterArtists, 
+				fileName,
+				filterArtists,
 				function(err) {
 					connection.getAllArtists(filter, function(artists) {
 						this.artists = artists;
@@ -29867,7 +29877,7 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				if (filter === "all") {
 					filter = undefined;
 				}
-				
+
 				var filterAlbums = function(albums) {
 					this.albums = albums;
 					if (filter) {
@@ -29882,7 +29892,7 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 						processAlbums(albums);
 					}
 				}.bind(this);
-				
+
 				var processAlbums = function(albums) {
 					var end = index + 50 > albums.length ? albums.length : index + 50;
 					var subset = albums.slice(index, end);
@@ -29893,13 +29903,13 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 					};
 					cb(resp);
 				};
-				
+
 				if (this.albums) {
 					filterAlbums(this.albums);
 					return;
 				}
 				var fileName = config.getConnectionConfig().host+"_"+config.getConnectionConfig().port+"_albums.json";
-				FS.readFile(fileName, 
+				FS.readFile(fileName,
 					filterAlbums,
 					function(err) {
 						connection.getAllAlbums(filter, function(albums) {
@@ -29961,7 +29971,7 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				return;
 			}
 			connection.clearPlayList();
-			
+
 			function createPlaylist(albums) {
 				var songlist = [];
 				for (var i = 0; i < 50; i++) {
@@ -29979,9 +29989,9 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 							}
 						}
 					}, errorHandler);
-				}				
+				}
 			}
-			
+
 			if (this.albums) {
 				createPlaylist(this.albums);
 			} else {
@@ -30031,36 +30041,30 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 			}
 			if (type === "play") {
 				connection.play();
-				if (audio) {
-					audio.play();
+				if (streamurl) {
+					MusicStreamer.play();
 				}
 			} else if (type === "pause") {
 				connection.pause();
-				if (audio) {
-					audio.play();
+				if (streamurl) {
+					MusicStreamer.pause();
 				}
 			} else if (type === "stop") {
 				connection.stop();
-				if (audio) {
-					audio.pause();
-					audio = undefined;
-					createAudio();
+				if (streamurl) {
+					MusicStreamer.stop();
 				}
 			} else if (type === "previous") {
 				connection.previous();
-				if (audio) {
-					audio.pause();
-					audio = undefined;
-					createAudio();
-					audio.play();
+				if (streamurl) {
+					MusicStreamer.stop();
+					MusicStreamer.play();
 				}
 			} else if (type === "next") {
 				connection.next();
-				if (audio) {
-					audio.pause();
-					audio = undefined;
-					createAudio();
-					audio.play();
+				if (streamurl) {
+					MusicStreamer.stop();
+					MusicStreamer.play();
 				}
 			} else if (type === "update") {
 				connection.update();
@@ -30106,21 +30110,21 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.listFiles(uri, cb, errorcb);			
+			connection.listFiles(uri, cb, errorcb);
 		},
 		listPlayLists: function(cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.listPlayLists(cb, errorcb);			
+			connection.listPlayLists(cb, errorcb);
 		},
 		loadPlayList: function(name, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.loadPlayList(name, cb, errorcb);			
+			connection.loadPlayList(name, cb, errorcb);
 		},
 		savePlayList: function(name, cb, errorcb) {
 			if (!connection) {
@@ -30128,77 +30132,77 @@ define('mpd/MPDClient',['./MPDConnector', '../uiconfig', '../util/MessagePopup',
 				return;
 			}
 			connection.deletePlayList(name);
-			connection.savePlayList(name, cb, errorcb);			
+			connection.savePlayList(name, cb, errorcb);
 		},
 		deletePlayList: function(name, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.deletePlayList(name, cb, errorcb);			
+			connection.deletePlayList(name, cb, errorcb);
 		},
 		getOutputs: function(cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.getOutputs(cb, errorcb);			
+			connection.getOutputs(cb, errorcb);
 		},
 		enableOutput: function(id, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.enableOutput(id, cb, errorcb);			
+			connection.enableOutput(id, cb, errorcb);
 		},
 		disableOutput: function(id, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.disableOutput(id, cb, errorcb);			
+			connection.disableOutput(id, cb, errorcb);
 		},
 		shuffle: function(on, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.shuffle(on, cb, errorcb);			
+			connection.shuffle(on, cb, errorcb);
 		},
 		repeat: function(on, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.repeat(on, cb, errorcb);			
+			connection.repeat(on, cb, errorcb);
 		},
 		consume: function(on, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.consume(on, cb, errorcb);			
+			connection.consume(on, cb, errorcb);
 		},
 		single: function(on, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.single(on, cb, errorcb);			
+			connection.single(on, cb, errorcb);
 		},
 		crossfade: function(seconds, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.crossfade(seconds, cb, errorcb);			
+			connection.crossfade(seconds, cb, errorcb);
 		},
 		replayGainMode: function(mode, cb, errorcb) {
 			if (!connection) {
 				errorHandler("Connection has been lost", errorcb);
 				return;
 			}
-			connection.replayGainMode(mode, cb, errorcb);			
+			connection.replayGainMode(mode, cb, errorcb);
 		}
 	};
 });
@@ -32387,31 +32391,31 @@ define('text!templates/ConnectionDiscoveredItem.html',[],function () { return '<
 
 /*
 * The MIT License (MIT)
-* 
+*
 * Copyright (c) 2012 Richard Backhouse
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
 define('views/ConnectionListView',[
-		'jquery', 
+		'jquery',
 		'backbone',
-		'underscore', 
+		'underscore',
 		'./BaseView',
 		'../uiconfig',
 		'../mpd/MPDClient',
 		'../util/MessagePopup',
 		'text!templates/ConnectionList.html',
-		'text!templates/ConnectionListItem.html', 
-		'text!templates/ConnectionDiscoveredItem.html'], 
+		'text!templates/ConnectionListItem.html',
+		'text!templates/ConnectionDiscoveredItem.html'],
 function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, itemTemplate, discoveredItemTemplate) {
 	var View = BaseView.extend({
 		events: function() {
@@ -32448,7 +32452,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 								$("#connect").val("Connect");
 								$("#connect").button('option', {icon : "check" });
 								$("#connect").button("refresh");
-							}						
+							}
 							this.loadLists();
 							this.connect();
 						}
@@ -32471,7 +32475,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 						this.connect();
 					}
 				}
-		    });	
+		    });
 		},
 		initialize: function() {
 			var options = {};
@@ -32480,12 +32484,12 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				backLink: false
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template ) ( { 
-				connections: config.getConnections(), 
-				discoveredList: config.getDiscoveredList(), 
-				selectedIndex: config.getSelectedIndex(), 
-				discoveredIndex: config.getDiscoveredIndex(), 
-				isConnected: MPDClient.isConnected() 
+			this.template = _.template( template ) ( {
+				connections: config.getConnections(),
+				discoveredList: config.getDiscoveredList(),
+				selectedIndex: config.getSelectedIndex(),
+				discoveredIndex: config.getDiscoveredIndex(),
+				isConnected: MPDClient.isConnected()
 			} );
 			if (!MPDClient.isConnected() && config.getConnection()) {
 				this.connect();
@@ -32506,55 +32510,54 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				transition : "pop"
 			}).bind("popupafterclose", function() {
 				$(this).remove();
-			});			
+			});
 			$popUp.addClass("ui-content");
 			$("<h3/>", {
 				text : "Add Connection"
 			}).appendTo($popUp);
-			
+
 			$("<p/>", {
 				text : "Host:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "host",
 				type : "text",
 				value : "",
 				autocapitalize: "off"
 			}).appendTo($popUp);
-			
+
 			$("<p/>", {
 				text : "Port:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "port",
 				type : "text",
 				value : "6600",
 				autocapitalize: "off"
 			}).appendTo($popUp);
-			
+
 			$("<p/>", {
 				text : "Password:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "pwd",
 				type : "password",
 				autocapitalize: "off"
 			}).appendTo($popUp);
-			
+
 			$("<span/>", {
 				id : "errmsg"
 			}).appendTo($popUp);
-			
+
 			$("#errmsg").addClass("error");
-			$("<br/>", {}).appendTo($popUp);
 			/*
 			$("<p/>", {
 				text : "Streaming Port:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "streamingport",
 				type : "text",
@@ -32562,6 +32565,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				autocapitalize: "off"
 			}).appendTo($popUp);
 			*/
+			$("<br/>", {}).appendTo($popUp);
 			$("<a>", {
 				text : "Ok"
 			}).buttonMarkup({
@@ -32577,7 +32581,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				if (host === "") {
 					$("#errmsg").text("Enter a Host value");
 					return;
-				}	
+				}
 				if (port === "") {
 					$("#errmsg").text("Enter a Port value");
 					return;
@@ -32589,7 +32593,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				config.getConnections().forEach(function(connection, index) {
 					if (connection.host === host && connection.port === port && connection.streamingport === streamingport) {
 						dup = true;
-					}					
+					}
 				});
 				if (!dup) {
 					var index = config.addConnection(host, port, streamingport, pwd);
@@ -32600,7 +32604,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 					}
 				}
 			}.bind(this)).appendTo($popUp);
-			
+
 			$("<a>", {
 				text : "Cancel"
 			}).buttonMarkup({
@@ -32609,7 +32613,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 			}).bind("click", function() {
 				$popUp.popup("close");
 			}).appendTo($popUp);
-			
+
 			$popUp.popup("open").trigger("create");
 		},
 		connect: function() {
@@ -32656,7 +32660,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 			config.removeDiscoverListener(this.discoverListener);
 		}
 	});
-	
+
 	return View;
 });
 

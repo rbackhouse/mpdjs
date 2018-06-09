@@ -21,10 +21,6 @@
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
     </feature>
-    <feature name="File">
-        <param name="ios-package" value="CDVFile" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="StatusBar">
         <param name="ios-package" value="CDVStatusBar" />
         <param name="onload" value="true" />
@@ -34,6 +30,10 @@
     </feature>
     <feature name="SocketConnection">
         <param name="ios-package" value="SocketConnection" />
+    </feature>
+    <feature name="File">
+        <param name="ios-package" value="CDVFile" />
+        <param name="onload" value="true" />
     </feature>
     <name>MPD js</name>
     <description>

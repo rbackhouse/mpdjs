@@ -6,9 +6,12 @@
     "platforms": [
       "ios"
     ],
-    "plugins": {}
+    "plugins": {
+      "cordova-plugin-file": {}
+    }
   },
   "dependencies": {
-    "cordova-ios": "^4.4.0"
+    "cordova-ios": "^4.4.0",
+    "cordova-plugin-file": "^6.0.1"
   }
 }

@@ -1,57 +1,150 @@
 {
-  "name": "cordova-plugin-file",
-  "version": "4.3.1",
-  "description": "Cordova File Plugin",
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-file@6.0.1",
+        "scope": null,
+        "escapedName": "cordova-plugin-file",
+        "name": "cordova-plugin-file",
+        "rawSpec": "6.0.1",
+        "spec": "6.0.1",
+        "type": "version"
+      },
+      "/Users/richardbackhouse/Development/musicserver/mpdjs/cordova/mpdjs"
+    ]
+  ],
+  "_from": "cordova-plugin-file@6.0.1",
+  "_id": "cordova-plugin-file@6.0.1",
+  "_inCache": true,
+  "_location": "/cordova-plugin-file",
+  "_nodeVersion": "8.2.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/cordova-plugin-file-6.0.1.tgz_1514690802908_0.5163829217199236"
+  },
+  "_npmUser": {
+    "name": "macdonst",
+    "email": "simon.macdonald@gmail.com"
+  },
+  "_npmVersion": "4.6.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-file@6.0.1",
+    "scope": null,
+    "escapedName": "cordova-plugin-file",
+    "name": "cordova-plugin-file",
+    "rawSpec": "6.0.1",
+    "spec": "6.0.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-file/-/cordova-plugin-file-6.0.1.tgz",
+  "_shasum": "49606b8c15a5688d4728f92e4a7325a061de07f5",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-file@6.0.1",
+  "_where": "/Users/richardbackhouse/Development/musicserver/mpdjs/cordova/mpdjs",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
   "cordova": {
     "id": "cordova-plugin-file",
     "platforms": [
       "android",
-      "amazon-fireos",
-      "ubuntu",
+      "browser",
       "ios",
       "osx",
-      "wp7",
-      "wp8",
-      "blackberry10",
-      "windows8",
-      "windows",
-      "firefoxos"
+      "windows"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-file"
+  "dependencies": {},
+  "description": "Cordova File Plugin",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   },
+  "directories": {},
+  "dist": {
+    "shasum": "49606b8c15a5688d4728f92e4a7325a061de07f5",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-file/-/cordova-plugin-file-6.0.1.tgz"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "5.0.0": {
+        "cordova-android": ">=6.3.0"
+      },
+      "7.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-file#readme",
   "keywords": [
     "cordova",
     "file",
     "ecosystem:cordova",
     "cordova-android",
-    "cordova-amazon-fireos",
-    "cordova-ubuntu",
+    "cordova-browser",
     "cordova-ios",
     "cordova-osx",
-    "cordova-wp7",
-    "cordova-wp8",
-    "cordova-blackberry10",
-    "cordova-windows8",
-    "cordova-windows",
-    "cordova-firefoxos"
+    "cordova-windows"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests"
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "engines": {
-    "cordovaDependencies": {
-      "5.0.0": {
-        "cordova": ">100"
-      }
+  "maintainers": [
+    {
+      "name": "macdonst",
+      "email": "simon.macdonald@gmail.com"
+    },
+    {
+      "name": "bowserj",
+      "email": "bowserj@apache.org"
+    },
+    {
+      "name": "purplecabbage",
+      "email": "purplecabbage@gmail.com"
+    },
+    {
+      "name": "filmaj",
+      "email": "maj.fil@gmail.com"
+    },
+    {
+      "name": "shazron",
+      "email": "shazron@gmail.com"
+    },
+    {
+      "name": "csantanapr",
+      "email": "csantana23@gmail.com"
+    },
+    {
+      "name": "kotikov.vladimir",
+      "email": "kotikov.vladimir@gmail.com"
+    },
+    {
+      "name": "stevegill",
+      "email": "stevengill97@gmail.com"
     }
+  ],
+  "name": "cordova-plugin-file",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-file.git"
   },
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "scripts": {
+    "eslint": "node node_modules/eslint/bin/eslint www && node node_modules/eslint/bin/eslint src && node node_modules/eslint/bin/eslint tests",
+    "test": "npm run eslint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "6.0.1"
 }

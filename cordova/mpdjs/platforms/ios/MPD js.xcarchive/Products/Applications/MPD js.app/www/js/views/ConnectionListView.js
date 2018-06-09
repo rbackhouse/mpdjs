@@ -1,30 +1,30 @@
 /*
 * The MIT License (MIT)
-* 
+*
 * Copyright (c) 2012 Richard Backhouse
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
 * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
 define([
-		'jquery', 
+		'jquery',
 		'backbone',
-		'underscore', 
+		'underscore',
 		'./BaseView',
 		'../uiconfig',
 		'../mpd/MPDClient',
 		'../util/MessagePopup',
 		'text!templates/ConnectionList.html',
-		'text!templates/ConnectionListItem.html', 
-		'text!templates/ConnectionDiscoveredItem.html'], 
+		'text!templates/ConnectionListItem.html',
+		'text!templates/ConnectionDiscoveredItem.html'],
 function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, itemTemplate, discoveredItemTemplate) {
 	var View = BaseView.extend({
 		events: function() {
@@ -61,7 +61,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 								$("#connect").val("Connect");
 								$("#connect").button('option', {icon : "check" });
 								$("#connect").button("refresh");
-							}						
+							}
 							this.loadLists();
 							this.connect();
 						}
@@ -84,7 +84,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 						this.connect();
 					}
 				}
-		    });	
+		    });
 		},
 		initialize: function() {
 			var options = {};
@@ -93,12 +93,12 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				backLink: false
 			};
 			this.constructor.__super__.initialize.apply(this, [options]);
-			this.template = _.template( template ) ( { 
-				connections: config.getConnections(), 
-				discoveredList: config.getDiscoveredList(), 
-				selectedIndex: config.getSelectedIndex(), 
-				discoveredIndex: config.getDiscoveredIndex(), 
-				isConnected: MPDClient.isConnected() 
+			this.template = _.template( template ) ( {
+				connections: config.getConnections(),
+				discoveredList: config.getDiscoveredList(),
+				selectedIndex: config.getSelectedIndex(),
+				discoveredIndex: config.getDiscoveredIndex(),
+				isConnected: MPDClient.isConnected()
 			} );
 			if (!MPDClient.isConnected() && config.getConnection()) {
 				this.connect();
@@ -119,55 +119,54 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				transition : "pop"
 			}).bind("popupafterclose", function() {
 				$(this).remove();
-			});			
+			});
 			$popUp.addClass("ui-content");
 			$("<h3/>", {
 				text : "Add Connection"
 			}).appendTo($popUp);
-			
+
 			$("<p/>", {
 				text : "Host:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "host",
 				type : "text",
 				value : "",
 				autocapitalize: "off"
 			}).appendTo($popUp);
-			
+
 			$("<p/>", {
 				text : "Port:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "port",
 				type : "text",
 				value : "6600",
 				autocapitalize: "off"
 			}).appendTo($popUp);
-			
+
 			$("<p/>", {
 				text : "Password:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "pwd",
 				type : "password",
 				autocapitalize: "off"
 			}).appendTo($popUp);
-			
+
 			$("<span/>", {
 				id : "errmsg"
 			}).appendTo($popUp);
-			
+
 			$("#errmsg").addClass("error");
-			$("<br/>", {}).appendTo($popUp);
 			/*
 			$("<p/>", {
 				text : "Streaming Port:"
 			}).appendTo($popUp);
-			
+
 			$("<input/>", {
 				id : "streamingport",
 				type : "text",
@@ -175,6 +174,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				autocapitalize: "off"
 			}).appendTo($popUp);
 			*/
+			$("<br/>", {}).appendTo($popUp);
 			$("<a>", {
 				text : "Ok"
 			}).buttonMarkup({
@@ -190,7 +190,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				if (host === "") {
 					$("#errmsg").text("Enter a Host value");
 					return;
-				}	
+				}
 				if (port === "") {
 					$("#errmsg").text("Enter a Port value");
 					return;
@@ -202,7 +202,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 				config.getConnections().forEach(function(connection, index) {
 					if (connection.host === host && connection.port === port && connection.streamingport === streamingport) {
 						dup = true;
-					}					
+					}
 				});
 				if (!dup) {
 					var index = config.addConnection(host, port, streamingport, pwd);
@@ -213,7 +213,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 					}
 				}
 			}.bind(this)).appendTo($popUp);
-			
+
 			$("<a>", {
 				text : "Cancel"
 			}).buttonMarkup({
@@ -222,7 +222,7 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 			}).bind("click", function() {
 				$popUp.popup("close");
 			}).appendTo($popUp);
-			
+
 			$popUp.popup("open").trigger("create");
 		},
 		connect: function() {
@@ -269,6 +269,6 @@ function($, Backbone, _, BaseView, config, MPDClient, MessagePopup, template, it
 			config.removeDiscoverListener(this.discoverListener);
 		}
 	});
-	
+
 	return View;
 });

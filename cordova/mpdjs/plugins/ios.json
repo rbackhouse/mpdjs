@@ -13,9 +13,6 @@
     "cordova-plugin-device": {
       "PACKAGE_NAME": "org.potpie.mpdjs"
     },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "org.potpie.mpdjs"
-    },
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "org.potpie.mpdjs"
     },
@@ -24,11 +21,10 @@
     },
     "org.potpie.mpdjs.socketconnection": {
       "PACKAGE_NAME": "org.potpie.mpdjs"
-    }
-  },
-  "dependent_plugins": {
-    "cordova-plugin-compat": {
+    },
+    "cordova-plugin-file": {
       "PACKAGE_NAME": "org.potpie.mpdjs"
     }
-  }
+  },
+  "dependent_plugins": {}
 }
