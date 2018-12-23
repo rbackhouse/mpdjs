@@ -1,7 +1,9 @@
 mpdjs
 =====
 
-Music Player Daemon client written in javascript. 
+**Note** mpdjs is no longer actively developed. See [MaximumMPD](https://github.com/rbackhouse/MaximumMPD) for a replacement
+
+Music Player Daemon client written in javascript.
 
 A proxy running on a nodejs server provides the connection to the Music Play Daemon process. The Frontend is written using JQuery/JQuery Mobile/Backbone/Underscore.
 JavaScript optimization provided by Zazl (https://github.com/zazl/zazloptimizer). A WebSocket is used to push status updates to the browser.
@@ -12,10 +14,10 @@ Install
 From npm
 
 	npm install mpdjs
-	
+
 From git
-	
-	git clone git@github.com:rbackhouse/mpdjs.git 
+
+	git clone git@github.com:rbackhouse/mpdjs.git
 	(or download the zipped source from https://github.com/rbackhouse/mpdjs/archive/master.zip)
 	cd mpdjs
 	npm install
